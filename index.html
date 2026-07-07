@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CETC Unit - Dashboard</title>
-    <!-- خط القاهرة الاحترافي من جوجل -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -13,6 +12,8 @@
             --bg-light: #f8f9fa;
             --white: #ffffff;
             --text-gray: #555;
+            --positive-green: #27ae60;
+            --negative-red: #C41230;
         }
 
         body {
@@ -23,7 +24,7 @@
             color: var(--main-black);
         }
 
-        /* رأس الصفحة المطور */
+        /* Header Section */
         header {
             background-color: var(--white);
             border-bottom: 5px solid var(--ejust-red);
@@ -34,191 +35,66 @@
         }
 
         .logo-box {
-            background: #f4f4f4; /* خلفية رمادية فاتحة لإبراز اللوجو إذا كان أبيض */
+            background: #f4f4f4;
             display: inline-block;
             padding: 15px 25px;
             border-radius: 12px;
             margin-bottom: 15px;
         }
 
-        .logo-box img {
-            max-height: 80px;
-            display: block;
-        }
+        .logo-box img { max-height: 80px; display: block; }
+        header h1 { margin: 0; font-size: 1.8rem; font-weight: 800; }
+        header p.unit-name { margin: 5px 0; font-size: 1.1rem; color: var(--ejust-red); font-weight: 700; }
+        header p.uni-name { margin: 0; font-size: 0.9rem; color: var(--text-gray); }
 
-        header h1 {
-            margin: 0;
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: var(--main-black);
-        }
-
-        header p.unit-name {
-            margin: 5px 0;
-            font-size: 1.1rem;
-            color: var(--ejust-red);
-            font-weight: 700;
-        }
-
-        header p.uni-name {
-            margin: 0;
-            font-size: 0.9rem;
-            color: var(--text-gray);
-        }
-
-        /* زر تسجيل الخروج */
         .logout-link {
-            position: absolute;
-            top: 25px;
-            left: 25px;
-            color: var(--text-gray);
-            text-decoration: none;
-            font-size: 0.85rem;
-            border: 1.5px solid #ddd;
-            padding: 8px 18px;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: 0.3s;
-        }
-        .logout-link:hover {
-            background: var(--ejust-red);
-            color: var(--white);
-            border-color: var(--ejust-red);
+            position: absolute; top: 25px; left: 25px; color: var(--text-gray);
+            text-decoration: none; font-size: 0.85rem; border: 1.5px solid #ddd;
+            padding: 8px 18px; border-radius: 8px; font-weight: 600;
         }
 
-        .container {
-            max-width: 1250px;
-            margin: 30px auto;
-            padding: 0 20px;
-        }
+        .container { max-width: 1250px; margin: 30px auto; padding: 0 20px; }
 
-        /* أزرار المشاريع (التبويبات) */
-        .project-tabs {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-            margin-bottom: 35px;
-        }
-
+        /* Tabs */
+        .project-tabs { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-bottom: 35px; }
         .tab-btn {
-            padding: 14px 28px;
-            border: 2px solid var(--main-black);
-            background: var(--white);
-            color: var(--main-black);
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 1rem;
-            transition: all 0.3s ease;
+            padding: 14px 28px; border: 2px solid var(--main-black);
+            background: var(--white); color: var(--main-black);
+            border-radius: 10px; cursor: pointer; font-weight: 700; transition: 0.3s;
         }
-
         .tab-btn:hover, .tab-btn.active {
-            background: var(--ejust-red);
-            color: var(--white);
-            border-color: var(--ejust-red);
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(196, 18, 48, 0.2);
+            background: var(--ejust-red); color: var(--white); border-color: var(--ejust-red);
         }
 
-        /* لوحة الإحصائيات (المربعات الملونة) */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            margin-bottom: 35px;
-            display: none; /* تظهر فقط عند تحميل البيانات */
-        }
-
-        .stat-card {
-            background: var(--white);
-            padding: 30px 20px;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            border-right: 8px solid #ddd;
-        }
-
+        /* Stats Card */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin-bottom: 35px; display: none; }
+        .stat-card { background: var(--white); padding: 30px 20px; border-radius: 15px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-right: 8px solid #ddd; }
         .stat-card.due { border-right-color: var(--main-black); }
         .stat-card.received { border-right-color: var(--ejust-red); }
-        .stat-card.balance { border-right-color: #27ae60; }
+        .stat-card.balance { border-right-color: var(--positive-green); }
+        .stat-card .amount { font-size: 2rem; font-weight: 800; margin-top: 12px; }
 
-        .stat-card h3 { margin: 0; font-size: 1rem; color: var(--text-gray); }
-        .stat-card .amount { font-size: 2rem; font-weight: 800; margin-top: 12px; color: var(--main-black); }
+        /* Search */
+        .search-section { margin-bottom: 25px; display: none; }
+        #searchInput { width: 100%; padding: 18px 25px; border: 2px solid #e0e0e0; border-radius: 12px; outline: none; font-family: inherit; }
 
-        /* صندوق البحث الذكي */
-        .search-section {
-            margin-bottom: 25px;
-            display: none;
-        }
+        /* Table */
+        .table-overflow { background: var(--white); border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; min-width: 1000px; }
+        th { background-color: var(--main-black); color: var(--white); padding: 22px 15px; font-weight: 700; }
+        
+        td { padding: 18px 15px; border-bottom: 1px solid #f2f2f2; text-align: center; font-size: 1rem; font-weight: 500; }
 
-        #searchInput {
-            width: 100%;
-            padding: 18px 25px;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            font-size: 1.1rem;
-            font-family: 'Cairo', sans-serif;
-            box-sizing: border-box;
-            outline: none;
-            transition: 0.3s;
-        }
-        #searchInput:focus {
-            border-color: var(--ejust-red);
-            box-shadow: 0 0 15px rgba(196, 18, 48, 0.1);
-        }
+        /* تباين ألوان الصفوف (Zebra Striping) */
+        tr:nth-child(even) { background-color: #f2f4f6; } /* رمادي خفيف جداً */
+        tr:nth-child(odd) { background-color: #ffffff; } /* أبيض */
+        tr:hover { background-color: #e9ecef; }
 
-        /* الجدول المنسق */
-        .table-overflow {
-            background: var(--white);
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            overflow: hidden;
-            overflow-x: auto;
-        }
+        /* فئات التلوين الشرطي */
+        .val-positive { color: var(--positive-green) !important; font-weight: 700; }
+        .val-negative { color: var(--negative-red) !important; font-weight: 700; }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 1000px;
-        }
-
-        th {
-            background-color: var(--main-black);
-            color: var(--white);
-            padding: 22px 15px;
-            font-size: 1rem;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-
-        td {
-            padding: 18px 15px;
-            border-bottom: 1px solid #f2f2f2;
-            text-align: center;
-            font-size: 1rem;
-            font-weight: 500;
-        }
-
-        tr:nth-child(even) { background-color: #fcfcfc; }
-        tr:hover { background-color: #f8f8f8; cursor: default; }
-
-        /* رسالة التحميل */
-        #loadingOverlay {
-            display: none;
-            text-align: center;
-            padding: 40px;
-            color: var(--ejust-red);
-            font-weight: 800;
-            font-size: 1.2rem;
-        }
-
-        /* تجاوب الموبايل */
-        @media (max-width: 768px) {
-            header { padding: 50px 15px 30px; }
-            .tab-btn { width: 100%; }
-            .logout-link { top: 10px; left: 10px; width: 80px; text-align: center; }
-        }
+        #loadingOverlay { display: none; text-align: center; padding: 40px; color: var(--ejust-red); font-weight: 800; }
     </style>
 </head>
 <body>
@@ -226,7 +102,6 @@
     <header>
         <a href="/logout" class="logout-link">خروج</a>
         <div class="logo-box">
-            <!-- رابط شعار الجامعة الرسمي -->
             <img src="https://ejust.edu.eg/assets/img/logo.png" alt="E-JUST Logo">
         </div>
         <h1>CETC Unit</h1>
@@ -235,7 +110,6 @@
     </header>
 
     <div class="container">
-        <!-- أزرار التبديل بين الملفات -->
         <div class="project-tabs">
             <button class="tab-btn" onclick="fetchProject(1, this)">سجل - 01 LOG</button>
             <button class="tab-btn" onclick="fetchProject(2, this)">إسكان الحي التاسع</button>
@@ -243,7 +117,6 @@
             <button class="tab-btn" onclick="fetchProject(4, this)">مشروع ديارنا</button>
         </div>
 
-        <!-- الإحصائيات -->
         <div class="stats-grid" id="statsArea">
             <div class="stat-card due">
                 <h3>إجمالي المستحق</h3>
@@ -259,20 +132,17 @@
             </div>
         </div>
 
-        <!-- البحث -->
         <div class="search-section" id="searchArea">
             <input type="text" id="searchInput" placeholder="ابحث باسم الشركة أو تفاصيل البيان..." onkeyup="filterRows()">
         </div>
 
-        <!-- التحميل -->
-        <div id="loadingOverlay">جاري جلب البيانات من Google Drive...</div>
+        <div id="loadingOverlay">جاري الاتصال بـ Google Drive...</div>
 
-        <!-- الجدول -->
         <div class="table-overflow">
             <table id="mainTable">
                 <thead><tr id="headerRow"></tr></thead>
                 <tbody id="dataRows">
-                    <tr><td colspan="6" style="padding: 80px; color: #aaa; font-size: 1.2rem;">يرجى اختيار ملف المشروع أعلاه لعرض البيانات</td></tr>
+                    <tr><td colspan="6" style="padding: 80px; color: #aaa;">يرجى اختيار ملف المشروع أعلاه لعرض البيانات</td></tr>
                 </tbody>
             </table>
         </div>
@@ -282,27 +152,18 @@
         let currentData = [];
 
         async function fetchProject(id, btn) {
-            // تحديث حالة الأزرار
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-
-            // إعداد الواجهة
             document.getElementById('loadingOverlay').style.display = 'block';
             document.getElementById('statsArea').style.display = 'none';
             document.getElementById('searchArea').style.display = 'none';
 
             try {
                 const response = await fetch(`/get-data/${id}`);
-                const result = await response.json();
-                
-                if(result.error) {
-                    alert("خطأ: " + result.error);
-                } else {
-                    currentData = result;
-                    populateTable(currentData);
-                }
+                currentData = await response.json();
+                populateTable(currentData);
             } catch (err) {
-                alert("تعذر الاتصال بالسيرفر، يرجى المحاولة لاحقاً");
+                alert("تعذر جلب البيانات");
             } finally {
                 document.getElementById('loadingOverlay').style.display = 'none';
             }
@@ -311,11 +172,10 @@
         function populateTable(data) {
             const hRow = document.getElementById('headerRow');
             const bRows = document.getElementById('dataRows');
-            hRow.innerHTML = '';
-            bRows.innerHTML = '';
+            hRow.innerHTML = ''; bRows.innerHTML = '';
 
             if (data.length > 0) {
-                // العناوين: نفترض أنها في الصف رقم 3 (إندكس 2)
+                // العناوين (B-G)
                 const headers = data[2] || [];
                 headers.forEach(text => {
                     const th = document.createElement('th');
@@ -323,31 +183,41 @@
                     hRow.appendChild(th);
                 });
 
-                // البيانات والإحصائيات
                 let sumDue = 0, sumRec = 0;
 
                 data.slice(3).forEach(row => {
-                    if(!row[0] && !row[1]) return; // تجاهل الصفوف الفارغة تماماً
-                    
+                    if(!row[0] && !row[1]) return;
                     const tr = document.createElement('tr');
-                    row.forEach((cell, idx) => {
+                    
+                    row.forEach((cell) => {
                         const td = document.createElement('td');
-                        const val = cell || '';
-                        // تنسيق الأرقام بفاصلة الآلاف
-                        td.textContent = (isNaN(val) || val === '') ? val : Number(val).toLocaleString('en-US');
+                        const numVal = Number(cell);
+
+                        // التلوين الشرطي وتنسيق الأرقام
+                        if (!isNaN(numVal) && cell !== '' && cell !== null) {
+                            td.textContent = numVal.toLocaleString('en-US');
+                            if (numVal < 0) td.classList.add('val-negative');
+                            else if (numVal > 0) td.classList.add('val-positive');
+                        } else {
+                            td.textContent = cell || '';
+                        }
+                        
                         tr.appendChild(td);
                     });
                     bRows.appendChild(tr);
 
-                    // حسابات (Index 2 = D المستحق، Index 3 = E المورد)
                     sumDue += Number(row[2]) || 0;
                     sumRec += Number(row[3]) || 0;
                 });
 
-                // تحديث كروت الإحصائيات
                 document.getElementById('totalDueText').textContent = sumDue.toLocaleString() + " ج.م";
                 document.getElementById('totalReceivedText').textContent = sumRec.toLocaleString() + " ج.م";
-                document.getElementById('netBalanceText').textContent = (sumDue - sumRec).toLocaleString() + " ج.م";
+                
+                const balance = sumDue - sumRec;
+                const balEl = document.getElementById('netBalanceText');
+                balEl.textContent = balance.toLocaleString() + " ج.م";
+                // تلوين إجمالي المديونية أيضاً
+                balEl.className = 'amount ' + (balance < 0 ? 'val-negative' : 'val-positive');
 
                 document.getElementById('statsArea').style.display = 'grid';
                 document.getElementById('searchArea').style.display = 'block';

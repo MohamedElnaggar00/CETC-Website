@@ -23,7 +23,7 @@ const USER_CREDENTIALS = {
 
 // --- 3. إعدادات الوصول لجوجل درايف ---
 const auth = new google.auth.GoogleAuth({
-    keyFile: 'keys.json', 
+    keyFile: path.join(process.cwd(), 'keys.json'), 
     scopes: ['https://www.googleapis.com/auth/drive.readonly'],
 });
 const drive = google.drive({ version: 'v3', auth });

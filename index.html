@@ -11,90 +11,46 @@
             --main-black: #1a1a1a;
             --bg-light: #f8f9fa;
             --white: #ffffff;
-            --text-gray: #555;
             --positive-green: #27ae60;
-            --negative-red: #C41230;
+            --negative-red: #e74c3c;
         }
 
-        body {
-            font-family: 'Cairo', sans-serif;
-            background-color: var(--bg-light);
-            margin: 0;
-            padding: 0;
-            color: var(--main-black);
-        }
+        body { font-family: 'Cairo', sans-serif; background-color: var(--bg-light); margin: 0; padding: 0; }
 
-        /* Header Section */
-        header {
-            background-color: var(--white);
-            border-bottom: 5px solid var(--ejust-red);
-            padding: 30px 20px;
-            text-align: center;
-            position: relative;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-        }
-
-        .logo-box {
-            background: #f4f4f4;
-            display: inline-block;
-            padding: 15px 25px;
-            border-radius: 12px;
-            margin-bottom: 15px;
-        }
-
-        .logo-box img { max-height: 80px; display: block; }
-        header h1 { margin: 0; font-size: 1.8rem; font-weight: 800; }
-        header p.unit-name { margin: 5px 0; font-size: 1.1rem; color: var(--ejust-red); font-weight: 700; }
-        header p.uni-name { margin: 0; font-size: 0.9rem; color: var(--text-gray); }
-
-        .logout-link {
-            position: absolute; top: 25px; left: 25px; color: var(--text-gray);
-            text-decoration: none; font-size: 0.85rem; border: 1.5px solid #ddd;
-            padding: 8px 18px; border-radius: 8px; font-weight: 600;
-        }
-
-        .container { max-width: 1250px; margin: 30px auto; padding: 0 20px; }
-
-        /* Tabs */
-        .project-tabs { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-bottom: 35px; }
-        .tab-btn {
-            padding: 14px 28px; border: 2px solid var(--main-black);
-            background: var(--white); color: var(--main-black);
-            border-radius: 10px; cursor: pointer; font-weight: 700; transition: 0.3s;
-        }
-        .tab-btn:hover, .tab-btn.active {
-            background: var(--ejust-red); color: var(--white); border-color: var(--ejust-red);
-        }
-
-        /* Stats Card */
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin-bottom: 35px; display: none; }
-        .stat-card { background: var(--white); padding: 30px 20px; border-radius: 15px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-right: 8px solid #ddd; }
-        .stat-card.due { border-right-color: var(--main-black); }
-        .stat-card.received { border-right-color: var(--ejust-red); }
-        .stat-card.balance { border-right-color: var(--positive-green); }
-        .stat-card .amount { font-size: 2rem; font-weight: 800; margin-top: 12px; }
-
-        /* Search */
-        .search-section { margin-bottom: 25px; display: none; }
-        #searchInput { width: 100%; padding: 18px 25px; border: 2px solid #e0e0e0; border-radius: 12px; outline: none; font-family: inherit; }
-
-        /* Table */
-        .table-overflow { background: var(--white); border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; min-width: 1000px; }
-        th { background-color: var(--main-black); color: var(--white); padding: 22px 15px; font-weight: 700; }
+        header { background: var(--white); border-bottom: 5px solid var(--ejust-red); padding: 25px; text-align: center; position: relative; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .logo-box { background: #f4f4f4; display: inline-block; padding: 10px 20px; border-radius: 10px; margin-bottom: 10px; }
+        .logo-box img { max-height: 70px; }
         
-        td { padding: 18px 15px; border-bottom: 1px solid #f2f2f2; text-align: center; font-size: 1rem; font-weight: 500; }
+        .logout-link { position: absolute; top: 20px; left: 20px; color: #666; text-decoration: none; border: 1px solid #ddd; padding: 5px 12px; border-radius: 5px; font-size: 0.8rem; }
 
-        /* تباين ألوان الصفوف (Zebra Striping) */
-        tr:nth-child(even) { background-color: #f2f4f6; } /* رمادي خفيف جداً */
-        tr:nth-child(odd) { background-color: #ffffff; } /* أبيض */
-        tr:hover { background-color: #e9ecef; }
+        .container { max-width: 1200px; margin: 25px auto; padding: 0 20px; }
 
-        /* فئات التلوين الشرطي */
-        .val-positive { color: var(--positive-green) !important; font-weight: 700; }
-        .val-negative { color: var(--negative-red) !important; font-weight: 700; }
+        .project-tabs { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 30px; }
+        .tab-btn { padding: 12px 20px; border: 2px solid var(--main-black); background: var(--white); cursor: pointer; font-weight: 700; border-radius: 8px; transition: 0.3s; }
+        .tab-btn.active { background: var(--ejust-red); color: var(--white); border-color: var(--ejust-red); }
 
-        #loadingOverlay { display: none; text-align: center; padding: 40px; color: var(--ejust-red); font-weight: 800; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 30px; display: none; }
+        .stat-card { background: var(--white); padding: 20px; border-radius: 12px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-right: 6px solid #ddd; }
+        .stat-card.balance { border-right-color: var(--ejust-red); }
+        .stat-card .amount { font-size: 1.6rem; font-weight: 800; margin-top: 5px; }
+
+        .search-section { margin-bottom: 20px; display: none; }
+        #searchInput { width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 10px; outline: none; font-family: inherit; }
+
+        .table-wrapper { background: var(--white); border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; min-width: 900px; }
+        th { background: var(--main-black); color: var(--white); padding: 15px; font-size: 0.9rem; }
+        td { padding: 14px; border-bottom: 1px solid #eee; text-align: center; font-size: 0.95rem; }
+
+        /* تباين الصفوف */
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        tr:hover { background-color: #f1f1f1; }
+
+        /* تلوين مبلغ الفاتورة فقط */
+        .invoice-pos { color: var(--positive-green) !important; font-weight: 800; }
+        .invoice-neg { color: var(--negative-red) !important; font-weight: 800; }
+
+        #loading { display: none; text-align: center; color: var(--ejust-red); font-weight: 800; padding: 20px; }
     </style>
 </head>
 <body>
@@ -104,132 +60,107 @@
         <div class="logo-box">
             <img src="https://ejust.edu.eg/assets/img/logo.png" alt="E-JUST Logo">
         </div>
-        <h1>CETC Unit</h1>
-        <p class="unit-name">Civil Engineering Testing and Consulting Unit</p>
-        <p class="uni-name">Egypt-Japan University for Science and Technology</p>
+        <h2 style="margin:0; font-size: 1.4rem;">CETC Unit</h2>
+        <p style="margin:0; color:var(--ejust-red); font-weight:700; font-size:0.9rem;">Civil Engineering Testing and Consulting Unit</p>
     </header>
 
     <div class="container">
         <div class="project-tabs">
-            <button class="tab-btn" onclick="fetchProject(1, this)">سجل - 01 LOG</button>
-            <button class="tab-btn" onclick="fetchProject(2, this)">إسكان الحي التاسع</button>
-            <button class="tab-btn" onclick="fetchProject(3, this)">ترعة الحمام</button>
-            <button class="tab-btn" onclick="fetchProject(4, this)">مشروع ديارنا</button>
+            <button class="tab-btn" onclick="loadData(1, this)">سجل - 01 LOG</button>
+            <button class="tab-btn" onclick="loadData(2, this)">إسكان الحي التاسع</button>
+            <button class="tab-btn" onclick="loadData(3, this)">ترعة الحمام</button>
+            <button class="tab-btn" onclick="loadData(4, this)">مشروع ديارنا</button>
         </div>
 
         <div class="stats-grid" id="statsArea">
-            <div class="stat-card due">
-                <h3>إجمالي المستحق</h3>
-                <div class="amount" id="totalDueText">0</div>
-            </div>
-            <div class="stat-card received">
-                <h3>إجمالي المورد</h3>
-                <div class="amount" id="totalReceivedText">0</div>
-            </div>
-            <div class="stat-card balance">
-                <h3>صافي المديونية</h3>
-                <div class="amount" id="netBalanceText">0</div>
-            </div>
+            <div class="stat-card"><h3>إجمالي المستحق</h3><div class="amount" id="sumDue">0</div></div>
+            <div class="stat-card"><h3>إجمالي المورد</h3><div class="amount" id="sumRec">0</div></div>
+            <div class="stat-card balance"><h3>صافي المديونية</h3><div class="amount" id="sumBal">0</div></div>
         </div>
 
         <div class="search-section" id="searchArea">
-            <input type="text" id="searchInput" placeholder="ابحث باسم الشركة أو تفاصيل البيان..." onkeyup="filterRows()">
+            <input type="text" id="searchInput" placeholder="ابحث باسم الشركة أو البيان..." onkeyup="search()">
         </div>
 
-        <div id="loadingOverlay">جاري الاتصال بـ Google Drive...</div>
+        <div id="loading">جاري التحديث من Google Drive...</div>
 
-        <div class="table-overflow">
+        <div class="table-wrapper">
             <table id="mainTable">
-                <thead><tr id="headerRow"></tr></thead>
-                <tbody id="dataRows">
-                    <tr><td colspan="6" style="padding: 80px; color: #aaa;">يرجى اختيار ملف المشروع أعلاه لعرض البيانات</td></tr>
+                <thead><tr id="hRow"></tr></thead>
+                <tbody id="bRows">
+                    <tr><td colspan="6" style="padding:50px; color:#999;">يرجى اختيار المشروع لعرض البيانات</td></tr>
                 </tbody>
             </table>
         </div>
     </div>
 
     <script>
-        let currentData = [];
+        let currentId = null;
 
-        async function fetchProject(id, btn) {
+        async function loadData(id, btn) {
+            currentId = id;
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            document.getElementById('loadingOverlay').style.display = 'block';
-            document.getElementById('statsArea').style.display = 'none';
-            document.getElementById('searchArea').style.display = 'none';
-
+            document.getElementById('loading').style.display = 'block';
+            
             try {
-                const response = await fetch(`/get-data/${id}`);
-                currentData = await response.json();
-                populateTable(currentData);
-            } catch (err) {
-                alert("تعذر جلب البيانات");
-            } finally {
-                document.getElementById('loadingOverlay').style.display = 'none';
-            }
+                const res = await fetch(`/get-data/${id}`);
+                const data = await res.json();
+                render(data);
+            } catch (e) { alert("خطأ في الاتصال"); }
+            finally { document.getElementById('loading').style.display = 'none'; }
         }
 
-        function populateTable(data) {
-            const hRow = document.getElementById('headerRow');
-            const bRows = document.getElementById('dataRows');
-            hRow.innerHTML = ''; bRows.innerHTML = '';
+        function render(data) {
+            const h = document.getElementById('hRow');
+            const b = document.getElementById('bRows');
+            h.innerHTML = ''; b.innerHTML = '';
 
             if (data.length > 0) {
-                // العناوين (B-G)
-                const headers = data[2] || [];
-                headers.forEach(text => {
+                data[2].forEach(txt => {
                     const th = document.createElement('th');
-                    th.textContent = text || '-';
-                    hRow.appendChild(th);
+                    th.textContent = txt || '-';
+                    h.appendChild(th);
                 });
 
-                let sumDue = 0, sumRec = 0;
+                let due = 0, rec = 0;
+                // تحديد موقع عمود مبلغ الفاتورة (آخر عمود دائماً في المصفوفة المرسلة)
+                const invoiceColIdx = (currentId == 1) ? 5 : 4;
 
                 data.slice(3).forEach(row => {
                     if(!row[0] && !row[1]) return;
                     const tr = document.createElement('tr');
                     
-                    row.forEach((cell) => {
+                    row.forEach((cell, idx) => {
                         const td = document.createElement('td');
-                        const numVal = Number(cell);
+                        const val = Number(cell);
 
-                        // التلوين الشرطي وتنسيق الأرقام
-                        if (!isNaN(numVal) && cell !== '' && cell !== null) {
-                            td.textContent = numVal.toLocaleString('en-US');
-                            if (numVal < 0) td.classList.add('val-negative');
-                            else if (numVal > 0) td.classList.add('val-positive');
+                        // تلوين عمود مبلغ الفاتورة فقط
+                        if (idx === invoiceColIdx && !isNaN(val) && cell !== '') {
+                            td.textContent = val.toLocaleString();
+                            td.className = val < 0 ? 'invoice-neg' : 'invoice-pos';
                         } else {
-                            td.textContent = cell || '';
+                            td.textContent = isNaN(val) || cell === '' ? cell : val.toLocaleString();
                         }
-                        
                         tr.appendChild(td);
                     });
-                    bRows.appendChild(tr);
-
-                    sumDue += Number(row[2]) || 0;
-                    sumRec += Number(row[3]) || 0;
+                    b.appendChild(tr);
+                    due += Number(row[2]) || 0;
+                    rec += Number(row[3]) || 0;
                 });
 
-                document.getElementById('totalDueText').textContent = sumDue.toLocaleString() + " ج.م";
-                document.getElementById('totalReceivedText').textContent = sumRec.toLocaleString() + " ج.م";
-                
-                const balance = sumDue - sumRec;
-                const balEl = document.getElementById('netBalanceText');
-                balEl.textContent = balance.toLocaleString() + " ج.م";
-                // تلوين إجمالي المديونية أيضاً
-                balEl.className = 'amount ' + (balance < 0 ? 'val-negative' : 'val-positive');
-
+                document.getElementById('sumDue').textContent = due.toLocaleString() + " ج.م";
+                document.getElementById('sumRec').textContent = rec.toLocaleString() + " ج.م";
+                document.getElementById('sumBal').textContent = (due - rec).toLocaleString() + " ج.م";
                 document.getElementById('statsArea').style.display = 'grid';
                 document.getElementById('searchArea').style.display = 'block';
             }
         }
 
-        function filterRows() {
+        function search() {
             const q = document.getElementById('searchInput').value.toLowerCase();
-            const trs = document.getElementById('dataRows').getElementsByTagName('tr');
-            for (let tr of trs) {
-                tr.style.display = tr.textContent.toLowerCase().includes(q) ? "" : "none";
-            }
+            const trs = document.getElementById('bRows').getElementsByTagName('tr');
+            for (let tr of trs) tr.style.display = tr.textContent.toLowerCase().includes(q) ? "" : "none";
         }
     </script>
 </body>

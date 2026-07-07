@@ -37,7 +37,6 @@ function checkAuth(req, res, next) {
     res.redirect('/login');
 }
 
-// --- 3. صفحة تسجيل الدخول المحدثة (داخل السيرفر) ---
 app.get('/login', (req, res) => {
     if (req.session.loggedIn) return res.redirect('/');
     res.send(`
@@ -49,7 +48,10 @@ app.get('/login', (req, res) => {
             <style>
                 body { font-family: sans-serif; background-color: #1a1a1a; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
                 .login-card { background: white; padding: 40px; border-radius: 15px; border-top: 8px solid #C41230; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.5); width: 320px; }
-                img { max-height: 90px; margin-bottom: 20px; }
+                /* اللوجو الجديد */
+                .logo-wrapper { background: #f8f8f8; padding: 15px; border-radius: 10px; margin-bottom: 20px; }
+                img { max-width: 100%; height: auto; max-height: 80px; }
+                
                 h2 { color: #1a1a1a; margin: 0 0 10px; font-size: 1.3rem; }
                 p.sub { color: #C41230; font-weight: bold; margin-bottom: 25px; font-size: 0.9rem; }
                 input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 1rem; outline: none; }
@@ -61,7 +63,9 @@ app.get('/login', (req, res) => {
         </head>
         <body>
             <div class="login-card">
-                <img src="logo.png" alt="Logo">
+                <div class="logo-wrapper">
+                    <img src="https://ejust.edu.eg/assets/img/logo.png" alt="E-JUST Logo">
+                </div>
                 <h2>CETC Unit</h2>
                 <p class="sub">نظام حصر فواتير الشركات</p>
                 <form action="/login" method="POST">

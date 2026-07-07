@@ -90,33 +90,34 @@ app.get('/', checkAuth, (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// جلب البيانات من جوجل درايف
+// جلب البيانات من جوجل درايف (نسخة محدثة لحصر الأعمدة من B إلى G)
 app.get('/get-data/:id', checkAuth, async (req, res) => {
     try {
         const fileId = fileIds[req.params.id];
-        if (!fileId) return res.status(404).send("معرف الملف غير صحيح");
-
-        // تحميل الملف
         const response = await drive.files.get(
             { fileId: fileId, alt: 'media' },
             { responseType: 'arraybuffer' }
         );
 
-        // معالجة الملف
         const workbook = XLSX.read(response.data, { type: 'buffer' });
         const sheetName = "فواتير الشركات"; 
-        
-        if (!workbook.SheetNames.includes(sheetName)) {
-            return res.status(404).json({ error: "تبويبة فواتير الشركات غير موجودة" });
-        }
-
         const sheet = workbook.Sheets[sheetName];
-        const data = XLSX.utils.sheet_to_json(sheet, { header: 1 });
 
-        res.json(data);
+        // 1. تحويل الشيت بالكامل إلى مصفوفة (Array)
+        const fullData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+        // 2. تصفية البيانات لاختيار الأعمدة من B إلى G فقط
+        // العمود B ترتيبه 1 والعمود G ترتيبه 6 (العد يبدأ من 0)
+        const filteredData = fullData.map(row => {
+            if (!row || row.length === 0) return [];
+            // slice(1, 7) تعني خذ العناصر من الحانة رقم 1 (B) حتى رقم 6 (G)
+            return row.slice(1, 7); 
+        });
+
+        res.json(filteredData);
     } catch (error) {
         console.error("Error fetching data:", error);
-        res.status(500).json({ error: "حدث خطأ أثناء جلب البيانات من جوجل" });
+        res.status(500).json({ error: "حدث خطأ أثناء جلب البيانات" });
     }
 });
 

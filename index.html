@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>لوحة عرض فواتير الشركات</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #f8f9fa; margin: 0; padding: 20px; }
+        .header { text-align: center; color: #2c3e50; margin-bottom: 20px; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        .tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
+        .tab-button { padding: 10px 20px; cursor: pointer; border: 1px solid #3498db; background: white; border-radius: 5px; font-weight: bold; }
+        .tab-button.active { background: #3498db; color: white; }
+        .table-container { background: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); padding: 15px; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background-color: #34495e; color: white; padding: 12px; border: 1px solid #ddd; }
+        td { padding: 10px; border: 1px solid #ddd; text-align: center; }
+        tr:nth-child(even) { background-color: #f2f2f2; }
+        #loading { text-align: center; display: none; color: #e67e22; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="header"><h1>نظام عرض فواتير الشركات التلقائي</h1></div>
+
+    <div class="tabs">
+        <button class="tab-button" onclick="fetchData(1, this)">سجل - 01 LOG</button>
+        <button class="tab-button" onclick="fetchData(2, this)">إسكان الحي التاسع</button>
+        <button class="tab-button" onclick="fetchData(3, this)">ترعة الحمام</button>
+        <button class="tab-button" onclick="fetchData(4, this)">مشروع ديارنا</button>
+    </div>
+
+    <div id="loading">جاري تحديث البيانات من جوجل درايف...</div>
+
+    <div class="table-container">
+        <table id="dataTable">
+            <thead><tr id="headerRow"></tr></thead>
+            <tbody id="bodyRows"></tbody>
+        </table>
+    </div>
+
+    <script>
+        async function fetchData(id, btn) {
+            document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('loading').style.display = 'block';
+
+            try {
+                const response = await fetch(`/get-data/${id}`);
+                const data = await response.json();
+                renderTable(data);
+            } catch (err) {
+                alert("خطأ في جلب البيانات");
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+            }
+        }
+
+        function renderTable(data) {
+            const headerRow = document.getElementById('headerRow');
+            const bodyRows = document.getElementById('bodyRows');
+            headerRow.innerHTML = '';
+            bodyRows.innerHTML = '';
+
+            if (data.length > 0) {
+                // عرض الصفوف (نتخطى أول صفين لو كانت للعناوين الكبيرة)
+                data.forEach((row, index) => {
+                    const tr = document.createElement('tr');
+                    row.forEach(cell => {
+                        const cellElement = index === 2 ? document.createElement('th') : document.createElement('td');
+                        cellElement.textContent = cell || '';
+                        if (index === 2) headerRow.appendChild(cellElement);
+                        else tr.appendChild(cellElement);
+                    });
+                    if (index > 2) bodyRows.appendChild(tr);
+                });
+            }
+        }
+    </script>
+</body>
+</html>

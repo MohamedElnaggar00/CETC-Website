@@ -4,14 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CETC Unit - Dashboard</title>
-    <!-- خط القاهرة الاحترافي -->
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- خط القاهرة الاحترافي من جوجل -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --ejust-red: #C41230;
             --main-black: #1a1a1a;
-            --bg-light: #f4f4f4;
+            --bg-light: #f8f9fa;
             --white: #ffffff;
+            --text-gray: #555;
         }
 
         body {
@@ -22,138 +23,156 @@
             color: var(--main-black);
         }
 
-        /* رأس الصفحة (Header) */
+        /* رأس الصفحة المطور */
         header {
             background-color: var(--white);
             border-bottom: 5px solid var(--ejust-red);
             padding: 30px 20px;
             text-align: center;
             position: relative;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .logo-box {
+            background: #f4f4f4; /* خلفية رمادية فاتحة لإبراز اللوجو إذا كان أبيض */
+            display: inline-block;
+            padding: 15px 25px;
+            border-radius: 12px;
+            margin-bottom: 15px;
         }
 
         .logo-box img {
-            max-height: 100px;
-            margin-bottom: 15px;
+            max-height: 80px;
+            display: block;
         }
 
         header h1 {
             margin: 0;
-            font-size: 1.6rem;
+            font-size: 1.8rem;
+            font-weight: 800;
             color: var(--main-black);
-            letter-spacing: 1px;
         }
 
-        header p {
-            margin: 5px 0 0;
-            font-size: 1rem;
+        header p.unit-name {
+            margin: 5px 0;
+            font-size: 1.1rem;
             color: var(--ejust-red);
-            font-weight: 600;
+            font-weight: 700;
         }
 
-        .university-name {
-            font-size: 0.85rem;
-            color: #555;
-            margin-top: 5px;
+        header p.uni-name {
+            margin: 0;
+            font-size: 0.9rem;
+            color: var(--text-gray);
         }
 
-        /* زر الخروج */
+        /* زر تسجيل الخروج */
         .logout-link {
             position: absolute;
-            top: 20px;
-            left: 20px;
-            color: #666;
+            top: 25px;
+            left: 25px;
+            color: var(--text-gray);
             text-decoration: none;
             font-size: 0.85rem;
-            border: 1px solid #ddd;
-            padding: 5px 15px;
-            border-radius: 5px;
+            border: 1.5px solid #ddd;
+            padding: 8px 18px;
+            border-radius: 8px;
+            font-weight: 600;
             transition: 0.3s;
         }
-        .logout-link:hover { background: #eee; color: var(--ejust-red); }
+        .logout-link:hover {
+            background: var(--ejust-red);
+            color: var(--white);
+            border-color: var(--ejust-red);
+        }
 
         .container {
-            max-width: 1200px;
+            max-width: 1250px;
             margin: 30px auto;
             padding: 0 20px;
         }
 
-        /* أزرار المشاريع */
+        /* أزرار المشاريع (التبويبات) */
         .project-tabs {
             display: flex;
             justify-content: center;
-            gap: 12px;
+            gap: 15px;
             flex-wrap: wrap;
-            margin-bottom: 30px;
+            margin-bottom: 35px;
         }
 
         .tab-btn {
-            padding: 12px 25px;
+            padding: 14px 28px;
             border: 2px solid var(--main-black);
             background: var(--white);
             color: var(--main-black);
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
             font-weight: 700;
-            font-size: 0.95rem;
-            transition: 0.3s;
+            font-size: 1rem;
+            transition: all 0.3s ease;
         }
 
         .tab-btn:hover, .tab-btn.active {
             background: var(--ejust-red);
             color: var(--white);
             border-color: var(--ejust-red);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(196, 18, 48, 0.2);
         }
 
-        /* لوحة الإحصائيات */
-        .stats-row {
+        /* لوحة الإحصائيات (المربعات الملونة) */
+        .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-            display: none; /* تظهر عند جلب البيانات */
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 35px;
+            display: none; /* تظهر فقط عند تحميل البيانات */
         }
 
-        .stat-item {
+        .stat-card {
             background: var(--white);
-            padding: 25px;
-            border-radius: 12px;
+            padding: 30px 20px;
+            border-radius: 15px;
             text-align: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            border-bottom: 4px solid #ddd;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border-right: 8px solid #ddd;
         }
 
-        .stat-item.due { border-bottom-color: var(--main-black); }
-        .stat-item.received { border-bottom-color: var(--ejust-red); }
-        .stat-item.balance { border-bottom-color: #27ae60; }
+        .stat-card.due { border-right-color: var(--main-black); }
+        .stat-card.received { border-right-color: var(--ejust-red); }
+        .stat-card.balance { border-right-color: #27ae60; }
 
-        .stat-item h3 { margin: 0; font-size: 1rem; color: #777; }
-        .stat-item .number { font-size: 1.8rem; font-weight: 800; margin-top: 10px; color: var(--main-black); }
+        .stat-card h3 { margin: 0; font-size: 1rem; color: var(--text-gray); }
+        .stat-card .amount { font-size: 2rem; font-weight: 800; margin-top: 12px; color: var(--main-black); }
 
-        /* صندوق البحث */
-        .search-box {
-            margin-bottom: 20px;
+        /* صندوق البحث الذكي */
+        .search-section {
+            margin-bottom: 25px;
             display: none;
         }
 
         #searchInput {
             width: 100%;
-            padding: 15px 20px;
-            border: 2px solid #ddd;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-family: inherit;
+            padding: 18px 25px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-family: 'Cairo', sans-serif;
             box-sizing: border-box;
             outline: none;
             transition: 0.3s;
         }
-        #searchInput:focus { border-color: var(--ejust-red); box-shadow: 0 0 10px rgba(196,18,48,0.1); }
+        #searchInput:focus {
+            border-color: var(--ejust-red);
+            box-shadow: 0 0 15px rgba(196, 18, 48, 0.1);
+        }
 
-        /* الجدول */
-        .table-container {
+        /* الجدول المنسق */
+        .table-overflow {
             background: var(--white);
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
             overflow: hidden;
             overflow-x: auto;
         }
@@ -161,40 +180,44 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 900px;
+            min-width: 1000px;
         }
 
         th {
             background-color: var(--main-black);
             color: var(--white);
-            padding: 18px 10px;
-            font-size: 0.95rem;
-            font-weight: 600;
+            padding: 22px 15px;
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
         }
 
         td {
-            padding: 15px 10px;
-            border-bottom: 1px solid #f0f0f0;
+            padding: 18px 15px;
+            border-bottom: 1px solid #f2f2f2;
             text-align: center;
-            font-size: 0.95rem;
+            font-size: 1rem;
+            font-weight: 500;
         }
 
-        tr:nth-child(even) { background-color: #fafafa; }
-        tr:hover { background-color: #f1f1f1; }
+        tr:nth-child(even) { background-color: #fcfcfc; }
+        tr:hover { background-color: #f8f8f8; cursor: default; }
 
         /* رسالة التحميل */
-        #loadingMsg {
+        #loadingOverlay {
             display: none;
             text-align: center;
-            padding: 20px;
+            padding: 40px;
             color: var(--ejust-red);
-            font-weight: bold;
+            font-weight: 800;
+            font-size: 1.2rem;
         }
 
-        /* للهواتف */
+        /* تجاوب الموبايل */
         @media (max-width: 768px) {
-            .project-tabs { flex-direction: column; }
+            header { padding: 50px 15px 30px; }
             .tab-btn { width: 100%; }
+            .logout-link { top: 10px; left: 10px; width: 80px; text-align: center; }
         }
     </style>
 </head>
@@ -203,107 +226,105 @@
     <header>
         <a href="/logout" class="logout-link">خروج</a>
         <div class="logo-box">
-            <!-- سيقوم الموقع بقراءة logo.png من المجلد الرئيسي -->
-            <img src="logo.png" alt="CETC Logo">
+            <!-- رابط شعار الجامعة الرسمي -->
+            <img src="https://ejust.edu.eg/assets/img/logo.png" alt="E-JUST Logo">
         </div>
         <h1>CETC Unit</h1>
-        <p>Civil Engineering Testing and Consulting Unit</p>
-        <div class="university-name">Egypt-Japan University for Science and Technology</div>
+        <p class="unit-name">Civil Engineering Testing and Consulting Unit</p>
+        <p class="uni-name">Egypt-Japan University for Science and Technology</p>
     </header>
 
     <div class="container">
-        <!-- أزرار المشاريع -->
+        <!-- أزرار التبديل بين الملفات -->
         <div class="project-tabs">
-            <button class="tab-btn" onclick="fetchData(1, this)">سجل - 01 LOG</button>
-            <button class="tab-btn" onclick="fetchData(2, this)">إسكان الحي التاسع</button>
-            <button class="tab-btn" onclick="fetchData(3, this)">ترعة الحمام</button>
-            <button class="tab-btn" onclick="tabClick(4, this)">مشروع ديارنا</button>
+            <button class="tab-btn" onclick="fetchProject(1, this)">سجل - 01 LOG</button>
+            <button class="tab-btn" onclick="fetchProject(2, this)">إسكان الحي التاسع</button>
+            <button class="tab-btn" onclick="fetchProject(3, this)">ترعة الحمام</button>
+            <button class="tab-btn" onclick="fetchProject(4, this)">مشروع ديارنا</button>
         </div>
 
-        <!-- إحصائيات -->
-        <div class="stats-row" id="statsArea">
-            <div class="stat-item due">
+        <!-- الإحصائيات -->
+        <div class="stats-grid" id="statsArea">
+            <div class="stat-card due">
                 <h3>إجمالي المستحق</h3>
-                <div class="number" id="valDue">0</div>
+                <div class="amount" id="totalDueText">0</div>
             </div>
-            <div class="stat-item received">
+            <div class="stat-card received">
                 <h3>إجمالي المورد</h3>
-                <div class="number" id="valReceived">0</div>
+                <div class="amount" id="totalReceivedText">0</div>
             </div>
-            <div class="stat-item balance">
+            <div class="stat-card balance">
                 <h3>صافي المديونية</h3>
-                <div class="number" id="valBalance">0</div>
+                <div class="amount" id="netBalanceText">0</div>
             </div>
         </div>
 
-        <!-- بحث -->
-        <div class="search-box" id="searchArea">
-            <input type="text" id="searchInput" placeholder="ابحث باسم الشركة أو البيان..." onkeyup="doSearch()">
+        <!-- البحث -->
+        <div class="search-section" id="searchArea">
+            <input type="text" id="searchInput" placeholder="ابحث باسم الشركة أو تفاصيل البيان..." onkeyup="filterRows()">
         </div>
 
-        <div id="loadingMsg">جاري الاتصال بقاعدة بيانات جوجل درايف...</div>
+        <!-- التحميل -->
+        <div id="loadingOverlay">جاري جلب البيانات من Google Drive...</div>
 
         <!-- الجدول -->
-        <div class="table-container">
+        <div class="table-overflow">
             <table id="mainTable">
-                <thead><tr id="headRow"></tr></thead>
-                <tbody id="bodyRows">
-                    <tr><td colspan="6" style="padding: 60px; color: #888;">يرجى اختيار ملف المشروع لعرض البيانات</td></tr>
+                <thead><tr id="headerRow"></tr></thead>
+                <tbody id="dataRows">
+                    <tr><td colspan="6" style="padding: 80px; color: #aaa; font-size: 1.2rem;">يرجى اختيار ملف المشروع أعلاه لعرض البيانات</td></tr>
                 </tbody>
             </table>
         </div>
     </div>
 
     <script>
-        let cachedData = [];
+        let currentData = [];
 
-        async function fetchData(id, btn) {
-            // تنسيق الأزرار
+        async function fetchProject(id, btn) {
+            // تحديث حالة الأزرار
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
 
-            // إظهار التحميل وإخفاء العناصر
-            document.getElementById('loadingMsg').style.display = 'block';
+            // إعداد الواجهة
+            document.getElementById('loadingOverlay').style.display = 'block';
             document.getElementById('statsArea').style.display = 'none';
             document.getElementById('searchArea').style.display = 'none';
 
             try {
-                const res = await fetch(`/get-data/${id}`);
-                cachedData = await res.json();
+                const response = await fetch(`/get-data/${id}`);
+                const result = await response.json();
                 
-                if(cachedData.error) {
-                    alert(cachedData.error);
+                if(result.error) {
+                    alert("خطأ: " + result.error);
                 } else {
-                    buildUI(cachedData);
+                    currentData = result;
+                    populateTable(currentData);
                 }
-            } catch (e) {
-                alert("حدث خطأ في جلب البيانات من السيرفر");
+            } catch (err) {
+                alert("تعذر الاتصال بالسيرفر، يرجى المحاولة لاحقاً");
             } finally {
-                document.getElementById('loadingMsg').style.display = 'none';
+                document.getElementById('loadingOverlay').style.display = 'none';
             }
         }
 
-        // دالة بديلة لزر ديارنا لتجنب أي تعليق
-        function tabClick(id, btn) { fetchData(id, btn); }
-
-        function buildUI(data) {
-            const head = document.getElementById('headRow');
-            const body = document.getElementById('bodyRows');
-            head.innerHTML = '';
-            body.innerHTML = '';
+        function populateTable(data) {
+            const hRow = document.getElementById('headerRow');
+            const bRows = document.getElementById('dataRows');
+            hRow.innerHTML = '';
+            bRows.innerHTML = '';
 
             if (data.length > 0) {
-                // العناوين: نفترض أنها في الصف رقم 3 (إندكس 2 في المصفوفة الأصلية)
-                // بما أننا عملنا slice للأعمدة في السيرفر، فالعناوين ستكون في أول صف متاح
+                // العناوين: نفترض أنها في الصف رقم 3 (إندكس 2)
                 const headers = data[2] || [];
-                headers.forEach(h => {
+                headers.forEach(text => {
                     const th = document.createElement('th');
-                    th.textContent = h || '-';
-                    head.appendChild(th);
+                    th.textContent = text || '-';
+                    hRow.appendChild(th);
                 });
 
-                // البيانات: تبدأ من الصف 4 (إندكس 3)
-                let totalDue = 0, totalRec = 0;
+                // البيانات والإحصائيات
+                let sumDue = 0, sumRec = 0;
 
                 data.slice(3).forEach(row => {
                     if(!row[0] && !row[1]) return; // تجاهل الصفوف الفارغة تماماً
@@ -312,32 +333,32 @@
                     row.forEach((cell, idx) => {
                         const td = document.createElement('td');
                         const val = cell || '';
-                        td.textContent = isNaN(val) || val === '' ? val : Number(val).toLocaleString();
+                        // تنسيق الأرقام بفاصلة الآلاف
+                        td.textContent = (isNaN(val) || val === '') ? val : Number(val).toLocaleString('en-US');
                         tr.appendChild(td);
                     });
-                    body.appendChild(tr);
+                    bRows.appendChild(tr);
 
-                    // حسابات (بناءً على الترتيب B-G): 
-                    // B(0), C(1), D(2:المستحق), E(3:المورد)
-                    totalDue += Number(row[2]) || 0;
-                    totalRec += Number(row[3]) || 0;
+                    // حسابات (Index 2 = D المستحق، Index 3 = E المورد)
+                    sumDue += Number(row[2]) || 0;
+                    sumRec += Number(row[3]) || 0;
                 });
 
-                // تحديث الإحصائيات
-                document.getElementById('valDue').textContent = totalDue.toLocaleString() + " ج.م";
-                document.getElementById('valReceived').textContent = totalRec.toLocaleString() + " ج.م";
-                document.getElementById('valBalance').textContent = (totalDue - totalRec).toLocaleString() + " ج.م";
+                // تحديث كروت الإحصائيات
+                document.getElementById('totalDueText').textContent = sumDue.toLocaleString() + " ج.م";
+                document.getElementById('totalReceivedText').textContent = sumRec.toLocaleString() + " ج.م";
+                document.getElementById('netBalanceText').textContent = (sumDue - sumRec).toLocaleString() + " ج.م";
 
                 document.getElementById('statsArea').style.display = 'grid';
                 document.getElementById('searchArea').style.display = 'block';
             }
         }
 
-        function doSearch() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
-            const rows = document.getElementById('bodyRows').getElementsByTagName('tr');
-            for (let row of rows) {
-                row.style.display = row.textContent.toLowerCase().includes(query) ? "" : "none";
+        function filterRows() {
+            const q = document.getElementById('searchInput').value.toLowerCase();
+            const trs = document.getElementById('dataRows').getElementsByTagName('tr');
+            for (let tr of trs) {
+                tr.style.display = tr.textContent.toLowerCase().includes(q) ? "" : "none";
             }
         }
     </script>

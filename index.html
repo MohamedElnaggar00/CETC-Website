@@ -11,10 +11,8 @@
         
         .sidebar { width: 280px; background: var(--sidebar); color: white; display: flex; flex-direction: column; justify-content: space-between; }
         .sidebar-header { padding: 30px 20px; text-align: center; border-bottom: 1px solid #333; }
-        
-        /* تحديث خلفية اللوجو */
-        .logo-box { background: white; padding: 10px; border-radius: 8px; display: inline-block; }
-        .logo-box img { max-height: 55px; display: block; }
+        .logo-box { background: white; padding: 8px; border-radius: 8px; display: inline-block; }
+        .logo-box img { max-height: 50px; display: block; }
 
         .menu-list { flex-grow: 1; padding: 20px 0; }
         .menu-item { padding: 15px 25px; display: flex; align-items: center; gap: 15px; cursor: pointer; color: #a0a0a0; font-weight: 600; }
@@ -52,7 +50,6 @@
     <aside class="sidebar">
         <div class="sidebar-header">
             <div class="logo-box">
-                <!-- تم تحديث رابط اللوجو هنا -->
                 <img src="https://github.com/MohamedElnaggar00/CETC-office-online/blob/main/public/logo.png?raw=true" alt="CETC Logo">
             </div>
             <div style="font-weight: 800; margin-top: 10px; color: #fff;">CETC UNIT</div>
@@ -128,14 +125,14 @@
                 if(data.length > 0) {
                     data[2].forEach(t => { const th = document.createElement('th'); th.textContent = t; h.appendChild(th); });
                     let due=0, rec=0;
-                    const invoiceColIdx = (id == 1 || id == 5) ? 5 : 4;
+                    const invCol = (id == 1 || id == 5) ? 5 : 4;
                     data.slice(3).forEach(row => {
                         if(!row[0] && !row[1]) return;
                         const tr = document.createElement('tr');
                         row.forEach((c, i) => {
                             const td = document.createElement('td');
                             const val = Number(c);
-                            if(mod === 'billing' && i === invoiceColIdx && !isNaN(val) && c !== '') {
+                            if(mod === 'billing' && i === invCol && !isNaN(val) && c !== '') {
                                 td.className = val < 0 ? 'neg' : 'pos';
                                 td.textContent = val.toLocaleString();
                             } else { td.textContent = isNaN(val) || c==='' ? c : val.toLocaleString(); }

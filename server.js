@@ -6,13 +6,12 @@ const path = require('path');
 
 const app = express();
 
-// --- 1. الإعدادات الأساسية ---
 app.use(express.static(path.join(process.cwd()))); 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(session({
-    secret: 'cetc-unit-final-stable-2024',
+    secret: 'cetc-unit-ultimate-v4',
     resave: false,
     saveUninitialized: true,
     cookie: { maxAge: 24 * 60 * 60 * 1000 }
@@ -42,11 +41,12 @@ function checkAuth(req, res, next) {
     res.redirect('/login');
 }
 
-// --- 2. صفحة تسجيل الدخول (تم تحديث الروابط هنا) ---
+// --- صفحة تسجيل الدخول ---
 app.get('/login', (req, res) => {
     if (req.session.loggedIn) return res.redirect('/');
     
-    const bgUrl = "https://github.com/MohamedElnaggar00/CETC-office-online/blob/main/public/Background.jpg?raw=true";
+    // روابط صور خارجية مضمونة 100%
+    const bgUrl = "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop";
     const logoUrl = "https://github.com/MohamedElnaggar00/CETC-office-online/blob/main/public/logo.png?raw=true";
 
     res.send(`
@@ -57,27 +57,24 @@ app.get('/login', (req, res) => {
             <title>CETC Unit - Login</title>
             <style>
                 body { 
-                    font-family: 'Segoe UI', sans-serif;
-                    margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; 
-                    background: #1a1a1a url('${bgUrl}') no-repeat center center fixed; 
+                    font-family: sans-serif; margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; 
+                    background: #000 url('${bgUrl}') no-repeat center center fixed; 
                     background-size: cover; position: relative;
                 }
                 body::before { content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.7); z-index: 1; }
-                .login-card { background: rgba(255, 255, 255, 0.96); padding: 40px; border-radius: 15px; border-top: 8px solid #C41230; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.6); width: 340px; z-index: 2; position: relative; }
-                .logo-wrapper { background: #f8f8f8; padding: 15px; border-radius: 10px; margin-bottom: 25px; }
-                img { max-height: 80px; display: block; margin: 0 auto; }
-                h2 { color: #1a1a1a; margin: 10px 0 5px; font-size: 1.4rem; font-weight: 800; }
+                .card { background: rgba(255, 255, 255, 0.96); padding: 40px; border-radius: 15px; border-top: 8px solid #C41230; text-align: center; width: 330px; z-index: 2; position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
+                .logo-wrapper { background: white; padding: 10px; border-radius: 8px; margin-bottom: 25px; display: inline-block; }
+                img { max-height: 75px; display: block; margin: 0 auto; }
+                h2 { color: #1a1a1a; margin: 10px 0 5px; font-size: 1.3rem; font-weight: 800; }
                 p.sub { color: #C41230; font-weight: bold; margin-bottom: 30px; font-size: 0.85rem; }
-                input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; outline: none; }
-                button { width: 100%; padding: 12px; background: #C41230; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 1.1rem; }
+                input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; outline: none; box-sizing: border-box; }
+                button { width: 100%; padding: 12px; background: #C41230; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1.1rem; }
                 button:hover { background: #000; }
             </style>
         </head>
         <body>
-            <div class="login-card">
-                <div class="logo-wrapper">
-                    <img src="${logoUrl}" alt="CETC Logo">
-                </div>
+            <div class="card">
+                <div class="logo-wrapper"><img src="${logoUrl}" alt="CETC Logo"></div>
                 <h2>CETC Unit</h2>
                 <p class="sub">نظام حصر فواتير الشركات والمشاريع</p>
                 <form action="/login" method="POST">
@@ -97,7 +94,7 @@ app.post('/login', (req, res) => {
         req.session.loggedIn = true;
         res.redirect('/');
     } else {
-        res.send('بيانات الدخول غير صحيحة. <a href="/login">حاول مرة أخرى</a>');
+        res.send('خطأ في الدخول. <a href="/login">عودة</a>');
     }
 });
 
@@ -127,5 +124,5 @@ app.get('/get-data/:id', checkAuth, async (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server started on ${PORT}`));
+app.listen(PORT, () => console.log(`System Online`));
 module.exports = app;

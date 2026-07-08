@@ -7,29 +7,11 @@
     }
   ],
   "routes": [
-    {
-      "handle": "filesystem"
-    },
-    {
-      "src": "/get-data/(.*)",
-      "dest": "server.js"
-    },
-    {
-      "src": "/update-account",
-      "dest": "server.js"
-    },
-    {
-      "src": "/login",
-      "methods": ["GET", "POST"],
-      "dest": "server.js"
-    },
-    {
-      "src": "/logout",
-      "dest": "server.js"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "server.js"
-    }
+    { "handle": "filesystem" },
+    { "src": "/get-data/(.*)", "dest": "server.js" },
+    { "src": "/update-account", "dest": "server.js" },
+    { "src": "/login", "methods": ["GET", "POST"], "dest": "server.js" },
+    { "src": "/logout", "dest": "server.js" },
+    { "src": "/(.*)", "dest": "server.js" }
   ]
 }

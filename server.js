@@ -18,13 +18,13 @@ app.use(session({
     cookie: { maxAge: 24 * 60 * 60 * 1000 }
 }));
 
-// بيانات الحساب (تستخدم إعدادات Vercel أو الافتراضي)
-let USER_CREDENTIALS = {
+// بيانات الحساب من متغيرات البيئة في Vercel
+const USER_CREDENTIALS = {
     username: process.env.ADMIN_USER || "admin",
     password: process.env.ADMIN_PASS || "123"
 };
 
-// معرفات ملفات جوجل درايف
+// معرفات ملفات جوجل درايف (تأكد أن الحساب البريدي له صلاحية الوصول لها)
 const fileIds = {
     "1": "19sOJ3ihc-edrZ9B0bYsVfv_loQbO0uhW", // سجل 01 LOG
     "2": "1L_XTHyXNy-7YtC6ZQZ3GHYriLGFMvAfx", // اسكان الحي التاسع
@@ -33,18 +33,31 @@ const fileIds = {
     "5": "19z4P-fDzzCIFOIeL9197YhQyr2vXPSgv"  // الايرادات الشهرية
 };
 
-// إعدادات الوصول لجوجل درايف باستخدام متغيرات البيئة
+// --- 2. إعدادات الوصول لجوجل درايف (بدون ملف خارجي) ---
+// يتم معالجة المفتاح الخاص لحل مشكلة الـ New Lines في Vercel
+const privateKey = process.env.GOOGLE_PRIVATE_KEY 
+    ? process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n') 
+    : undefined;
+
 const auth = new google.auth.GoogleAuth({
     credentials: {
         client_email: process.env.GOOGLE_CLIENT_EMAIL,
-        private_key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'), // معالجة الرموز السطرية
+        private_key: privateKey,
         project_id: process.env.GOOGLE_PROJECT_ID,
     },
     scopes: ['https://www.googleapis.com/auth/drive.readonly'],
 });
+
 const drive = google.drive({ version: 'v3', auth });
 
-// --- 2. صفحة تسجيل الدخول المحدثة بالروابط الجديدة ---
+// ميدل وير للتحقق من تسجيل الدخول
+function checkAuth(req, res, next) {
+    if (req.session.loggedIn) return next();
+    res.redirect('/login');
+}
+
+// --- 3. المسارات (Routes) ---
+
 app.get('/login', (req, res) => {
     if (req.session.loggedIn) return res.redirect('/');
     
@@ -101,31 +114,58 @@ app.post('/login', (req, res) => {
     }
 });
 
-app.get('/logout', (req, res) => { req.session.destroy(); res.redirect('/login'); });
+app.get('/logout', (req, res) => { 
+    req.session.destroy(); 
+    res.redirect('/login'); 
+});
+
+app.get('/', checkAuth, (req, res) => { 
+    res.sendFile(path.join(process.cwd(), 'index.html')); 
+});
+
+// سحب البيانات من Google Drive
+app.get('/get-data/:id', checkAuth, async (req, res) => {
+    try {
+        const id = req.params.id;
+        const fileId = fileIds[id];
+        
+        if (!fileId) return res.status(404).json({ error: "ملف غير موجود" });
+
+        // التحقق من وجود المتغيرات
+        if (!process.env.GOOGLE_PRIVATE_KEY || !process.env.GOOGLE_CLIENT_EMAIL) {
+            throw new Error("Missing Google API Credentials in Environment Variables");
+        }
+
+        const response = await drive.files.get(
+            { fileId: fileId, alt: 'media' }, 
+            { responseType: 'arraybuffer' }
+        );
+
+        const workbook = XLSX.read(response.data, { type: 'buffer' });
+        const sheetName = workbook.SheetNames[0]; // نأخذ أول شيت غالباً
+        const sheet = workbook.Sheets[sheetName];
+        const fullData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+        
+        // معالجة البيانات حسب نوع الملف
+        const endCol = (id == "1" || id == "5") ? 7 : 6;
+        const filteredData = fullData.map(row => row ? row.slice(1, endCol) : []);
+        
+        res.json(filteredData);
+    } catch (error) { 
+        console.error("Drive Error:", error.message);
+        res.status(500).json({ error: "خطأ في الاتصال بالسيرفر أو جوجل درايف", details: error.message }); 
+    }
+});
 
 app.post('/update-account', checkAuth, (req, res) => {
     const { user, pass } = req.body;
+    // ملاحظة: هذه الطريقة تغير البيانات في الذاكرة فقط، ستعود للأصل عند ريستارت السيرفر في Vercel
     if (user) USER_CREDENTIALS.username = user;
     if (pass) USER_CREDENTIALS.password = pass;
     res.status(200).send("Updated");
 });
 
-app.get('/', checkAuth, (req, res) => { res.sendFile(path.join(__dirname, 'index.html')); });
-
-app.get('/get-data/:id', checkAuth, async (req, res) => {
-    try {
-        const id = req.params.id;
-        const fileId = fileIds[id];
-        const response = await drive.files.get({ fileId: fileId, alt: 'media' }, { responseType: 'arraybuffer' });
-        const workbook = XLSX.read(response.data, { type: 'buffer' });
-        const sheet = workbook.Sheets["فواتير الشركات"];
-        const fullData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-        const endCol = (id == "1" || id == "5") ? 7 : 6;
-        const filteredData = fullData.map(row => row ? row.slice(1, endCol) : []);
-        res.json(filteredData);
-    } catch (error) { res.status(500).json({ error: "خطأ في الاتصال بجوجل درايف" }); }
-});
-
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`System Online on ${PORT}`));
+
 module.exports = app;

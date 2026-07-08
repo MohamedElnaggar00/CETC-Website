@@ -11,7 +11,10 @@
         
         .sidebar { width: 280px; background: var(--sidebar); color: white; display: flex; flex-direction: column; justify-content: space-between; }
         .sidebar-header { padding: 30px 20px; text-align: center; border-bottom: 1px solid #333; }
-        .sidebar-header img { max-height: 50px; background: white; padding: 5px; border-radius: 5px; }
+        
+        /* تحديث خلفية اللوجو */
+        .logo-box { background: white; padding: 10px; border-radius: 8px; display: inline-block; }
+        .logo-box img { max-height: 55px; display: block; }
 
         .menu-list { flex-grow: 1; padding: 20px 0; }
         .menu-item { padding: 15px 25px; display: flex; align-items: center; gap: 15px; cursor: pointer; color: #a0a0a0; font-weight: 600; }
@@ -19,7 +22,7 @@
 
         .user-section { padding: 20px; background: #000; border-top: 1px solid #333; }
         .user-actions { display: flex; gap: 10px; margin-top: 10px; }
-        .btn-side { background: #222; color: #fff; border: none; padding: 8px; border-radius: 5px; cursor: pointer; flex: 1; font-size: 0.8rem; text-decoration: none; text-align: center; }
+        .btn-side { background: #222; color: #fff; border: none; padding: 8px; border-radius: 5px; cursor: pointer; flex: 1; font-size: 0.8rem; text-align: center; text-decoration: none; }
 
         .main-content { flex-grow: 1; overflow-y: auto; padding: 30px; }
         .module { display: none; }
@@ -36,7 +39,6 @@
         th { background: #000; color: #fff; padding: 15px; font-size: 0.85rem; }
         td { padding: 12px; border-bottom: 1px solid #eee; text-align: center; font-size: 0.9rem; }
         
-        /* تباين ألوان الصفوف وتلوين الفواتير */
         tr:nth-child(even) { background-color: #f6f6f6; }
         tr:hover { background-color: #f1f1f1; }
         .pos { color: var(--green) !important; font-weight: bold; }
@@ -49,8 +51,11 @@
 
     <aside class="sidebar">
         <div class="sidebar-header">
-            <img src="https://ejust.edu.eg/assets/img/logo.png" alt="Logo">
-            <div style="font-weight: 800; margin-top: 10px;">CETC UNIT</div>
+            <div class="logo-box">
+                <!-- تم تحديث رابط اللوجو هنا -->
+                <img src="https://github.com/MohamedElnaggar00/CETC-office-online/blob/main/public/logo.png?raw=true" alt="CETC Logo">
+            </div>
+            <div style="font-weight: 800; margin-top: 10px; color: #fff;">CETC UNIT</div>
         </div>
         <nav class="menu-list">
             <div class="menu-item active" onclick="switchMod('billing', this)"><i class="fas fa-file-invoice-dollar"></i><span>حصر الفواتير</span></div>
@@ -59,7 +64,7 @@
             <div class="menu-item" onclick="switchMod('monthly', this)"><i class="fas fa-calendar-alt"></i><span>الايرادات الشهرية</span></div>
         </nav>
         <div class="user-section">
-            <div style="font-size: 0.85rem;"><i class="fas fa-user-shield"></i> المسؤول (Admin)</div>
+            <div style="font-size: 0.85rem; color: #ccc;"><i class="fas fa-user-shield"></i> مسؤول النظام</div>
             <div class="user-actions">
                 <button class="btn-side" onclick="switchMod('settings', this)"><i class="fas fa-cog"></i> إعدادات</button>
                 <a href="/logout" class="btn-side" style="color: #ff5555;"><i class="fas fa-sign-out-alt"></i> خروج</a>
@@ -68,7 +73,6 @@
     </aside>
 
     <main class="main-content">
-        <!-- 1. منظومة الفواتير -->
         <section id="billing-module" class="module active">
             <h2 style="border-bottom: 3px solid var(--ejust-red); padding-bottom:10px;">حصر فواتير الشركات والمشاريع</h2>
             <div style="margin-bottom: 20px;">
@@ -85,30 +89,26 @@
             <div class="table-wrapper"><table><thead><tr id="h-billing"></tr></thead><tbody id="b-billing"></tbody></table></div>
         </section>
 
-        <!-- 4. الايرادات الشهرية -->
         <section id="monthly-module" class="module">
             <h2 style="border-bottom: 3px solid var(--ejust-red); padding-bottom:10px;">جداول الايرادات الشهرية</h2>
             <button class="tab-btn active" onclick="loadData(5, this)">عرض كافة الايرادات</button>
             <div class="table-wrapper" style="margin-top:20px;"><table><thead><tr id="h-monthly"></tr></thead><tbody id="b-monthly"></tbody></table></div>
         </section>
 
-        <!-- 5. الإعدادات -->
         <section id="settings-module" class="module">
-            <h2 style="border-bottom: 3px solid var(--ejust-red); padding-bottom:10px;">إعدادات الحساب والنظام</h2>
+            <h2 style="border-bottom: 3px solid var(--ejust-red); padding-bottom:10px;">إعدادات الحساب</h2>
             <div style="max-width: 400px; background:white; padding:25px; border-radius:15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
                 <label>اسم المستخدم الجديد:</label><input type="text" id="new-user" class="settings-in" value="admin">
-                <br><br><label>كلمة المرور الجديدة:</label><input type="password" id="new-pass" class="settings-in" placeholder="اتركها فارغة لعدم التغيير">
+                <br><br><label>كلمة المرور الجديدة:</label><input type="password" id="new-pass" class="settings-in">
                 <br><br><button class="tab-btn active" style="width:100%; margin:0;" onclick="saveSet()">حفظ الإعدادات</button>
             </div>
         </section>
 
-        <section id="reports-module" class="module" style="text-align:center; padding:100px;"><h2>مسلسلات التقارير</h2><p>قيد التطوير البرمجي...</p></section>
-        <section id="revenue-module" class="module" style="text-align:center; padding:100px;"><h2>متابعة الايرادات</h2><p>قيد التطوير البرمجي...</p></section>
+        <section id="reports-module" class="module" style="text-align:center; padding:100px;"><h2>مسلسلات التقارير</h2><p>قيد التطوير...</p></section>
+        <section id="revenue-module" class="module" style="text-align:center; padding:100px;"><h2>متابعة الايرادات</h2><p>قيد التطوير...</p></section>
     </main>
 
     <script>
-        let currentFileId = null;
-
         function switchMod(name, btn) {
             document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
             if(btn.classList.contains('menu-item')) btn.classList.add('active');
@@ -117,7 +117,6 @@
         }
 
         async function loadData(id, btn) {
-            currentFileId = id;
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             const mod = document.querySelector('.module.active').id.split('-')[0];
@@ -129,15 +128,13 @@
                 if(data.length > 0) {
                     data[2].forEach(t => { const th = document.createElement('th'); th.textContent = t; h.appendChild(th); });
                     let due=0, rec=0;
-                    const invoiceColIdx = (id == 1 || id == 5) ? 5 : 4; // موقع عمود الفاتورة بناءً على القص
-
+                    const invoiceColIdx = (id == 1 || id == 5) ? 5 : 4;
                     data.slice(3).forEach(row => {
                         if(!row[0] && !row[1]) return;
                         const tr = document.createElement('tr');
                         row.forEach((c, i) => {
                             const td = document.createElement('td');
                             const val = Number(c);
-                            // تلوين عمود مبلغ الفاتورة فقط
                             if(mod === 'billing' && i === invoiceColIdx && !isNaN(val) && c !== '') {
                                 td.className = val < 0 ? 'neg' : 'pos';
                                 td.textContent = val.toLocaleString();
@@ -154,7 +151,7 @@
                         document.getElementById('stat-billing').style.display = 'grid';
                     }
                 }
-            } catch(e) { alert("حدث خطأ في جلب البيانات"); }
+            } catch(e) { alert("خطأ في البيانات"); }
         }
 
         async function saveSet() {

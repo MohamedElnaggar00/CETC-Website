@@ -6,34 +6,29 @@ const path = require('path');
 
 const app = express();
 
-// --- 1. الإعدادات وتوفير الملفات من مجلد public ---
-app.use(express.static('public')); 
+// --- الإعدادات ---
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
 app.use(session({
-    secret: 'cetc-ejust-unit-2024',
+    secret: 'cetc-unit-2024-secure',
     resave: false,
     saveUninitialized: true,
     cookie: { maxAge: 24 * 60 * 60 * 1000 }
 }));
 
-// بيانات الحساب
 let USER_CREDENTIALS = {
     username: process.env.ADMIN_USER || "admin",
     password: process.env.ADMIN_PASS || "123"
 };
 
-// معرفات ملفات جوجل درايف
 const fileIds = {
     "1": "19sOJ3ihc-edrZ9B0bYsVfv_loQbO0uhW",
     "2": "1L_XTHyXNy-7YtC6ZQZ3GHYriLGFMvAfx",
     "3": "19z4P-fDzzCIFOIeL9197YhQyr2vXPSgv",
     "4": "1knkwfR7QmAFoHzyC3xg--ucJRuj33x8K",
-    "5": "19z4P-fDzzCIFOIeL9197YhQyr2vXPSgv" // استبدله بـ ID ملف الإيرادات الشهرية
+    "5": "19z4P-fDzzCIFOIeL9197YhQyr2vXPSgv" 
 };
 
-// الاتصال بجوجل درايف
 const auth = new google.auth.GoogleAuth({
     keyFile: path.join(process.cwd(), 'keys.json'), 
     scopes: ['https://www.googleapis.com/auth/drive.readonly'],
@@ -45,9 +40,12 @@ function checkAuth(req, res, next) {
     res.redirect('/login');
 }
 
-// --- 2. صفحة تسجيل الدخول (مع الخلفية) ---
+// --- صفحة تسجيل الدخول (استخدام الرابط المباشر للخلفية) ---
 app.get('/login', (req, res) => {
     if (req.session.loggedIn) return res.redirect('/');
+    
+    const bgImageUrl = "https://github.com/MohamedElnaggar00/CETC-office-online/blob/main/public/Background.jpg?raw=true";
+
     res.send(`
         <!DOCTYPE html>
         <html lang="ar" dir="rtl">
@@ -57,7 +55,7 @@ app.get('/login', (req, res) => {
             <style>
                 body { 
                     font-family: sans-serif; margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; 
-                    background-image: url('/Background.jpg'); /* يسحب من مجلد public */
+                    background-image: url('${bgImageUrl}'); 
                     background-size: cover; background-position: center; position: relative;
                 }
                 body::before { content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.7); z-index: 0; }
@@ -72,7 +70,7 @@ app.get('/login', (req, res) => {
         </head>
         <body>
             <div class="card">
-                <img src="https://ejust.edu.eg/assets/img/logo.png" alt="E-JUST Logo">
+                <img src="https://ejust.edu.eg/assets/img/logo.png" alt="Logo">
                 <h2>CETC Unit</h2>
                 <p class="sub">نظام حصر فواتير الشركات والمشاريع</p>
                 <form action="/login" method="POST">
@@ -92,7 +90,7 @@ app.post('/login', (req, res) => {
         req.session.loggedIn = true;
         res.redirect('/');
     } else {
-        res.send('بيانات خاطئة. <a href="/login">حاول مرة أخرى</a>');
+        res.send('خطأ. <a href="/login">حاول مرة أخرى</a>');
     }
 });
 
@@ -112,7 +110,6 @@ app.get('/', checkAuth, (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// جلب البيانات مع قص الأعمدة والتنسيق المطلوب
 app.get('/get-data/:id', checkAuth, async (req, res) => {
     try {
         const id = req.params.id;
@@ -121,16 +118,14 @@ app.get('/get-data/:id', checkAuth, async (req, res) => {
         const workbook = XLSX.read(response.data, { type: 'buffer' });
         const sheet = workbook.Sheets["فواتير الشركات"];
         const fullData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-
-        // ملف 1 و 5: B إلى G (Index 1-7) | ملفات 2، 3، 4: B إلى F (Index 1-6)
         const endColumn = (id == "1" || id == "5") ? 7 : 6;
         const filteredData = fullData.map(row => row ? row.slice(1, endColumn) : []);
         res.json(filteredData);
     } catch (error) {
-        res.status(500).json({ error: "خطأ في الاتصال بجوجل درايف" });
+        res.status(500).json({ error: "خطأ في الاتصال" });
     }
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server on ${PORT}`));
+app.listen(PORT, () => console.log(`Server Live on ${PORT}`));
 module.exports = app;

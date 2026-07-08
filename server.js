@@ -7,24 +7,22 @@ const path = require('path');
 const app = express();
 
 // --- 1. الإعدادات الأساسية ---
-app.use(express.static(process.cwd())); 
+app.use(express.static(path.join(process.cwd()))); 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(session({
-    secret: 'cetc-unit-final-stable-v1',
+    secret: 'cetc-unit-final-stable-2024',
     resave: false,
     saveUninitialized: true,
     cookie: { maxAge: 24 * 60 * 60 * 1000 }
 }));
 
-// بيانات الحساب
 let USER_CREDENTIALS = {
     username: process.env.ADMIN_USER || "admin",
     password: process.env.ADMIN_PASS || "123"
 };
 
-// معرفات ملفات جوجل درايف
 const fileIds = {
     "1": "19sOJ3ihc-edrZ9B0bYsVfv_loQbO0uhW",
     "2": "1L_XTHyXNy-7YtC6ZQZ3GHYriLGFMvAfx",
@@ -44,69 +42,41 @@ function checkAuth(req, res, next) {
     res.redirect('/login');
 }
 
-// --- 2. صفحة تسجيل الدخول (باستخدام طريقة الرابط المباشر مثل اللوجو) ---
+// --- 2. صفحة تسجيل الدخول (تم تحديث الروابط هنا) ---
 app.get('/login', (req, res) => {
     if (req.session.loggedIn) return res.redirect('/');
     
-    // هذا هو الرابط المباشر لصورتك على GitHub (مثل رابط اللوجو تماماً)
-    const directBgUrl = "https://raw.githubusercontent.com/MohamedElnaggar00/CETC-office-online/main/public/Background.jpg";
-    const logoUrl = "https://ejust.edu.eg/assets/img/logo.png";
+    const bgUrl = "https://github.com/MohamedElnaggar00/CETC-office-online/blob/main/public/Background.jpg?raw=true";
+    const logoUrl = "https://github.com/MohamedElnaggar00/CETC-office-online/blob/main/public/logo.png?raw=true";
 
     res.send(`
         <!DOCTYPE html>
         <html lang="ar" dir="rtl">
         <head>
             <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>CETC Unit - Login</title>
             <style>
                 body { 
-                    font-family: 'Segoe UI', Tahoma, sans-serif;
-                    margin: 0; 
-                    padding: 0;
-                    display: flex; 
-                    align-items: center; 
-                    justify-content: center; 
-                    height: 100vh; 
-                    /* استخدام الرابط المباشر هنا */
-                    background: #1a1a1a url('${directBgUrl}') no-repeat center center fixed; 
-                    background-size: cover;
-                    position: relative;
+                    font-family: 'Segoe UI', sans-serif;
+                    margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; 
+                    background: #1a1a1a url('${bgUrl}') no-repeat center center fixed; 
+                    background-size: cover; position: relative;
                 }
-                /* طبقة التعتيم لضمان وضوح الكارت */
-                body::before { 
-                    content: ""; 
-                    position: absolute; 
-                    top: 0; left: 0; right: 0; bottom: 0; 
-                    background: rgba(0, 0, 0, 0.7); 
-                    z-index: 1; 
-                }
-                .login-card { 
-                    background: rgba(255, 255, 255, 0.96); 
-                    padding: 40px; 
-                    border-radius: 15px; 
-                    border-top: 8px solid #C41230; 
-                    text-align: center; 
-                    box-shadow: 0 20px 40px rgba(0,0,0,0.6); 
-                    width: 340px; 
-                    z-index: 2; 
-                    position: relative;
-                }
+                body::before { content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.7); z-index: 1; }
+                .login-card { background: rgba(255, 255, 255, 0.96); padding: 40px; border-radius: 15px; border-top: 8px solid #C41230; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.6); width: 340px; z-index: 2; position: relative; }
                 .logo-wrapper { background: #f8f8f8; padding: 15px; border-radius: 10px; margin-bottom: 25px; }
                 img { max-height: 80px; display: block; margin: 0 auto; }
                 h2 { color: #1a1a1a; margin: 10px 0 5px; font-size: 1.4rem; font-weight: 800; }
                 p.sub { color: #C41230; font-weight: bold; margin-bottom: 30px; font-size: 0.85rem; }
-                input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; outline: none; transition: 0.3s; }
-                input:focus { border-color: #C41230; box-shadow: 0 0 5px rgba(196,18,48,0.2); }
+                input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; outline: none; }
                 button { width: 100%; padding: 12px; background: #C41230; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 1.1rem; }
-                button:hover { background: #000; transform: translateY(-2px); }
-                .footer { font-size: 0.7rem; color: #888; margin-top: 30px; line-height: 1.5; }
+                button:hover { background: #000; }
             </style>
         </head>
         <body>
             <div class="login-card">
                 <div class="logo-wrapper">
-                    <img src="${logoUrl}" alt="E-JUST Logo">
+                    <img src="${logoUrl}" alt="CETC Logo">
                 </div>
                 <h2>CETC Unit</h2>
                 <p class="sub">نظام حصر فواتير الشركات والمشاريع</p>
@@ -115,10 +85,6 @@ app.get('/login', (req, res) => {
                     <input type="password" name="password" placeholder="كلمة المرور" required>
                     <button type="submit">دخول للنظام</button>
                 </form>
-                <div class="footer">
-                    Egypt-Japan University for Science and Technology<br>
-                    Project Management System © 2024
-                </div>
             </div>
         </body>
         </html>
@@ -131,14 +97,11 @@ app.post('/login', (req, res) => {
         req.session.loggedIn = true;
         res.redirect('/');
     } else {
-        res.send('<h3 style="text-align:center; margin-top:50px; font-family:sans-serif;">بيانات الدخول غير صحيحة! <a href="/login">حاول مرة أخرى</a></h3>');
+        res.send('بيانات الدخول غير صحيحة. <a href="/login">حاول مرة أخرى</a>');
     }
 });
 
-app.get('/logout', (req, res) => {
-    req.session.destroy();
-    res.redirect('/login');
-});
+app.get('/logout', (req, res) => { req.session.destroy(); res.redirect('/login'); });
 
 app.post('/update-account', checkAuth, (req, res) => {
     const { user, pass } = req.body;
@@ -147,9 +110,7 @@ app.post('/update-account', checkAuth, (req, res) => {
     res.status(200).send("Updated");
 });
 
-app.get('/', checkAuth, (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
-});
+app.get('/', checkAuth, (req, res) => { res.sendFile(path.join(__dirname, 'index.html')); });
 
 app.get('/get-data/:id', checkAuth, async (req, res) => {
     try {
@@ -162,11 +123,9 @@ app.get('/get-data/:id', checkAuth, async (req, res) => {
         const endCol = (id == "1" || id == "5") ? 7 : 6;
         const filteredData = fullData.map(row => row ? row.slice(1, endCol) : []);
         res.json(filteredData);
-    } catch (error) {
-        res.status(500).json({ error: "خطأ في الاتصال بجوجل درايف" });
-    }
+    } catch (error) { res.status(500).json({ error: "خطأ في الاتصال" }); }
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+app.listen(PORT, () => console.log(`Server started on ${PORT}`));
 module.exports = app;

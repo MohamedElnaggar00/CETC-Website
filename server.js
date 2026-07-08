@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(session({
-    secret: 'cetc-unit-final-v3',
+    secret: 'cetc-unit-final-stable-v1',
     resave: false,
     saveUninitialized: true,
     cookie: { maxAge: 24 * 60 * 60 * 1000 }
@@ -26,14 +26,13 @@ let USER_CREDENTIALS = {
 
 // معرفات ملفات جوجل درايف
 const fileIds = {
-    "1": "19sOJ3ihc-edrZ9B0bYsVfv_loQbO0uhW", // سجل 01 LOG
-    "2": "1L_XTHyXNy-7YtC6ZQZ3GHYriLGFMvAfx", // اسكان الحي التاسع
-    "3": "19z4P-fDzzCIFOIeL9197YhQyr2vXPSgv", // ترعة الحمام
-    "4": "1knkwfR7QmAFoHzyC3xg--ucJRuj33x8K", // مشروع ديارنا
-    "5": "19z4P-fDzzCIFOIeL9197YhQyr2vXPSgv"  // الايرادات الشهرية
+    "1": "19sOJ3ihc-edrZ9B0bYsVfv_loQbO0uhW",
+    "2": "1L_XTHyXNy-7YtC6ZQZ3GHYriLGFMvAfx",
+    "3": "19z4P-fDzzCIFOIeL9197YhQyr2vXPSgv",
+    "4": "1knkwfR7QmAFoHzyC3xg--ucJRuj33x8K",
+    "5": "19z4P-fDzzCIFOIeL9197YhQyr2vXPSgv" 
 };
 
-// إعدادات جوجل درايف
 const auth = new google.auth.GoogleAuth({
     keyFile: path.join(process.cwd(), 'keys.json'), 
     scopes: ['https://www.googleapis.com/auth/drive.readonly'],
@@ -45,12 +44,13 @@ function checkAuth(req, res, next) {
     res.redirect('/login');
 }
 
-// --- 2. صفحة تسجيل الدخول (كود HTML المراجع) ---
+// --- 2. صفحة تسجيل الدخول (باستخدام طريقة الرابط المباشر مثل اللوجو) ---
 app.get('/login', (req, res) => {
     if (req.session.loggedIn) return res.redirect('/');
     
-    // استخدام الرابط الخام المباشر لضمان الظهور
-    const rawBgUrl = "https://raw.githubusercontent.com/MohamedElnaggar00/CETC-office-online/main/public/Background.jpg";
+    // هذا هو الرابط المباشر لصورتك على GitHub (مثل رابط اللوجو تماماً)
+    const directBgUrl = "https://raw.githubusercontent.com/MohamedElnaggar00/CETC-office-online/main/public/Background.jpg";
+    const logoUrl = "https://ejust.edu.eg/assets/img/logo.png";
 
     res.send(`
         <!DOCTYPE html>
@@ -60,23 +60,20 @@ app.get('/login', (req, res) => {
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>CETC Unit - Login</title>
             <style>
-                * { box-sizing: border-box; }
                 body { 
-                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                    font-family: 'Segoe UI', Tahoma, sans-serif;
                     margin: 0; 
                     padding: 0;
                     display: flex; 
                     align-items: center; 
                     justify-content: center; 
                     height: 100vh; 
-                    background-color: #1a1a1a; /* لون احتياطي */
-                    background-image: url('${rawBgUrl}'); 
-                    background-size: cover; 
-                    background-position: center; 
-                    background-repeat: no-repeat;
+                    /* استخدام الرابط المباشر هنا */
+                    background: #1a1a1a url('${directBgUrl}') no-repeat center center fixed; 
+                    background-size: cover;
                     position: relative;
                 }
-                /* طبقة التعتيم */
+                /* طبقة التعتيم لضمان وضوح الكارت */
                 body::before { 
                     content: ""; 
                     position: absolute; 
@@ -85,31 +82,31 @@ app.get('/login', (req, res) => {
                     z-index: 1; 
                 }
                 .login-card { 
-                    background: rgba(255, 255, 255, 0.95); 
+                    background: rgba(255, 255, 255, 0.96); 
                     padding: 40px; 
                     border-radius: 15px; 
                     border-top: 8px solid #C41230; 
                     text-align: center; 
-                    box-shadow: 0 15px 35px rgba(0,0,0,0.5); 
-                    width: 320px; 
+                    box-shadow: 0 20px 40px rgba(0,0,0,0.6); 
+                    width: 340px; 
                     z-index: 2; 
                     position: relative;
                 }
-                .logo-wrapper { background: #f8f8f8; padding: 10px; border-radius: 10px; margin-bottom: 20px; }
-                img { max-height: 70px; display: block; margin: 0 auto; }
-                h2 { color: #1a1a1a; margin: 10px 0 5px; font-size: 1.4rem; }
-                p.sub { color: #C41230; font-weight: bold; margin-bottom: 25px; font-size: 0.85rem; }
-                input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px; outline: none; font-size: 1rem; }
-                input:focus { border-color: #C41230; }
-                button { width: 100%; padding: 12px; background: #C41230; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 1rem; }
-                button:hover { background: #000; }
-                .footer { font-size: 0.7rem; color: #777; margin-top: 25px; }
+                .logo-wrapper { background: #f8f8f8; padding: 15px; border-radius: 10px; margin-bottom: 25px; }
+                img { max-height: 80px; display: block; margin: 0 auto; }
+                h2 { color: #1a1a1a; margin: 10px 0 5px; font-size: 1.4rem; font-weight: 800; }
+                p.sub { color: #C41230; font-weight: bold; margin-bottom: 30px; font-size: 0.85rem; }
+                input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; outline: none; transition: 0.3s; }
+                input:focus { border-color: #C41230; box-shadow: 0 0 5px rgba(196,18,48,0.2); }
+                button { width: 100%; padding: 12px; background: #C41230; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 1.1rem; }
+                button:hover { background: #000; transform: translateY(-2px); }
+                .footer { font-size: 0.7rem; color: #888; margin-top: 30px; line-height: 1.5; }
             </style>
         </head>
         <body>
             <div class="login-card">
                 <div class="logo-wrapper">
-                    <img src="https://ejust.edu.eg/assets/img/logo.png" alt="E-JUST Logo">
+                    <img src="${logoUrl}" alt="E-JUST Logo">
                 </div>
                 <h2>CETC Unit</h2>
                 <p class="sub">نظام حصر فواتير الشركات والمشاريع</p>
@@ -118,7 +115,10 @@ app.get('/login', (req, res) => {
                     <input type="password" name="password" placeholder="كلمة المرور" required>
                     <button type="submit">دخول للنظام</button>
                 </form>
-                <div class="footer">Egypt-Japan University for Science and Technology</div>
+                <div class="footer">
+                    Egypt-Japan University for Science and Technology<br>
+                    Project Management System © 2024
+                </div>
             </div>
         </body>
         </html>
@@ -131,7 +131,7 @@ app.post('/login', (req, res) => {
         req.session.loggedIn = true;
         res.redirect('/');
     } else {
-        res.send('بيانات غير صحيحة. <a href="/login">حاول مرة أخرى</a>');
+        res.send('<h3 style="text-align:center; margin-top:50px; font-family:sans-serif;">بيانات الدخول غير صحيحة! <a href="/login">حاول مرة أخرى</a></h3>');
     }
 });
 
@@ -168,5 +168,5 @@ app.get('/get-data/:id', checkAuth, async (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`System Running...` ));
+app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
 module.exports = app;

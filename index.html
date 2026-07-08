@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المركز الاستشاري للهندسة المدنية - E-JUST</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --red: #C41230; --black: #1a1a1a; --white: #ffffff; --gray: #f4f4f4; }
+        body { font-family: 'Cairo', sans-serif; margin: 0; background: var(--white); color: var(--black); line-height: 1.6; }
+        
+        /* Header & Hero */
+        header { background: var(--white); padding: 10px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 4px solid var(--red); position: sticky; top: 0; z-index: 1000; }
+        .logo img { height: 60px; }
+        
+        .hero { background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://ejust.edu.eg/storage/EventsPhoto/top-min%20(1).jpg'); 
+                background-size: cover; background-position: center; color: white; padding: 100px 5%; text-align: center; }
+        .hero h1 { font-size: 2.5rem; font-weight: 900; margin-bottom: 20px; }
+        .hero p { font-size: 1.2rem; max-width: 800px; margin: 0 auto 30px; }
+
+        /* Navigation Buttons Grid */
+        .nav-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; padding: 50px 5%; max-width: 1200px; margin: 0 auto; }
+        .nav-card { background: var(--gray); padding: 30px; text-align: center; border-radius: 15px; transition: 0.3s; cursor: pointer; text-decoration: none; color: var(--black); border-bottom: 5px solid transparent; }
+        .nav-card i { font-size: 2.5rem; color: var(--red); margin-bottom: 15px; }
+        .nav-card h3 { margin: 10px 0; font-weight: 700; }
+        .nav-card:hover { transform: translateY(-10px); border-bottom-color: var(--red); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .admin-btn { background: var(--red); color: white !important; }
+        .admin-btn i { color: white; }
+
+        /* About Section */
+        .about { padding: 60px 5%; background: var(--white); text-align: center; }
+        .about-content { max-width: 900px; margin: 0 auto; }
+        .section-title { font-size: 2rem; color: var(--red); margin-bottom: 30px; position: relative; display: inline-block; }
+        .section-title::after { content: ""; width: 50%; height: 3px; background: var(--black); position: absolute; bottom: -10px; right: 25%; }
+
+        footer { background: var(--black); color: white; text-align: center; padding: 20px; margin-top: 50px; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo"><img src="https://ejust.edu.eg/assets/img/logo.png" alt="E-JUST Logo"></div>
+    <div style="font-weight: 800; font-size: 1.2rem;">المركز الاستشاري للهندسة المدنية (CETC)</div>
+</header>
+
+<section class="hero">
+    <h1>بيت الخبرة الهندسي بالجامعة المصرية اليابانية</h1>
+    <p>تقديم خدمات استشارية هندسية متكاملة بمعايير عالمية وتقنيات يابانية حديثة لدعم قطاع التشييد والبناء في مصر والشرق الأوسط.</p>
+</section>
+
+<section class="about">
+    <div class="about-content">
+        <h2 class="section-title">عن المركز</h2>
+        <p>يعد المركز الاستشاري للهندسة المدنية (CETC) بالجامعة المصرية اليابانية للعلوم والتكنولوجيا كياناً متميزاً يهدف إلى ربط البحث الأكاديمي بالاحتياجات الصناعية. يضم المركز نخبة من أساتذة الهندسة والخبراء لتقديم حلول مبتكرة في كافة التخصصات المدنية، مع الالتزام الكامل بمعايير الجودة اليابانية والدقة المتناهية.</p>
+    </div>
+</section>
+
+<div class="nav-grid">
+    <a href="/login" class="nav-card admin-btn">
+        <i class="fas fa-user-shield"></i>
+        <h3>منصة الإدارة</h3>
+        <p>الدخول لنظام حصر الفواتير والإيرادات</p>
+    </a>
+    <div class="nav-card">
+        <i class="fas fa-info-circle"></i>
+        <h3>التعريف بالمركز</h3>
+        <p>الرؤية، المهمة، والهيكل التنظيمي</p>
+    </div>
+    <div class="nav-card">
+        <i class="fas fa-briefcase"></i>
+        <h3>سابقة الأعمال</h3>
+        <p>استعراض المشاريع الكبرى المنجزة</p>
+    </div>
+    <div class="nav-card">
+        <i class="fas fa-list-check"></i>
+        <h3>لائحة الخدمات</h3>
+        <p>قائمة الخدمات الاستشارية والأسعار</p>
+    </div>
+    <div class="nav-card">
+        <i class="fas fa-building"></i>
+        <h3>الشركاء والعملاء</h3>
+        <p>كبرى شركات المقاولات والجهات الحكومية</p>
+    </div>
+    <div class="nav-card">
+        <i class="fas fa-images"></i>
+        <h3>معرض الصور</h3>
+        <p>توثيق حي لأعمال المواقع والمعامل</p>
+    </div>
+</div>
+
+<footer>
+    <p>&copy; 2024 المركز الاستشاري للهندسة المدنية - الجامعة المصرية اليابانية للعلوم والتكنولوجيا</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول - منصة إدارة CETC</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --red: #C41230; --black: #1a1a1a; --gray: #f8f9fa; }
+        
+        body {
+            font-family: 'Cairo', sans-serif;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+                        url('https://ejust.edu.eg/storage/EventsPhoto/top-min%20(1).jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.98);
+            width: 100%;
+            max-width: 400px;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            text-align: center;
+            border-top: 8px solid var(--red);
+            position: relative;
+        }
+
+        .logo-box {
+            background: var(--gray);
+            padding: 15px;
+            border-radius: 12px;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .logo-box img {
+            max-height: 70px;
+            display: block;
+        }
+
+        h2 {
+            color: var(--black);
+            margin: 10px 0;
+            font-weight: 800;
+        }
+
+        p.subtitle {
+            color: var(--red);
+            font-weight: 600;
+            margin-bottom: 30px;
+            font-size: 0.9rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+            text-align: right;
+        }
+
+        .form-group i {
+            position: absolute;
+            right: 15px;
+            top: 42px;
+            color: #888;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 700;
+            color: #555;
+            font-size: 0.9rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 40px 12px 15px;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+            box-sizing: border-box;
+        }
+
+        input:focus {
+            border-color: var(--red);
+            box-shadow: 0 0 10px rgba(196, 18, 48, 0.1);
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: var(--red);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: #a00e26;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(196, 18, 48, 0.3);
+        }
+
+        .back-link {
+            display: block;
+            margin-top: 20px;
+            color: #777;
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: 0.3s;
+        }
+
+        .back-link:hover {
+            color: var(--red);
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .login-container { margin: 20px; padding: 30px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <div class="logo-box">
+            <img src="https://ejust.edu.eg/assets/img/logo.png" alt="E-JUST Logo">
+        </div>
+        
+        <h2>CETC UNIT</h2>
+        <p class="subtitle">منصة الإدارة والتحكم للمركز الاستشاري</p>
+
+        <form action="/login" method="POST">
+            <div class="form-group">
+                <label>اسم المستخدم</label>
+                <i class="fas fa-user"></i>
+                <input type="text" name="username" placeholder="أدخل اسم المستخدم" required>
+            </div>
+
+            <div class="form-group">
+                <label>كلمة المرور</label>
+                <i class="fas fa-lock"></i>
+                <input type="password" name="password" placeholder="أدخل كلمة المرور" required>
+            </div>
+
+            <button type="submit">دخول للنظام <i class="fas fa-sign-in-alt"></i></button>
+        </form>
+
+        <a href="/" class="back-link"><i class="fas fa-arrow-right"></i> العودة للرئيسية</a>
+    </div>
+
+</body>
+</html>

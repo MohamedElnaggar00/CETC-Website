@@ -39,8 +39,6 @@
         
         tr:nth-child(even) { background-color: #f6f6f6; }
         tr:hover { background-color: #f1f1f1; }
-        .pos { color: var(--green) !important; font-weight: bold; }
-        .neg { color: var(--red) !important; font-weight: bold; }
 
         input.settings-in { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 5px; }
     </style>
@@ -88,7 +86,7 @@
 
         <section id="monthly-module" class="module">
             <h2 style="border-bottom: 3px solid var(--ejust-red); padding-bottom:10px;">جداول الايرادات الشهرية</h2>
-            <button class="tab-btn active" onclick="loadData(5, this)">عرض كافة الايرادات</button>
+            <button class="tab-btn" onclick="loadData(5, this)">عرض كافة الايرادات</button>
             <div class="table-wrapper" style="margin-top:20px;"><table><thead><tr id="h-monthly"></tr></thead><tbody id="b-monthly"></tbody></table></div>
         </section>
 
@@ -108,27 +106,92 @@
     <script>
         function switchMod(name, btn) {
             document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
-            if(btn.classList.contains('menu-item')) btn.classList.add('active');
+            if(btn && btn.classList.contains('menu-item')) btn.classList.add('active');
             document.querySelectorAll('.module').forEach(s => s.classList.remove('active'));
             document.getElementById(name + '-module').classList.add('active');
         }
 
         async function loadData(id, btn) {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            const mod = document.querySelector('.module.active').id.split('-')[0];
+            if(btn) btn.classList.add('active');
+            
+            const activeModule = document.querySelector('.module.active').id.split('-')[0];
+            const h = document.getElementById('h-' + activeModule);
+            const b = document.getElementById('b-' + activeModule);
+            
             try {
+                b.innerHTML = '<tr><td colspan="10">جاري تحميل البيانات...</td></tr>';
                 const res = await fetch(`/get-data/${id}`);
                 const data = await res.json();
-                const h = document.getElementById('h-'+mod), b = document.getElementById('b-'+mod);
+                
                 h.innerHTML = ''; b.innerHTML = '';
+                
+                if(data.error) {
+                    b.innerHTML = `<tr><td colspan="10" style="color:red;">خطأ: ${data.details || data.error}</td></tr>`;
+                    return;
+                }
+
                 if(data.length > 0) {
-                    data[2].forEach(t => { const th = document.createElement('th'); th.textContent = t; h.appendChild(th); });
-                    let due=0, rec=0;
-                    const invCol = (id == 1 || id == 5) ? 5 : 4;
-                    data.slice(3).forEach(row => {
-                        if(!row[0]) return;
+                    // العثور على أول صف يحتوي على عناوين (غالباً هو الصف الثالث في ملفاتك)
+                    let headerRowIndex = 0;
+                    for(let i=0; i<data.length; i++) {
+                        if(data[i].length > 2) { headerRowIndex = i; break; }
+                    }
+
+                    // رسم الهيدر
+                    data[headerRowIndex].forEach(t => {
+                        const th = document.createElement('th');
+                        th.textContent = t || '-';
+                        h.appendChild(th);
+                    });
+
+                    let totalDue = 0, totalRec = 0;
+                    
+                    // رسم البيانات (تخطي صف الهيدر وما قبله)
+                    data.slice(headerRowIndex + 1).forEach(row => {
+                        if(!row || row.length === 0 || !row[0]) return;
+                        
                         const tr = document.createElement('tr');
-                        row.forEach((c, i) => {
+                        row.forEach((cell, i) => {
                             const td = document.createElement('td');
-                            const va
+                            td.textContent = cell || '-';
+                            
+                            // حساب الإحصائيات (تعديل الأعمدة حسب ترتيب ملف الإكسيل لديك)
+                            // عادة المستحق عمود 3 والمورد عمود 4 (برمجياً 3 و 4)
+                            if(i === 3) totalDue += parseFloat(cell) || 0;
+                            if(i === 4) totalRec += parseFloat(cell) || 0;
+                            
+                            tr.appendChild(td);
+                        });
+                        b.appendChild(tr);
+                    });
+
+                    // تحديث كروت الإحصائيات إذا كانت موجودة
+                    const stats = document.getElementById('stat-billing');
+                    if(stats && activeModule === 'billing') {
+                        stats.style.display = 'grid';
+                        document.getElementById('d-due').textContent = totalDue.toLocaleString() + ' ج.م';
+                        document.getElementById('d-rec').textContent = totalRec.toLocaleString() + ' ج.م';
+                        document.getElementById('d-bal').textContent = (totalDue - totalRec).toLocaleString() + ' ج.م';
+                    }
+                } else {
+                    b.innerHTML = '<tr><td colspan="10">لا توجد بيانات متاحة.</td></tr>';
+                }
+            } catch (error) {
+                b.innerHTML = '<tr><td colspan="10" style="color:red;">حدث خطأ في الاتصال بالسيرفر.</td></tr>';
+            }
+        }
+
+        async function saveSet() {
+            const user = document.getElementById('new-user').value;
+            const pass = document.getElementById('new-pass').value;
+            const res = await fetch('/update-account', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({user, pass})
+            });
+            if(res.ok) alert('تم الحفظ بنجاح');
+        }
+    </script>
+</body>
+</html>

@@ -11,11 +11,11 @@
         
         .sidebar { width: 280px; background: var(--sidebar); color: white; display: flex; flex-direction: column; justify-content: space-between; }
         .sidebar-header { padding: 30px 20px; text-align: center; border-bottom: 1px solid #333; }
-        .logo-box { background: white; padding: 8px; border-radius: 8px; display: inline-block; }
-        .logo-box img { max-height: 50px; display: block; }
+        .logo-box { background: white; padding: 10px; border-radius: 8px; display: inline-block; }
+        .logo-box img { max-height: 55px; display: block; }
 
         .menu-list { flex-grow: 1; padding: 20px 0; }
-        .menu-item { padding: 15px 25px; display: flex; align-items: center; gap: 15px; cursor: pointer; color: #a0a0a0; font-weight: 600; }
+        .menu-item { padding: 15px 25px; display: flex; align-items: center; gap: 15px; cursor: pointer; color: #a0a0a0; font-weight: 600; transition: 0.3s; }
         .menu-item:hover, .menu-item.active { background: var(--ejust-red); color: white; }
 
         .user-section { padding: 20px; background: #000; border-top: 1px solid #333; }
@@ -50,9 +50,9 @@
     <aside class="sidebar">
         <div class="sidebar-header">
             <div class="logo-box">
-                <img src="https://github.com/MohamedElnaggar00/CETC-office-online/blob/main/public/logo.png?raw=true" alt="CETC Logo">
+                <img src="https://ejust.edu.eg/assets/img/logo.png" alt="CETC Logo">
             </div>
-            <div style="font-weight: 800; margin-top: 10px; color: #fff;">CETC UNIT</div>
+            <div style="font-weight: 800; margin-top: 15px; color: #fff;">CETC UNIT</div>
         </div>
         <nav class="menu-list">
             <div class="menu-item active" onclick="switchMod('billing', this)"><i class="fas fa-file-invoice-dollar"></i><span>حصر الفواتير</span></div>
@@ -94,7 +94,7 @@
 
         <section id="settings-module" class="module">
             <h2 style="border-bottom: 3px solid var(--ejust-red); padding-bottom:10px;">إعدادات الحساب</h2>
-            <div style="max-width: 400px; background:white; padding:25px; border-radius:15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+            <div style="max-width: 400px; background:white; padding:25px; border-radius:15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
                 <label>اسم المستخدم الجديد:</label><input type="text" id="new-user" class="settings-in" value="admin">
                 <br><br><label>كلمة المرور الجديدة:</label><input type="password" id="new-pass" class="settings-in">
                 <br><br><button class="tab-btn active" style="width:100%; margin:0;" onclick="saveSet()">حفظ الإعدادات</button>
@@ -127,40 +127,8 @@
                     let due=0, rec=0;
                     const invCol = (id == 1 || id == 5) ? 5 : 4;
                     data.slice(3).forEach(row => {
-                        if(!row[0] && !row[1]) return;
+                        if(!row[0]) return;
                         const tr = document.createElement('tr');
                         row.forEach((c, i) => {
                             const td = document.createElement('td');
-                            const val = Number(c);
-                            if(mod === 'billing' && i === invCol && !isNaN(val) && c !== '') {
-                                td.className = val < 0 ? 'neg' : 'pos';
-                                td.textContent = val.toLocaleString();
-                            } else { td.textContent = isNaN(val) || c==='' ? c : val.toLocaleString(); }
-                            tr.appendChild(td);
-                        });
-                        b.appendChild(tr);
-                        due += Number(row[2]) || 0; rec += Number(row[3]) || 0;
-                    });
-                    if(mod==='billing'){
-                        document.getElementById('d-due').textContent = due.toLocaleString() + " ج.م";
-                        document.getElementById('d-rec').textContent = rec.toLocaleString() + " ج.م";
-                        document.getElementById('d-bal').textContent = (due-rec).toLocaleString() + " ج.م";
-                        document.getElementById('stat-billing').style.display = 'grid';
-                    }
-                }
-            } catch(e) { alert("خطأ في البيانات"); }
-        }
-
-        async function saveSet() {
-            const user = document.getElementById('new-user').value;
-            const pass = document.getElementById('new-pass').value;
-            const res = await fetch('/update-account', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ user, pass })
-            });
-            if(res.ok) alert("تم تحديث البيانات بنجاح!");
-        }
-    </script>
-</body>
-</html>
+                            const va

@@ -91,13 +91,12 @@ app.get('/logout', (req, res) => {
     res.redirect('/'); 
 });
 
-// [هـ] جلب البيانات من Google Drive (محمي)
 app.get('/get-data/:id', checkAuth, async (req, res) => {
     try {
         const id = req.params.id;
         const fileId = fileIds[id];
         
-        if (!fileId) return res.status(404).json({ error: "الملف المطلوب غير معرف" });
+        if (!fileId) return res.status(404).json({ error: "المستند غير معرف" });
 
         const response = await drive.files.get(
             { fileId: fileId, alt: 'media' }, 
@@ -105,21 +104,27 @@ app.get('/get-data/:id', checkAuth, async (req, res) => {
         );
 
         const workbook = XLSX.read(response.data, { type: 'buffer' });
-        const sheetName = workbook.SheetNames[0]; 
-        const sheet = workbook.Sheets[sheetName];
+        
+        // العودة لاستخدام التبويبة المحددة "فواتير الشركات"
+        const targetSheetName = "فواتير الشركات";
+        const sheet = workbook.Sheets[targetSheetName];
+
+        if (!sheet) {
+            return res.status(404).json({ error: `التبويبة "${targetSheetName}" غير موجودة في ملف الإكسيل` });
+        }
+
         const fullData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
         
-        // معالجة الأعمدة حسب نوع الملف (سجل 1 و 5 يحتاجان أعمدة أكثر)
+        // إعادة منطق القص القديم (بدءاً من العمود الثاني وحتى العمود 6 أو 7)
         const endCol = (id == "1" || id == "5") ? 7 : 6;
         const filteredData = fullData.map(row => row ? row.slice(1, endCol) : []);
         
         res.json(filteredData);
     } catch (error) { 
-        console.error("Drive API Error:", error.message);
-        res.status(500).json({ error: "فشل جلب البيانات من Google Drive", details: error.message }); 
+        console.error("Drive Error:", error.message);
+        res.status(500).json({ error: "فشل الاتصال بجوجل درايف", details: error.message }); 
     }
 });
-
 // [و] تحديث بيانات الحساب (مؤقت في الذاكرة)
 app.post('/update-account', checkAuth, (req, res) => {
     const { user, pass } = req.body;

@@ -33,17 +33,16 @@ const fileIds = {
     "5": "19z4P-fDzzCIFOIeL9197YhQyr2vXPSgv"  // الايرادات الشهرية
 };
 
-// إعدادات الوصول لجوجل درايف
+// إعدادات الوصول لجوجل درايف باستخدام متغيرات البيئة
 const auth = new google.auth.GoogleAuth({
-    keyFile: path.join(process.cwd(), 'keys.json'), 
+    credentials: {
+        client_email: process.env.GOOGLE_CLIENT_EMAIL,
+        private_key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'), // معالجة الرموز السطرية
+        project_id: process.env.GOOGLE_PROJECT_ID,
+    },
     scopes: ['https://www.googleapis.com/auth/drive.readonly'],
 });
 const drive = google.drive({ version: 'v3', auth });
-
-function checkAuth(req, res, next) {
-    if (req.session.loggedIn) return next();
-    res.redirect('/login');
-}
 
 // --- 2. صفحة تسجيل الدخول المحدثة بالروابط الجديدة ---
 app.get('/login', (req, res) => {

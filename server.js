@@ -7,6 +7,7 @@ const path = require('path');
 const app = express();
 
 // --- 1. الإعدادات الأساسية ---
+// السماح بالوصول للملفات الثابتة (مثل الصور إذا كانت في المجلد الرئيسي)
 app.use(express.static(path.join(process.cwd()))); 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -15,7 +16,7 @@ app.use(session({
     secret: 'cetc-ejust-system-final-2024',
     resave: false,
     saveUninitialized: true,
-    cookie: { maxAge: 24 * 60 * 60 * 1000 }
+    cookie: { maxAge: 24 * 60 * 60 * 1000 } // جلسة لمدة 24 ساعة
 }));
 
 // بيانات الحساب من متغيرات البيئة في Vercel
@@ -24,7 +25,7 @@ const USER_CREDENTIALS = {
     password: process.env.ADMIN_PASS || "123"
 };
 
-// معرفات ملفات جوجل درايف (تأكد أن الحساب البريدي له صلاحية الوصول لها)
+// معرفات ملفات جوجل درايف
 const fileIds = {
     "1": "19sOJ3ihc-edrZ9B0bYsVfv_loQbO0uhW", // سجل 01 LOG
     "2": "1L_XTHyXNy-7YtC6ZQZ3GHYriLGFMvAfx", // اسكان الحي التاسع
@@ -33,8 +34,7 @@ const fileIds = {
     "5": "19z4P-fDzzCIFOIeL9197YhQyr2vXPSgv"  // الايرادات الشهرية
 };
 
-// --- 2. إعدادات الوصول لجوجل درايف (بدون ملف خارجي) ---
-// يتم معالجة المفتاح الخاص لحل مشكلة الـ New Lines في Vercel
+// --- 2. إعدادات الوصول لجوجل درايف (Environment Variables) ---
 const privateKey = process.env.GOOGLE_PRIVATE_KEY 
     ? process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n') 
     : undefined;
@@ -50,7 +50,7 @@ const auth = new google.auth.GoogleAuth({
 
 const drive = google.drive({ version: 'v3', auth });
 
-// ميدل وير للتحقق من تسجيل الدخول
+// ميدل وير لحماية المسارات الخاصة (لوحة التحكم)
 function checkAuth(req, res, next) {
     if (req.session.loggedIn) return next();
     res.redirect('/login');
@@ -58,83 +58,46 @@ function checkAuth(req, res, next) {
 
 // --- 3. المسارات (Routes) ---
 
-app.get('/login', (req, res) => {
-    if (req.session.loggedIn) return res.redirect('/');
-    
-    const bgUrl = "https://ejust.edu.eg/storage/EventsPhoto/top-min%20(1).jpg";
-    const logoUrl = "https://ejust.edu.eg/assets/img/logo.png";
+// [أ] الواجهة الرئيسية التعريفية
+app.get('/', (req, res) => {
+    res.sendFile(path.join(process.cwd(), 'index.html'));
+});
 
-    res.send(`
-        <!DOCTYPE html>
-        <html lang="ar" dir="rtl">
-        <head>
-            <meta charset="UTF-8">
-            <title>CETC Unit - Login</title>
-            <style>
-                body { 
-                    font-family: 'Segoe UI', Tahoma, sans-serif;
-                    margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; 
-                    background: #1a1a1a url('${bgUrl}') no-repeat center center fixed; 
-                    background-size: cover; position: relative;
-                }
-                body::before { content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.75); z-index: 1; }
-                .login-card { background: rgba(255, 255, 255, 0.96); padding: 40px; border-radius: 15px; border-top: 8px solid #C41230; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.6); width: 340px; z-index: 2; position: relative; }
-                .logo-wrapper { background: #f8f8f8; padding: 15px; border-radius: 10px; margin-bottom: 25px; display: inline-block; }
-                img { max-height: 70px; display: block; margin: 0 auto; }
-                h2 { color: #1a1a1a; margin: 10px 0 5px; font-size: 1.4rem; font-weight: 800; }
-                p.sub { color: #C41230; font-weight: bold; margin-bottom: 30px; font-size: 0.85rem; }
-                input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; outline: none; box-sizing: border-box; }
-                button { width: 100%; padding: 12px; background: #C41230; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 1.1rem; }
-                button:hover { background: #000; transform: translateY(-2px); }
-            </style>
-        </head>
-        <body>
-            <div class="login-card">
-                <div class="logo-wrapper"><img src="${logoUrl}" alt="E-JUST Logo"></div>
-                <h2>CETC Unit</h2>
-                <p class="sub">نظام حصر فواتير الشركات والمشاريع</p>
-                <form action="/login" method="POST">
-                    <input type="text" name="username" placeholder="اسم المستخدم" required>
-                    <input type="password" name="password" placeholder="كلمة المرور" required>
-                    <button type="submit">دخول للنظام</button>
-                </form>
-            </div>
-        </body>
-        </html>
-    `);
+// [ب] واجهة تسجيل الدخول
+app.get('/login', (req, res) => {
+    // إذا كان مسجلاً للدخول بالفعل، حوله للوحة التحكم
+    if (req.session.loggedIn) return res.redirect('/Dashboard');
+    res.sendFile(path.join(process.cwd(), 'login.html'));
 });
 
 app.post('/login', (req, res) => {
     const { username, password } = req.body;
     if (username === USER_CREDENTIALS.username && password === USER_CREDENTIALS.password) {
         req.session.loggedIn = true;
-        res.redirect('/');
+        res.redirect('/Dashboard'); // التوجيه للوحة التحكم بعد النجاح
     } else {
-        res.send('بيانات غير صحيحة. <a href="/login">حاول مرة أخرى</a>');
+        res.send('بيانات الدخول خاطئة. <a href="/login">حاول مرة أخرى</a>');
     }
 });
 
+// [ج] واجهة الإدارة والتحكم (Dashboard) - محمية
+app.get('/Dashboard', checkAuth, (req, res) => {
+    res.sendFile(path.join(process.cwd(), 'dashboard.html'));
+});
+
+// [د] تسجيل الخروج
 app.get('/logout', (req, res) => { 
     req.session.destroy(); 
-    res.redirect('/login'); 
+    res.redirect('/'); 
 });
 
-app.get('/', checkAuth, (req, res) => { 
-    res.sendFile(path.join(process.cwd(), 'index.html')); 
-});
-
-// سحب البيانات من Google Drive
+// [هـ] جلب البيانات من Google Drive (محمي)
 app.get('/get-data/:id', checkAuth, async (req, res) => {
     try {
         const id = req.params.id;
         const fileId = fileIds[id];
         
-        if (!fileId) return res.status(404).json({ error: "ملف غير موجود" });
-
-        // التحقق من وجود المتغيرات
-        if (!process.env.GOOGLE_PRIVATE_KEY || !process.env.GOOGLE_CLIENT_EMAIL) {
-            throw new Error("Missing Google API Credentials in Environment Variables");
-        }
+        if (!fileId) return res.status(404).json({ error: "الملف المطلوب غير معرف" });
 
         const response = await drive.files.get(
             { fileId: fileId, alt: 'media' }, 
@@ -142,30 +105,31 @@ app.get('/get-data/:id', checkAuth, async (req, res) => {
         );
 
         const workbook = XLSX.read(response.data, { type: 'buffer' });
-        const sheetName = workbook.SheetNames[0]; // نأخذ أول شيت غالباً
+        const sheetName = workbook.SheetNames[0]; 
         const sheet = workbook.Sheets[sheetName];
         const fullData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
         
-        // معالجة البيانات حسب نوع الملف
+        // معالجة الأعمدة حسب نوع الملف (سجل 1 و 5 يحتاجان أعمدة أكثر)
         const endCol = (id == "1" || id == "5") ? 7 : 6;
         const filteredData = fullData.map(row => row ? row.slice(1, endCol) : []);
         
         res.json(filteredData);
     } catch (error) { 
-        console.error("Drive Error:", error.message);
-        res.status(500).json({ error: "خطأ في الاتصال بالسيرفر أو جوجل درايف", details: error.message }); 
+        console.error("Drive API Error:", error.message);
+        res.status(500).json({ error: "فشل جلب البيانات من Google Drive", details: error.message }); 
     }
 });
 
+// [و] تحديث بيانات الحساب (مؤقت في الذاكرة)
 app.post('/update-account', checkAuth, (req, res) => {
     const { user, pass } = req.body;
-    // ملاحظة: هذه الطريقة تغير البيانات في الذاكرة فقط، ستعود للأصل عند ريستارت السيرفر في Vercel
     if (user) USER_CREDENTIALS.username = user;
     if (pass) USER_CREDENTIALS.password = pass;
     res.status(200).send("Updated");
 });
 
+// تشغيل السيرفر
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`System Online on ${PORT}`));
+app.listen(PORT, () => console.log(`CETC System Online on port ${PORT}`));
 
 module.exports = app;

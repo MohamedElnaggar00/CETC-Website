@@ -58,6 +58,44 @@
         .val-positive { color: #10b981 !important; font-weight: 900; }
         .val-negative { color: #ef4444 !important; font-weight: 900; }
 
+        /* تنسيقات إكسيل الكلاسيكية والمطابقة لشبكة برنامج Excel (Excel Replica Grid) */
+        .excel-table-wrapper { 
+            background: #ffffff; 
+            border: 1px solid #b0b0b0; 
+            overflow-x: auto; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+            border-radius: 6px;
+        }
+        .excel-table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            font-family: Calibri, 'Segoe UI', Arial, sans-serif; 
+            font-size: 13.5px; 
+            color: #000000; 
+            direction: rtl; 
+        }
+        .excel-table th { 
+            background: #f3f3f3; 
+            color: #444444; 
+            font-weight: bold; 
+            border: 1px solid #b0b0b0; 
+            padding: 8px 15px; 
+            font-size: 13px; 
+            text-align: center; 
+            user-select: none;
+        }
+        .excel-table td { 
+            border: 1px solid #d4d4d4; 
+            padding: 6px 12px; 
+            text-align: center; 
+            white-space: nowrap; 
+            background: #ffffff;
+            font-weight: normal;
+        }
+        .excel-table tr:hover td { 
+            background-color: #e9f0f8 !important; /* لون تظليل صفوف الإكسيل عند التمرير */
+        }
+
         /* الموبايل */
         @media (max-width: 768px) {
             .app-layout { flex-direction: column; overflow-y: auto; }
@@ -161,7 +199,7 @@
                 </div>
             </section>
             
-            <!-- قسم مسلسلات التقارير (محدث لحساب أقصى عدد من الأعمدة تلقائياً) -->
+            <!-- قسم مسلسلات التقارير (محدث لمحاكاة خلايا وجدول إكسيل بدقة) -->
             <section id="reports-module" class="module">
                 <h2 style="color:var(--sidebar); border-bottom: 4px solid var(--primary); padding-bottom:10px; display:inline-block; font-weight: 900; margin-bottom: 25px;">مسلسلات التقارير</h2>
                 
@@ -178,12 +216,12 @@
                     </div>
                 </div>
 
-                <!-- جدول مسلسلات التقارير -->
-                <div class="table-wrapper">
-                    <table style="min-width: 100%;">
+                <!-- جدول مسلسلات التقارير بنمط شبكة إكسيل -->
+                <div class="excel-table-wrapper">
+                    <table class="excel-table">
                         <thead id="h-reports"></thead>
                         <tbody id="b-reports">
-                            <tr><td colspan="10" style="padding: 40px;">الرجاء اختيار نوع التقرير من القائمة لعرض البيانات...</td></tr>
+                            <tr><td colspan="10" style="padding: 40px; text-align: center;">الرجاء اختيار نوع التقرير من القائمة لعرض البيانات...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -216,7 +254,7 @@
             if (val === undefined || val === null || isNaN(parseFloat(val))) return '-';
             const num = parseFloat(val);
             if (num % 1 !== 0) {
-                return num.toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+                return num.toLocaleString('en-US', { minimumFractionDigits: 1, minimumFractionDigits: 1 });
             }
             return num.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
         }
@@ -457,7 +495,7 @@
 
             if (!sheetName) {
                 h.innerHTML = '';
-                b.innerHTML = '<tr><td colspan="10" style="padding: 40px;">الرجاء اختيار نوع التقرير من القائمة لعرض البيانات...</td></tr>';
+                b.innerHTML = '<tr><td colspan="10" style="padding: 40px; text-align: center;">الرجاء اختيار نوع التقرير من القائمة لعرض البيانات...</td></tr>';
                 rawReportData = [];
                 currentReportMaxCols = 0;
                 return;
@@ -483,18 +521,18 @@
 
                     renderReportTable(data);
                 } else {
-                    b.innerHTML = '<tr><td colspan="10" style="padding: 30px; font-weight: bold;">التبويبة فارغة ولا تحتوي على بيانات.</td></tr>';
+                    b.innerHTML = '<tr><td colspan="10" style="padding: 30px; font-weight: bold; text-align: center;">التبويبة فارغة ولا تحتوي على بيانات.</td></tr>';
                     rawReportData = [];
                     currentReportMaxCols = 0;
                 }
             } catch (err) {
-                b.innerHTML = '<tr><td colspan="10" style="color:red; padding: 30px; font-weight: bold;">خطأ في جلب بيانات التقرير من الخادم!</td></tr>';
+                b.innerHTML = '<tr><td colspan="10" style="color:red; padding: 30px; font-weight: bold; text-align: center;">خطأ في جلب بيانات التقرير من الخادم!</td></tr>';
                 rawReportData = [];
                 currentReportMaxCols = 0;
             }
         }
 
-        // دالة بناء ورسم جدول التقارير (محدثة لدعم كافة الأعمدة ديناميكياً)
+        // دالة بناء ورسم جدول التقارير (تعرض الخلايا والأرقام والتواريخ والعملات بتنسيق الإكسيل الأصلي تماماً وبنفس مظهر الجدول)
         function renderReportTable(data) {
             const h = document.getElementById('h-reports');
             const b = document.getElementById('b-reports');
@@ -504,12 +542,11 @@
 
             if (!data || data.length === 0) return;
 
-            // 1. بناء الهيدر بناءً على الحد الأقصى للأعمدة المكتشفة في الملف
+            // 1. بناء الهيدر بناءً على الحد الأقصى للأعمدة المكتشفة في الملف ليكون مشابهاً لإكسيل
             const headers = data[0] || [];
             const trH = document.createElement('tr');
             for (let colIndex = 0; colIndex < currentReportMaxCols; colIndex++) {
                 const th = document.createElement('th');
-                // إذا كان العمود يحمل اسماً بالصف الأول نعرضه، وإلا نعطيه اسماً تلقائياً (مثال: عمود 2)
                 th.textContent = headers[colIndex] !== undefined && headers[colIndex] !== null ? headers[colIndex] : `عمود ${colIndex + 1}`;
                 trH.appendChild(th);
             }
@@ -525,15 +562,8 @@
                     const td = document.createElement('td');
                     let val = row[colIndex];
                     
-                    if (val !== undefined && val !== null) {
-                        if (!isNaN(parseFloat(val)) && typeof val === 'number') {
-                            td.textContent = formatNumber(val);
-                        } else {
-                            td.textContent = val;
-                        }
-                    } else {
-                        td.textContent = '-'; // عرض شحطة في الخلايا الفارغة لسلامة الهيكل البصري للجدول
-                    }
+                    // نعرض القيمة المنسقة القادمة من الإكسيل مباشرةً بدون تعديل عليها أو تلوين خارجي للحفاظ على التنسيق المالي والتواريخ
+                    td.textContent = val !== undefined && val !== null ? val : '-';
                     tr.appendChild(td);
                 }
                 b.appendChild(tr);

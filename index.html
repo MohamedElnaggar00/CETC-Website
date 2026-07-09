@@ -7,12 +7,45 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --red: #C41230; --black: #1a1a1a; --white: #ffffff; --bg: #f8fafc; }
+        :root { --red: #C41230; --black: #000000; --white: #ffffff; --bg: #f8fafc; }
         body { font-family: 'Cairo', sans-serif; margin: 0; background: var(--bg); color: var(--black); line-height: 1.6; }
         
-        /* التعديل في الهيدر ليتناسب مع سطرين من النصوص */
+        /* تصميم الشريط العلوي الأسود */
+        .top-bar {
+            background: var(--black);
+            color: var(--white);
+            padding: 8px 5%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 25px;
+            font-size: 0.9rem;
+            direction: ltr; /* لعرض الأرقام والإيميلات بشكل صحيح */
+        }
+        .top-bar-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .top-bar-item i {
+            color: var(--red);
+            font-size: 1rem;
+        }
+        .top-bar-divider {
+            width: 1px;
+            height: 20px;
+            background: #333;
+        }
+        .email-group {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+            font-size: 0.85rem;
+        }
+
+        /* الهيدر */
         header { 
-            background: var(--white); 
+            background: #ffffff; 
             padding: 10px 5%; 
             display: flex; 
             justify-content: space-between; 
@@ -24,27 +57,26 @@
             box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); 
         }
 
-        .logo img { height: 65px; transition: 0.3s; }
+        .logo img { height: 65px; }
 
-        /* حاوية نصوص العلامة التجارية */
         .brand-container {
             display: flex;
             flex-direction: column;
-            text-align: left; /* المحاذاة لليسار لأن اللوجو جهة اليمين في RTL */
+            text-align: left;
             gap: 2px;
         }
 
         .main-uni-title {
             font-weight: 900;
-            font-size: clamp(0.85rem, 2vw, 1.25rem); /* حجم خط كبير مرن */
-            color: var(--black);
+            font-size: clamp(0.85rem, 2vw, 1.25rem);
+            color: #1a1a1a;
             margin: 0;
             line-height: 1.2;
         }
 
         .sub-unit-title {
             font-weight: 700;
-            font-size: clamp(0.7rem, 1.5vw, 0.95rem); /* حجم خط أصغر قليلاً */
+            font-size: clamp(0.7rem, 1.5vw, 0.95rem);
             color: var(--red);
             margin: 0;
             line-height: 1.2;
@@ -55,7 +87,7 @@
         .hero p { font-size: clamp(1rem, 2vw, 1.2rem); max-width: 800px; margin: 0 auto; color: #f1f5f9; }
 
         .nav-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; padding: 60px 5%; max-width: 1200px; margin: -50px auto 0; position: relative; z-index: 10; }
-        .nav-card { background: var(--white); padding: 35px 25px; text-align: center; border-radius: 16px; transition: all 0.3s ease; cursor: pointer; text-decoration: none; color: var(--black); border: 1px solid #e2e8f0; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); display: flex; flex-direction: column; align-items: center; gap: 15px; }
+        .nav-card { background: #ffffff; padding: 35px 25px; text-align: center; border-radius: 16px; transition: all 0.3s ease; cursor: pointer; text-decoration: none; color: #1a1a1a; border: 1px solid #e2e8f0; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); display: flex; flex-direction: column; align-items: center; gap: 15px; }
         .nav-card i { font-size: 2.8rem; color: var(--red); background: #fef2f2; padding: 20px; border-radius: 50%; }
         .nav-card h3 { margin: 0; font-weight: 800; font-size: 1.3rem; }
         .nav-card p { margin: 0; font-size: 0.95rem; color: #64748b; }
@@ -65,23 +97,48 @@
         .admin-btn i { color: var(--red); background: white; }
         .admin-btn p { color: #f1f5f9; }
 
-        .about { padding: 60px 5%; background: var(--white); text-align: center; margin-top: 40px; }
+        .about { padding: 60px 5%; background: #ffffff; text-align: center; margin-top: 40px; }
         .section-title { font-size: 2rem; color: var(--red); position: relative; display: inline-block; margin-bottom: 30px; font-weight: 800; }
-        .section-title::after { content: ""; width: 40px; height: 4px; background: var(--black); position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); border-radius: 2px; }
+        .section-title::after { content: ""; width: 40px; height: 4px; background: #1a1a1a; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); border-radius: 2px; }
 
-        footer { background: var(--black); color: #94a3b8; text-align: center; padding: 25px 5%; margin-top: 50px; font-size: 0.9rem; }
+        footer { background: #000000; color: #94a3b8; text-align: center; padding: 25px 5%; margin-top: 50px; font-size: 0.9rem; }
 
         /* تحسينات الموبايل */
         @media (max-width: 768px) {
-            header { flex-direction: column; gap: 12px; text-align: center; padding: 15px; }
+            .top-bar { flex-direction: column; gap: 10px; padding: 15px; }
+            .top-bar-divider { display: none; }
+            header { flex-direction: column; gap: 12px; text-align: center; }
             .brand-container { text-align: center; }
-            .logo img { height: 50px; }
             .hero { padding: 80px 5%; }
-            .nav-grid { margin-top: 20px; padding: 20px 5%; }
         }
     </style>
 </head>
 <body>
+
+<!-- الشريط العلوي الجديد -->
+<div class="top-bar">
+    <div class="top-bar-item">
+        <span>16448</span>
+        <i class="fas fa-phone-alt"></i>
+    </div>
+    
+    <div class="top-bar-divider"></div>
+    
+    <div class="top-bar-item">
+        <div class="email-group">
+            <span>cetc.unit@ejust.edu.eg</span>
+            <span>CINTECH@ejust.edu.eg</span>
+        </div>
+        <i class="fas fa-envelope"></i>
+    </div>
+    
+    <div class="top-bar-divider"></div>
+    
+    <div class="top-bar-item">
+        <span>03-4600004</span>
+        <i class="fas fa-fax"></i>
+    </div>
+</div>
 
 <header>
     <div class="logo">

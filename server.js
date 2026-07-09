@@ -67,6 +67,7 @@ async function getExcelBuffer(fileId) {
 app.get('/', (req, res) => res.sendFile(path.join(process.cwd(), 'index.html')));
 app.get('/introducing', (req, res) => res.sendFile(path.join(process.cwd(), 'introducing.html')));
 app.get('/portfolio', (req, res) => res.sendFile(path.join(process.cwd(), 'portfolio.html')));
+app.get('/partners', (req, res) => res.sendFile(path.join(process.cwd(), 'partners.html')));
 app.get('/login', (req, res) => {
     if (req.session.loggedIn) return res.redirect('/Dashboard');
     res.sendFile(path.join(process.cwd(), 'login.html'));

@@ -10,43 +10,10 @@
         :root { --red: #C41230; --black: #000000; --white: #ffffff; --bg: #f8fafc; }
         body { font-family: 'Cairo', sans-serif; margin: 0; background: var(--bg); color: var(--black); line-height: 1.6; }
         
-        /* تصميم الشريط العلوي الأسود */
-        .top-bar {
-            background: var(--black);
-            color: var(--white);
-            padding: 8px 5%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 25px;
-            font-size: 0.9rem;
-            direction: ltr; /* لعرض الأرقام والإيميلات بشكل صحيح */
-        }
-        .top-bar-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .top-bar-item i {
-            color: var(--red);
-            font-size: 1rem;
-        }
-        .top-bar-divider {
-            width: 1px;
-            height: 20px;
-            background: #333;
-        }
-        .email-group {
-            display: flex;
-            flex-direction: column;
-            line-height: 1.2;
-            font-size: 0.85rem;
-        }
-
         /* الهيدر */
         header { 
             background: #ffffff; 
-            padding: 10px 5%; 
+            padding: 15px 5%; 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
@@ -101,44 +68,57 @@
         .section-title { font-size: 2rem; color: var(--red); position: relative; display: inline-block; margin-bottom: 30px; font-weight: 800; }
         .section-title::after { content: ""; width: 40px; height: 4px; background: #1a1a1a; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); border-radius: 2px; }
 
-        footer { background: #000000; color: #94a3b8; text-align: center; padding: 25px 5%; margin-top: 50px; font-size: 0.9rem; }
+        /* تصميم قسم بيانات التواصل في الأسفل */
+        .bottom-contact-bar {
+            background: var(--black);
+            color: var(--white);
+            padding: 30px 5%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            font-size: 0.9rem;
+            border-top: 1px solid #333;
+            flex-wrap: wrap;
+            direction: ltr; /* لعرض المحتوى الأجنبي بشكل سليم */
+        }
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .contact-item i {
+            color: var(--red);
+            font-size: 1.2rem;
+        }
+        .contact-divider {
+            width: 1px;
+            height: 40px;
+            background: #444;
+        }
+        .email-list {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.4;
+        }
+        .address-text {
+            max-width: 350px;
+            line-height: 1.4;
+        }
+
+        footer { background: #000000; color: #94a3b8; text-align: center; padding: 20px 5%; font-size: 0.85rem; border-top: 1px solid #222; }
 
         /* تحسينات الموبايل */
         @media (max-width: 768px) {
-            .top-bar { flex-direction: column; gap: 10px; padding: 15px; }
-            .top-bar-divider { display: none; }
             header { flex-direction: column; gap: 12px; text-align: center; }
             .brand-container { text-align: center; }
             .hero { padding: 80px 5%; }
+            .bottom-contact-bar { flex-direction: column; text-align: center; gap: 25px; }
+            .contact-divider { display: none; }
         }
     </style>
 </head>
 <body>
-
-<!-- الشريط العلوي الجديد -->
-<div class="top-bar">
-    <div class="top-bar-item">
-        <span>16448</span>
-        <i class="fas fa-phone-alt"></i>
-    </div>
-    
-    <div class="top-bar-divider"></div>
-    
-    <div class="top-bar-item">
-        <div class="email-group">
-            <span>cetc.unit@ejust.edu.eg</span>
-            <span>CINTECH@ejust.edu.eg</span>
-        </div>
-        <i class="fas fa-envelope"></i>
-    </div>
-    
-    <div class="top-bar-divider"></div>
-    
-    <div class="top-bar-item">
-        <span>03-4600004</span>
-        <i class="fas fa-fax"></i>
-    </div>
-</div>
 
 <header>
     <div class="logo">
@@ -184,6 +164,31 @@
         يهدف المركز الى تقديم اختبارات واستشارات فنية متميزة للمشروعات المدنية القومية والخاصة، ملبيا بذلك احتياجات الافراد والجهات الحكومية والمؤسسات والشركات المنفذة والمكاتب الاستشارية.
     </p>
 </section>
+
+<!-- قسم بيانات التواصل في الأسفل -->
+<div class="bottom-contact-bar">
+    <div class="contact-item">
+        <i class="fas fa-phone-alt"></i>
+        <span>16448</span>
+    </div>
+    
+    <div class="contact-divider"></div>
+    
+    <div class="contact-item">
+        <i class="fas fa-envelope"></i>
+        <div class="email-list">
+            <span>cetc.unit@ejust.edu.eg</span>
+            <span>CINTECH@ejust.edu.eg</span>
+        </div>
+    </div>
+    
+    <div class="contact-divider"></div>
+    
+    <div class="contact-item">
+        <i class="fas fa-map-marker-alt"></i>
+        <span class="address-text">P.O. Box 179, New Borg El-Arab City Postal Code 21934, Alexandria, Egypt</span>
+    </div>
+</div>
 
 <footer>
     <p>&copy; 2026 وحدة اختبارات واستشارات الهندسة المدنية (CETC) - E-JUST</p>

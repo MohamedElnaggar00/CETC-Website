@@ -31,10 +31,13 @@
         .module.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Tabs */
+        /* Tabs & Controls */
         .tab-group { display: flex; gap: 12px; margin-bottom: 25px; }
         .tab-btn { padding: 10px 20px; border: 2px solid #ddd; background: var(--surface); color: var(--text-light); font-weight: 800; border-radius: 8px; cursor: pointer; transition: 0.3s; font-family: inherit; font-size: 0.95rem; }
         .tab-btn.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 10px rgba(196,18,48,0.2); }
+
+        .control-item { background: var(--surface); border: 2px solid #ddd; border-radius: 8px; padding: 12px 20px; font-family: inherit; font-size: 0.95rem; font-weight: 700; outline: none; transition: 0.3s; color: var(--text); }
+        .control-item:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(196,18,48,0.1); }
 
         /* Stats Cards */
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 25px; display: none; }
@@ -104,9 +107,7 @@
                 
                 <div class="tab-group">
                     <button class="tab-btn" onclick="loadData(1, this)"><i class="fas fa-folder-open"></i> سجل - 01 LOG</button>
-                    <!-- تم تعديل الرقم هنا إلى 2 ليجلب الحي التاسع بشكل صحيح -->
                     <button class="tab-btn" onclick="loadData(2, this)"><i class="fas fa-building"></i> الحي التاسع</button>
-                    <!-- تم تعديل الرقم هنا إلى 3 ليجلب ترعة الحمام بشكل صحيح -->
                     <button class="tab-btn" onclick="loadData(3, this)"><i class="fas fa-water"></i> ترعة الحمام</button>
                     <button class="tab-btn" onclick="loadData(4, this)"><i class="fas fa-home"></i> مشروع ديارنا</button>
                 </div>
@@ -160,8 +161,32 @@
                 </div>
             </section>
             
+            <!-- قسم مسلسلات التقارير (تم تفعيله بالكامل) -->
             <section id="reports-module" class="module">
-                <!-- محتوى قسم التقارير إذا أردت برمجته لاحقاً -->
+                <h2 style="color:var(--sidebar); border-bottom: 4px solid var(--primary); padding-bottom:10px; display:inline-block; font-weight: 900; margin-bottom: 25px;">مسلسلات التقارير</h2>
+                
+                <div style="display: flex; gap: 15px; margin-bottom: 25px; flex-wrap: wrap;">
+                    <!-- القائمة المنسدلة لاختيار التبويبة -->
+                    <select id="report-sheet-select" class="control-item" onchange="loadReportData(this.value)" style="flex: 1; min-width: 250px; cursor: pointer;">
+                        <option value="">جاري تحميل أنواع التقارير...</option>
+                    </select>
+                    
+                    <!-- صندوق البحث الذكي والفلترة الفورية -->
+                    <div style="position: relative; display: flex; align-items: center; flex: 1.5; min-width: 250px;">
+                        <i class="fas fa-search" style="position: absolute; right: 15px; color: #94a3b8; font-size: 1.1rem;"></i>
+                        <input type="text" id="report-search-input" class="control-item" placeholder="بحث وفلترة فورية في محتويات التقرير..." onkeyup="filterReportTable()" style="width: 100%; padding-right: 40px; box-sizing: border-box;">
+                    </div>
+                </div>
+
+                <!-- جدول مسلسلات التقارير -->
+                <div class="table-wrapper">
+                    <table style="min-width: 100%;">
+                        <thead id="h-reports"></thead>
+                        <tbody id="b-reports">
+                            <tr><td colspan="10" style="padding: 40px;">الرجاء اختيار نوع التقرير من القائمة لعرض البيانات...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
             </section>
             
             <section id="revenue-module" class="module">
@@ -172,12 +197,18 @@
 
     <script>
         let incomeChartInstance = null; // لحفظ وتحديث الرسم البياني
+        let rawReportData = []; // لحفظ بيانات جدول التقارير الخام للبحث الفوري
 
         function switchMod(name, btn) {
             document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
             if(btn && !btn.hasAttribute('href')) btn.classList.add('active');
             document.querySelectorAll('.module').forEach(s => s.classList.remove('active'));
             document.getElementById(name + '-module').classList.add('active');
+
+            // إذا تم الانتقال لقسم التقارير، نقوم بجلب التبويبات تلقائياً
+            if (name === 'reports') {
+                loadReportSheets();
+            }
         }
 
         function formatNumber(val) {
@@ -289,7 +320,6 @@
                 b.innerHTML = '';
 
                 if(data.length > 1) {
-                    // 1. العناوين (الصف الأول)
                     const headers = data[0];
                     const trH = document.createElement('tr');
                     for(let i=0; i<3; i++) {
@@ -299,15 +329,11 @@
                     }
                     h.appendChild(trH);
 
-                    // مصفوفات الرسم البياني
                     const chartLabels = [];
                     const chartDataValues = [];
 
-                    // 2. بناء الجدول
                     data.slice(1).forEach(row => {
                         if(!row || row.length === 0) return;
-                        
-                        // تجاهل الصفوف الفارغة تماماً
                         if(row.every(cell => cell === undefined || cell === null || cell === '')) return;
 
                         const tr = document.createElement('tr');
@@ -325,7 +351,6 @@
                         }
                         b.appendChild(tr);
 
-                        // تجهيز بيانات الرسم البياني وتجاهل صف (Total)
                         const firstColStr = String(row[0] || '').toLowerCase();
                         if (!firstColStr.includes("total") && row[1]) {
                             chartLabels.push(row[1]); 
@@ -333,7 +358,6 @@
                         }
                     });
 
-                    // رسم المنحنى
                     drawIncomeChart(year, chartLabels, chartDataValues);
 
                 } else {
@@ -350,10 +374,9 @@
             const ctx = document.getElementById('incomeChart').getContext('2d');
 
             if (incomeChartInstance) {
-                incomeChartInstance.destroy(); // مسح الرسم القديم
+                incomeChartInstance.destroy(); 
             }
 
-            // تدرج لوني باللون الأحمر
             let gradient = ctx.createLinearGradient(0, 0, 0, 400);
             gradient.addColorStop(0, 'rgba(196, 18, 48, 0.4)'); 
             gradient.addColorStop(1, 'rgba(196, 18, 48, 0.0)');
@@ -374,7 +397,7 @@
                         pointRadius: 5,
                         pointHoverRadius: 7,
                         fill: true,
-                        tension: 0.4 // منحنى انسيابي
+                        tension: 0.4 
                     }]
                 },
                 options: {
@@ -395,6 +418,145 @@
                     }
                 }
             });
+        }
+
+        // دالة جلب قائمة التبويبات (أسماء التقارير) من جوجل درايف
+        async function loadReportSheets() {
+            const select = document.getElementById('report-sheet-select');
+            // لمنع تكرار التحميل إذا كانت محملة بالفعل
+            if (select.options.length > 1 && select.options[0].value !== "") return;
+
+            try {
+                select.innerHTML = '<option value="">جاري تحميل القائمة من جوجل درايف...</option>';
+                const res = await fetch('/get-report-sheets');
+                const data = await res.json();
+
+                if (data.sheets && data.sheets.length > 0) {
+                    select.innerHTML = '<option value="">اختر نوع التقرير...</option>';
+                    data.sheets.forEach(sheetName => {
+                        const opt = document.createElement('option');
+                        opt.value = sheetName;
+                        opt.textContent = sheetName;
+                        select.appendChild(opt);
+                    });
+                } else {
+                    select.innerHTML = '<option value="">لم يتم العثور على تبويبات بالملف</option>';
+                }
+            } catch (err) {
+                select.innerHTML = '<option value="">خطأ في تحميل قائمة التقارير!</option>';
+            }
+        }
+
+        // دالة جلب بيانات التقرير المحدد
+        async function loadReportData(sheetName) {
+            const h = document.getElementById('h-reports');
+            const b = document.getElementById('b-reports');
+            const searchInput = document.getElementById('report-search-input');
+            
+            searchInput.value = ''; // تصفير خانة البحث عند تغيير التقرير
+
+            if (!sheetName) {
+                h.innerHTML = '';
+                b.innerHTML = '<tr><td colspan="10" style="padding: 40px;">الرجاء اختيار نوع التقرير من القائمة لعرض البيانات...</td></tr>';
+                rawReportData = [];
+                return;
+            }
+
+            try {
+                b.innerHTML = '<tr><td colspan="10" class="loading"><i class="fas fa-circle-notch fa-spin"></i> جاري مزامنة بيانات التقرير...</td></tr>';
+                h.innerHTML = '';
+
+                const res = await fetch(`/get-report-data?sheet=${encodeURIComponent(sheetName)}`);
+                const data = await res.json();
+
+                if (data.length > 0) {
+                    rawReportData = data; // تخزين البيانات الخام برمجياً لتمكين الفلترة الفورية
+                    renderReportTable(data);
+                } else {
+                    b.innerHTML = '<tr><td colspan="10" style="padding: 30px; font-weight: bold;">التبويبة فارغة ولا تحتوي على بيانات.</td></tr>';
+                    rawReportData = [];
+                }
+            } catch (err) {
+                b.innerHTML = '<tr><td colspan="10" style="color:red; padding: 30px; font-weight: bold;">خطأ في جلب بيانات التقرير من الخادم!</td></tr>';
+                rawReportData = [];
+            }
+        }
+
+        // دالة بناء ورسم جدول التقارير
+        function renderReportTable(data) {
+            const h = document.getElementById('h-reports');
+            const b = document.getElementById('b-reports');
+            
+            h.innerHTML = '';
+            b.innerHTML = '';
+
+            if (!data || data.length === 0) return;
+
+            // 1. بناء الهيدر (الصف الأول)
+            const headers = data[0];
+            const trH = document.createElement('tr');
+            headers.forEach(text => {
+                const th = document.createElement('th');
+                th.textContent = text !== undefined && text !== null ? text : '-';
+                trH.appendChild(th);
+            });
+            h.appendChild(trH);
+
+            // 2. بناء صفوف البيانات (باقي الصفوف)
+            data.slice(1).forEach(row => {
+                if (!row || row.length === 0) return;
+                // تخطي الصفوف الفارغة تماماً
+                if (row.every(cell => cell === undefined || cell === null || cell === '')) return;
+
+                const tr = document.createElement('tr');
+                headers.forEach((_, colIndex) => {
+                    const td = document.createElement('td');
+                    let val = row[colIndex];
+                    
+                    if (val !== undefined && val !== null) {
+                        // تنسيق الأرقام إن وجدت داخل الجدول
+                        if (!isNaN(parseFloat(val)) && typeof val === 'number') {
+                            td.textContent = formatNumber(val);
+                        } else {
+                            td.textContent = val;
+                        }
+                    } else {
+                        td.textContent = '-';
+                    }
+                    tr.appendChild(td);
+                });
+                b.appendChild(tr);
+            });
+        }
+
+        // دالة البحث والفلترة المباشرة فائقة السرعة
+        function filterReportTable() {
+            const query = document.getElementById('report-search-input').value.toLowerCase().trim();
+            
+            if (!rawReportData || rawReportData.length === 0) return;
+
+            if (!query) {
+                // إذا كان البحث فارغاً، نعرض الجدول كاملاً
+                renderReportTable(rawReportData);
+                return;
+            }
+
+            const headers = rawReportData[0];
+            
+            // فلترة صفوف البيانات فقط مع الإبقاء على الهيدر ثابتاً
+            const filteredRows = rawReportData.slice(1).filter(row => {
+                if (!row || row.length === 0) return false;
+                
+                // البحث في أي عمود أو خلية داخل الصف
+                return row.some(cell => {
+                    if (cell === undefined || cell === null) return false;
+                    return String(cell).toLowerCase().includes(query);
+                });
+            });
+
+            // إعادة بناء مصفوفة الجدول الجديد وتحديث العرض
+            const datasetToRender = [headers, ...filteredRows];
+            renderReportTable(datasetToRender);
         }
     </script>
 </body>

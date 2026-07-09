@@ -42,7 +42,7 @@ const fileIds = {
     "2024": "1XBzfNn6LkHiRNF8s7NQeICn4D4mShyDm",
     "2025": "1ypVYF_Y6L-taMfkHSYly8nONIqEbj46V",
     "2026": "1wGGOGxcrakcSiPZMim_uJKI2RUOLxFm_",
-    "reports": "1366JN3rpYyrdt8Jq27jrlr6eoymtpf3S" // الملف المخصص للتقارير
+    "reports": "1366JN3rpYyrdt8Jq27jrlr6eoymtpf3S"
 };
 
 // ميدل وير لحماية المسارات
@@ -51,36 +51,20 @@ function checkAuth(req, res, next) {
     res.redirect('/login');
 }
 
-// دالة ذكية مساعدة لتحميل ملف الإكسيل كبفر تلقائي بغض النظر عن نوعه على الدرايف
 async function getExcelBuffer(fileId) {
-    const fileMeta = await drive.files.get({
-        fileId: fileId,
-        fields: 'mimeType'
-    });
+    const fileMeta = await drive.files.get({ fileId: fileId, fields: 'mimeType' });
     const mimeType = fileMeta.data.mimeType;
-
     let response;
     if (mimeType === 'application/vnd.google-apps.spreadsheet') {
-        response = await drive.files.export(
-            {
-                fileId: fileId,
-                mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-            },
-            { responseType: 'arraybuffer' }
-        );
+        response = await drive.files.export({ fileId: fileId, mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }, { responseType: 'arraybuffer' });
     } else {
-        response = await drive.files.get(
-            { fileId: fileId, alt: 'media' },
-            { responseType: 'arraybuffer' }
-        );
+        response = await drive.files.get({ fileId: fileId, alt: 'media' }, { responseType: 'arraybuffer' });
     }
     return response.data;
 }
 
-// --- 3. المسارات (Routes) ---
-
+// --- 3. المسارات ---
 app.get('/', (req, res) => res.sendFile(path.join(process.cwd(), 'index.html')));
-
 app.get('/login', (req, res) => {
     if (req.session.loggedIn) return res.redirect('/Dashboard');
     res.sendFile(path.join(process.cwd(), 'login.html'));
@@ -88,35 +72,22 @@ app.get('/login', (req, res) => {
 
 app.post('/login', (req, res) => {
     const { username, password } = req.body;
-    
-    const isValidUser = (username === process.env.ADMIN_USER);
-    const isValidPass = (password === process.env.ADMIN_PASS);
-
-    if (isValidUser && isValidPass && process.env.ADMIN_USER && process.env.ADMIN_PASS) {
+    if (username === process.env.ADMIN_USER && password === process.env.ADMIN_PASS && process.env.ADMIN_USER) {
         req.session.loggedIn = true;
         res.json({ success: true, redirect: '/Dashboard' });
     } else {
-        res.json({ success: false, error: 'اسم المستخدم أو كلمة المرور غير صحيحة.' });
+        res.json({ success: false, error: 'بيانات الدخول غير صحيحة' });
     }
 });
 
 app.get('/Dashboard', checkAuth, (req, res) => res.sendFile(path.join(process.cwd(), 'dashboard.html')));
+app.get('/logout', (req, res) => { req.session.destroy(); res.redirect('/'); });
 
-app.get('/logout', (req, res) => { 
-    req.session.destroy(); 
-    res.redirect('/'); 
-});
-
-// جلب البيانات ذكياً (فواتير وإيرادات)
+// جلب البيانات (فواتير وإيرادات) - تم تحديثه لمعالجة التواريخ
 app.get('/get-data/:id', checkAuth, async (req, res) => {
     try {
         const id = req.params.id;
         const fileId = fileIds[id];
-        
-        if (!fileId) {
-            return res.status(404).json({ error: "معرف الملف غير مسجل في النظام" });
-        }
-
         const buffer = await getExcelBuffer(fileId);
         const workbook = XLSX.read(buffer, { type: 'buffer' });
         const isIncomeFile = ["2024", "2025", "2026"].includes(id);
@@ -129,9 +100,8 @@ app.get('/get-data/:id', checkAuth, async (req, res) => {
         }
 
         const sheet = workbook.Sheets[sheetName];
-        if (!sheet) return res.status(404).json({ error: `التبويبة المطلوبة غير موجودة بالملف` });
-        
-        const fullData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+        // استخدام raw: false لضمان جلب النصوص المنسقة (التواريخ) بدلاً من الأرقام الخام
+        const fullData = XLSX.utils.sheet_to_json(sheet, { header: 1, raw: false });
 
         if (isIncomeFile) {
             return res.json(fullData.map(row => row ? row.slice(0, 3) : []));
@@ -140,44 +110,28 @@ app.get('/get-data/:id', checkAuth, async (req, res) => {
         const endCol = (id == "1" || id == "5") ? 7 : 6;
         res.json(fullData.map(row => row ? row.slice(1, endCol) : []));
     } catch (error) { 
-        res.status(500).json({ error: "فشل الاتصال بجوجل درايف", details: error.message }); 
+        res.status(500).json({ error: error.message }); 
     }
 });
 
-// جلب قائمة أسماء التبويبات (أنواع التقارير) تلقائياً
 app.get('/get-report-sheets', checkAuth, async (req, res) => {
     try {
-        const fileId = fileIds["reports"];
-        const buffer = await getExcelBuffer(fileId);
+        const buffer = await getExcelBuffer(fileIds["reports"]);
         const workbook = XLSX.read(buffer, { type: 'buffer' });
         res.json({ sheets: workbook.SheetNames });
-    } catch (error) {
-        res.status(500).json({ error: "فشل جلب التبويبات من جوجل درايف", details: error.message });
-    }
+    } catch (error) { res.status(500).json({ error: error.message }); }
 });
 
-// جلب بيانات تبويبة تقرير محددة بالكامل مع الحفاظ على التنسيق الأصلي للملف (الأرقام، العملات، التواريخ)
 app.get('/get-report-data', checkAuth, async (req, res) => {
     try {
-        const sheetName = req.query.sheet;
-        if (!sheetName) return res.status(400).json({ error: "يرجى تحديد اسم التبويبة" });
-
-        const fileId = fileIds["reports"];
-        const buffer = await getExcelBuffer(fileId);
+        const buffer = await getExcelBuffer(fileIds["reports"]);
         const workbook = XLSX.read(buffer, { type: 'buffer' });
-
-        const sheet = workbook.Sheets[sheetName];
-        if (!sheet) return res.status(404).json({ error: `التبويبة '${sheetName}' غير موجودة` });
-
-        // نستخدم raw: false لتجلب البيانات منسقة تماماً بنصوصها وصيغتها في الإكسيل
+        const sheet = workbook.Sheets[req.query.sheet];
         const fullData = XLSX.utils.sheet_to_json(sheet, { header: 1, raw: false });
         res.json(fullData);
-    } catch (error) {
-        res.status(500).json({ error: "فشل جلب بيانات التقرير من جوجل درايف", details: error.message });
-    }
+    } catch (error) { res.status(500).json({ error: error.message }); }
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`System running strictly on Environment Variables`));
-
+app.listen(PORT, () => console.log(`Server is running`));
 module.exports = app;

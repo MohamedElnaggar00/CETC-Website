@@ -59,6 +59,7 @@ app.get('/login', (req, res) => {
     res.sendFile(path.join(process.cwd(), 'login.html'));
 });
 
+// عملية تسجيل الدخول: تم تعديلها لترد باستجابة JSON بدلاً من إعادة التوجيه المباشر
 app.post('/login', (req, res) => {
     const { username, password } = req.body;
     
@@ -67,9 +68,9 @@ app.post('/login', (req, res) => {
 
     if (isValidUser && isValidPass && process.env.ADMIN_USER && process.env.ADMIN_PASS) {
         req.session.loggedIn = true;
-        res.redirect('/Dashboard');
+        res.json({ success: true, redirect: '/Dashboard' });
     } else {
-        res.send('خطأ في بيانات الدخول. <a href="/login">حاول مرة أخرى</a>');
+        res.json({ success: false, error: 'اسم المستخدم أو كلمة المرور غير صحيحة.' });
     }
 });
 
@@ -90,7 +91,6 @@ app.get('/get-data/:id', checkAuth, async (req, res) => {
             return res.status(404).json({ error: "معرف الملف غير مسجل في النظام" });
         }
 
-        // 1. جلب بيانات نوع الملف أولاً (mimeType)
         const fileMeta = await drive.files.get({
             fileId: fileId,
             fields: 'mimeType'
@@ -99,7 +99,6 @@ app.get('/get-data/:id', checkAuth, async (req, res) => {
 
         let response;
         
-        // 2. إذا كان الملف Google Sheets أصلي، نقوم بتصديره كـ Excel
         if (mimeType === 'application/vnd.google-apps.spreadsheet') {
             response = await drive.files.export(
                 {
@@ -109,7 +108,6 @@ app.get('/get-data/:id', checkAuth, async (req, res) => {
                 { responseType: 'arraybuffer' }
             );
         } else {
-            // إذا كان ملف Excel تقليدي مرفوع بصيغة ثنائية
             response = await drive.files.get(
                 { fileId: fileId, alt: 'media' },
                 { responseType: 'arraybuffer' }

@@ -108,21 +108,18 @@
                 
                 <!-- تم ترتيب الصناديق من اليمين لليسار حسب الصورة -->
                 <div class="stats-grid" id="stat-billing">
-                    <!-- 1. اجمالي التوريد (المورد) -->
                     <div class="stat-card">
-                        <h3>اجمالي التوريد</h3>
+                        <h3>صافي المديونية</h3>
                         <div id="d-rec" class="stat-val">0</div>
                     </div>
                     
-                    <!-- 2. صافي المديونية -->
                     <div class="stat-card">
-                        <h3>صافي المديونية</h3>
+                        <h3>المبلغ المستق</h3>
                         <div id="d-bal" class="stat-val">0</div>
                     </div>
                     
-                    <!-- 3. المبلغ المستحق -->
                     <div class="stat-card">
-                        <h3>المبلغ المستحق</h3>
+                        <h3>اجمالي التوريد</h3>
                         <div id="d-due" class="stat-val">0</div>
                     </div>
                 </div>
@@ -236,13 +233,13 @@
                     if(mod === 'billing') {
                         document.getElementById('stat-billing').style.display = 'grid';
                         
-                        // 1. اجمالي التوريد (يعرض المورد / المدفوع)
+                        // 1. المديوينة
                         document.getElementById('d-rec').textContent = formatNumber(rec) + ' ج.م';
                         
-                        // 2. صافي المديونية (يعرض الفرق بين المستحق والمورد)
+                        // 2. المستحق
                         document.getElementById('d-bal').textContent = formatNumber(due - rec) + ' ج.م';
                         
-                        // 3. المبلغ المستحق (يعرض الفواتير المستحقة كإجمالي)
+                        // 3. التوريد
                         document.getElementById('d-due').textContent = formatNumber(due) + ' ج.م';
                     }
                 } else {

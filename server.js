@@ -41,13 +41,40 @@ const fileIds = {
     "5": "19z4P-fDzzCIFOIeL9197YhQyr2vXPSgv",
     "2024": "1XBzfNn6LkHiRNF8s7NQeICn4D4mShyDm",
     "2025": "1ypVYF_Y6L-taMfkHSYly8nONIqEbj46V",
-    "2026": "1wGGOGxcrakcSiPZMim_uJKI2RUOLxFm_"
+    "2026": "1wGGOGxcrakcSiPZMim_uJKI2RUOLxFm_",
+    "reports": "1366JN3rpYyrdt8Jq27jrlr6eoymtpf3S" // الملف الجديد لمسلسلات التقارير
 };
 
 // ميدل وير لحماية المسارات
 function checkAuth(req, res, next) {
     if (req.session.loggedIn) return next();
     res.redirect('/login');
+}
+
+// دالة ذكية مساعدة لتحميل ملف الإكسيل كبفر تلقائي بغض النظر عن نوعه على الدرايف
+async function getExcelBuffer(fileId) {
+    const fileMeta = await drive.files.get({
+        fileId: fileId,
+        fields: 'mimeType'
+    });
+    const mimeType = fileMeta.data.mimeType;
+
+    let response;
+    if (mimeType === 'application/vnd.google-apps.spreadsheet') {
+        response = await drive.files.export(
+            {
+                fileId: fileId,
+                mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            },
+            { responseType: 'arraybuffer' }
+        );
+    } else {
+        response = await drive.files.get(
+            { fileId: fileId, alt: 'media' },
+            { responseType: 'arraybuffer' }
+        );
+    }
+    return response.data;
 }
 
 // --- 3. المسارات (Routes) ---
@@ -59,7 +86,6 @@ app.get('/login', (req, res) => {
     res.sendFile(path.join(process.cwd(), 'login.html'));
 });
 
-// عملية تسجيل الدخول: تم تعديلها لترد باستجابة JSON بدلاً من إعادة التوجيه المباشر
 app.post('/login', (req, res) => {
     const { username, password } = req.body;
     
@@ -81,7 +107,7 @@ app.get('/logout', (req, res) => {
     res.redirect('/'); 
 });
 
-// جلب البيانات ذكياً (يتعرف على نوع الملف ويحمله بالصيغة الصحيحة بدون أخطاء)
+// جلب البيانات ذكياً (فواتير وإيرادات)
 app.get('/get-data/:id', checkAuth, async (req, res) => {
     try {
         const id = req.params.id;
@@ -91,30 +117,8 @@ app.get('/get-data/:id', checkAuth, async (req, res) => {
             return res.status(404).json({ error: "معرف الملف غير مسجل في النظام" });
         }
 
-        const fileMeta = await drive.files.get({
-            fileId: fileId,
-            fields: 'mimeType'
-        });
-        const mimeType = fileMeta.data.mimeType;
-
-        let response;
-        
-        if (mimeType === 'application/vnd.google-apps.spreadsheet') {
-            response = await drive.files.export(
-                {
-                    fileId: fileId,
-                    mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-                },
-                { responseType: 'arraybuffer' }
-            );
-        } else {
-            response = await drive.files.get(
-                { fileId: fileId, alt: 'media' },
-                { responseType: 'arraybuffer' }
-            );
-        }
-
-        const workbook = XLSX.read(response.data, { type: 'buffer' });
+        const buffer = await getExcelBuffer(fileId);
+        const workbook = XLSX.read(buffer, { type: 'buffer' });
         const isIncomeFile = ["2024", "2025", "2026"].includes(id);
         
         let sheetName = "فواتير الشركات";
@@ -137,6 +141,38 @@ app.get('/get-data/:id', checkAuth, async (req, res) => {
         res.json(fullData.map(row => row ? row.slice(1, endCol) : []));
     } catch (error) { 
         res.status(500).json({ error: "فشل الاتصال بجوجل درايف", details: error.message }); 
+    }
+});
+
+// جلب قائمة أسماء التبويبات (أنواع التقارير) تلقائياً
+app.get('/get-report-sheets', checkAuth, async (req, res) => {
+    try {
+        const fileId = fileIds["reports"];
+        const buffer = await getExcelBuffer(fileId);
+        const workbook = XLSX.read(buffer, { type: 'buffer' });
+        res.json({ sheets: workbook.SheetNames });
+    } catch (error) {
+        res.status(500).json({ error: "فشل جلب التبويبات من جوجل درايف", details: error.message });
+    }
+});
+
+// جلب بيانات تبويبة تقرير محددة بالكامل
+app.get('/get-report-data', checkAuth, async (req, res) => {
+    try {
+        const sheetName = req.query.sheet;
+        if (!sheetName) return res.status(400).json({ error: "يرجى تحديد اسم التبويبة" });
+
+        const fileId = fileIds["reports"];
+        const buffer = await getExcelBuffer(fileId);
+        const workbook = XLSX.read(buffer, { type: 'buffer' });
+
+        const sheet = workbook.Sheets[sheetName];
+        if (!sheet) return res.status(404).json({ error: `التبويبة '${sheetName}' غير موجودة` });
+
+        const fullData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+        res.json(fullData);
+    } catch (error) {
+        res.status(500).json({ error: "فشل جلب بيانات التقرير من جوجل درايف", details: error.message });
     }
 });
 

@@ -98,14 +98,16 @@
         </aside>
 
         <main class="main-content">
-            <!-- قسم فواتير الشركات (لم يتغير) -->
+            <!-- قسم فواتير الشركات -->
             <section id="billing-module" class="module active">
                 <h2 style="color:var(--sidebar); border-bottom: 4px solid var(--primary); padding-bottom:10px; display:inline-block; font-weight: 900;">حصر فواتير الشركات</h2>
                 
                 <div class="tab-group">
                     <button class="tab-btn" onclick="loadData(1, this)"><i class="fas fa-folder-open"></i> سجل - 01 LOG</button>
-                    <button class="tab-btn" onclick="loadData(3, this)"><i class="fas fa-building"></i> الحي التاسع</button>
-                    <button class="tab-btn" onclick="loadData(2, this)"><i class="fas fa-water"></i> ترعة الحمام</button>
+                    <!-- تم تعديل الرقم هنا إلى 2 ليجلب الحي التاسع بشكل صحيح -->
+                    <button class="tab-btn" onclick="loadData(2, this)"><i class="fas fa-building"></i> الحي التاسع</button>
+                    <!-- تم تعديل الرقم هنا إلى 3 ليجلب ترعة الحمام بشكل صحيح -->
+                    <button class="tab-btn" onclick="loadData(3, this)"><i class="fas fa-water"></i> ترعة الحمام</button>
                     <button class="tab-btn" onclick="loadData(4, this)"><i class="fas fa-home"></i> مشروع ديارنا</button>
                 </div>
                 
@@ -132,7 +134,7 @@
                 </div>
             </section>
 
-            <!-- قسم الإيرادات الشهرية (تم تحديثه) -->
+            <!-- قسم الإيرادات الشهرية -->
             <section id="monthly-module" class="module">
                 <h2 style="color:var(--sidebar); border-bottom: 4px solid var(--primary); padding-bottom:10px; display:inline-block; font-weight: 900;">الايرادات الشهرية</h2>
                 
@@ -187,7 +189,7 @@
             return num.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
         }
 
-        // دالة جلب فواتير الشركات (النظام القديم)
+        // دالة جلب فواتير الشركات
         async function loadData(id, btn) {
             document.querySelectorAll('#billing-module .tab-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');

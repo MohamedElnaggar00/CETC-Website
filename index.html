@@ -4,15 +4,51 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>وحدة اختبارات واستشارات الهندسة المدنية - E-JUST</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { --red: #C41230; --black: #1a1a1a; --white: #ffffff; --bg: #f8fafc; }
         body { font-family: 'Cairo', sans-serif; margin: 0; background: var(--bg); color: var(--black); line-height: 1.6; }
         
-        header { background: var(--white); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 4px solid var(--red); position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
-        .logo img { height: 50px; }
-        .brand-text { font-weight: 800; font-size: 1.1rem; }
+        /* التعديل في الهيدر ليتناسب مع سطرين من النصوص */
+        header { 
+            background: var(--white); 
+            padding: 10px 5%; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            border-bottom: 4px solid var(--red); 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000; 
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); 
+        }
+
+        .logo img { height: 65px; transition: 0.3s; }
+
+        /* حاوية نصوص العلامة التجارية */
+        .brand-container {
+            display: flex;
+            flex-direction: column;
+            text-align: left; /* المحاذاة لليسار لأن اللوجو جهة اليمين في RTL */
+            gap: 2px;
+        }
+
+        .main-uni-title {
+            font-weight: 900;
+            font-size: clamp(0.85rem, 2vw, 1.25rem); /* حجم خط كبير مرن */
+            color: var(--black);
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .sub-unit-title {
+            font-weight: 700;
+            font-size: clamp(0.7rem, 1.5vw, 0.95rem); /* حجم خط أصغر قليلاً */
+            color: var(--red);
+            margin: 0;
+            line-height: 1.2;
+        }
 
         .hero { background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://ejust.edu.eg/storage/EventsPhoto/top-min%20(1).jpg') no-repeat center/cover; color: white; padding: 100px 5%; text-align: center; }
         .hero h1 { font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 900; margin-bottom: 20px; }
@@ -24,6 +60,7 @@
         .nav-card h3 { margin: 0; font-weight: 800; font-size: 1.3rem; }
         .nav-card p { margin: 0; font-size: 0.95rem; color: #64748b; }
         .nav-card:hover { transform: translateY(-8px); border-color: var(--red); box-shadow: 0 20px 25px -5px rgba(196,18,48,0.15); }
+        
         .admin-btn { background: var(--red); color: white; border: none; }
         .admin-btn i { color: var(--red); background: white; }
         .admin-btn p { color: #f1f5f9; }
@@ -34,9 +71,11 @@
 
         footer { background: var(--black); color: #94a3b8; text-align: center; padding: 25px 5%; margin-top: 50px; font-size: 0.9rem; }
 
-        /* موبايل */
+        /* تحسينات الموبايل */
         @media (max-width: 768px) {
-            header { flex-direction: column; gap: 10px; text-align: center; }
+            header { flex-direction: column; gap: 12px; text-align: center; padding: 15px; }
+            .brand-container { text-align: center; }
+            .logo img { height: 50px; }
             .hero { padding: 80px 5%; }
             .nav-grid { margin-top: 20px; padding: 20px 5%; }
         }
@@ -45,8 +84,13 @@
 <body>
 
 <header>
-    <div class="logo"><img src="https://ejust.edu.eg/assets/img/logo.png" alt="E-JUST Logo"></div>
-    <div class="brand-text">CETC Unit - وحدة اختبارات واستشارات الهندسة المدنية</div>
+    <div class="logo">
+        <img src="https://ejust.edu.eg/assets/img/logo.png" alt="E-JUST Logo">
+    </div>
+    <div class="brand-container">
+        <div class="main-uni-title">الجامعة المصرية اليابانية - جامعة مصرية بحثية حكومية وذات طبيعة خاصة</div>
+        <div class="sub-unit-title">وحدة اختبارات واستشارات الهندسة المدنية - CETC unit</div>
+    </div>
 </header>
 
 <section class="hero">

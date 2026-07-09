@@ -161,7 +161,7 @@
                 </div>
             </section>
             
-            <!-- قسم مسلسلات التقارير (تم تفعيله بالكامل) -->
+            <!-- قسم مسلسلات التقارير (محدث لحساب أقصى عدد من الأعمدة تلقائياً) -->
             <section id="reports-module" class="module">
                 <h2 style="color:var(--sidebar); border-bottom: 4px solid var(--primary); padding-bottom:10px; display:inline-block; font-weight: 900; margin-bottom: 25px;">مسلسلات التقارير</h2>
                 
@@ -195,9 +195,10 @@
         </main>
     </div>
 
-    <script>
+    <script {nonce}>
         let incomeChartInstance = null; // لحفظ وتحديث الرسم البياني
         let rawReportData = []; // لحفظ بيانات جدول التقارير الخام للبحث الفوري
+        let currentReportMaxCols = 0; // لحفظ أقصى عدد للأعمدة الممتلئة بالبيانات في التقرير النشط
 
         function switchMod(name, btn) {
             document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
@@ -423,7 +424,6 @@
         // دالة جلب قائمة التبويبات (أسماء التقارير) من جوجل درايف
         async function loadReportSheets() {
             const select = document.getElementById('report-sheet-select');
-            // لمنع تكرار التحميل إذا كانت محملة بالفعل
             if (select.options.length > 1 && select.options[0].value !== "") return;
 
             try {
@@ -453,12 +453,13 @@
             const b = document.getElementById('b-reports');
             const searchInput = document.getElementById('report-search-input');
             
-            searchInput.value = ''; // تصفير خانة البحث عند تغيير التقرير
+            searchInput.value = ''; // تصفير خانة البحث
 
             if (!sheetName) {
                 h.innerHTML = '';
                 b.innerHTML = '<tr><td colspan="10" style="padding: 40px;">الرجاء اختيار نوع التقرير من القائمة لعرض البيانات...</td></tr>';
                 rawReportData = [];
+                currentReportMaxCols = 0;
                 return;
             }
 
@@ -470,19 +471,30 @@
                 const data = await res.json();
 
                 if (data.length > 0) {
-                    rawReportData = data; // تخزين البيانات الخام برمجياً لتمكين الفلترة الفورية
+                    rawReportData = data; 
+
+                    // برمجياً: قياس أقصى طول صف (عدد الأعمدة الكلي بالملف) لضمان جلب كافة الأعمدة المعبأة بالنصوص
+                    currentReportMaxCols = 0;
+                    data.forEach(row => {
+                        if (row && row.length > currentReportMaxCols) {
+                            currentReportMaxCols = row.length;
+                        }
+                    });
+
                     renderReportTable(data);
                 } else {
                     b.innerHTML = '<tr><td colspan="10" style="padding: 30px; font-weight: bold;">التبويبة فارغة ولا تحتوي على بيانات.</td></tr>';
                     rawReportData = [];
+                    currentReportMaxCols = 0;
                 }
             } catch (err) {
                 b.innerHTML = '<tr><td colspan="10" style="color:red; padding: 30px; font-weight: bold;">خطأ في جلب بيانات التقرير من الخادم!</td></tr>';
                 rawReportData = [];
+                currentReportMaxCols = 0;
             }
         }
 
-        // دالة بناء ورسم جدول التقارير
+        // دالة بناء ورسم جدول التقارير (محدثة لدعم كافة الأعمدة ديناميكياً)
         function renderReportTable(data) {
             const h = document.getElementById('h-reports');
             const b = document.getElementById('b-reports');
@@ -492,69 +504,65 @@
 
             if (!data || data.length === 0) return;
 
-            // 1. بناء الهيدر (الصف الأول)
-            const headers = data[0];
+            // 1. بناء الهيدر بناءً على الحد الأقصى للأعمدة المكتشفة في الملف
+            const headers = data[0] || [];
             const trH = document.createElement('tr');
-            headers.forEach(text => {
+            for (let colIndex = 0; colIndex < currentReportMaxCols; colIndex++) {
                 const th = document.createElement('th');
-                th.textContent = text !== undefined && text !== null ? text : '-';
+                // إذا كان العمود يحمل اسماً بالصف الأول نعرضه، وإلا نعطيه اسماً تلقائياً (مثال: عمود 2)
+                th.textContent = headers[colIndex] !== undefined && headers[colIndex] !== null ? headers[colIndex] : `عمود ${colIndex + 1}`;
                 trH.appendChild(th);
-            });
+            }
             h.appendChild(trH);
 
-            // 2. بناء صفوف البيانات (باقي الصفوف)
+            // 2. بناء صفوف البيانات لجميع الأعمدة النشطة
             data.slice(1).forEach(row => {
                 if (!row || row.length === 0) return;
-                // تخطي الصفوف الفارغة تماماً
                 if (row.every(cell => cell === undefined || cell === null || cell === '')) return;
 
                 const tr = document.createElement('tr');
-                headers.forEach((_, colIndex) => {
+                for (let colIndex = 0; colIndex < currentReportMaxCols; colIndex++) {
                     const td = document.createElement('td');
                     let val = row[colIndex];
                     
                     if (val !== undefined && val !== null) {
-                        // تنسيق الأرقام إن وجدت داخل الجدول
                         if (!isNaN(parseFloat(val)) && typeof val === 'number') {
                             td.textContent = formatNumber(val);
                         } else {
                             td.textContent = val;
                         }
                     } else {
-                        td.textContent = '-';
+                        td.textContent = '-'; // عرض شحطة في الخلايا الفارغة لسلامة الهيكل البصري للجدول
                     }
                     tr.appendChild(td);
-                });
+                }
                 b.appendChild(tr);
             });
         }
 
-        // دالة البحث والفلترة المباشرة فائقة السرعة
+        // دالة البحث والفلترة المباشرة السريعة (تحافظ على ثبات هيكل الأعمدة الأقصى)
         function filterReportTable() {
             const query = document.getElementById('report-search-input').value.toLowerCase().trim();
             
             if (!rawReportData || rawReportData.length === 0) return;
 
             if (!query) {
-                // إذا كان البحث فارغاً، نعرض الجدول كاملاً
                 renderReportTable(rawReportData);
                 return;
             }
 
             const headers = rawReportData[0];
             
-            // فلترة صفوف البيانات فقط مع الإبقاء على الهيدر ثابتاً
             const filteredRows = rawReportData.slice(1).filter(row => {
                 if (!row || row.length === 0) return false;
                 
-                // البحث في أي عمود أو خلية داخل الصف
+                // البحث في أي خلية ممتلئة داخل الصف بالكامل
                 return row.some(cell => {
                     if (cell === undefined || cell === null) return false;
                     return String(cell).toLowerCase().includes(query);
                 });
             });
 
-            // إعادة بناء مصفوفة الجدول الجديد وتحديث العرض
             const datasetToRender = [headers, ...filteredRows];
             renderReportTable(datasetToRender);
         }

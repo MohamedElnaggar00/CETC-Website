@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="ar" dir="rtl" id="mainHtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About CETC - E-JUST</title>
+    <title>التعريف بالوحدة - CETC E-JUST</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { --red: #C41230; --black: #000000; --white: #ffffff; --bg: #f8fafc; --gray: #475569; }
-        body { font-family: 'Cairo', sans-serif; margin: 0; background: var(--bg); color: #1a1a1a; line-height: 1.6; }
+        body { font-family: 'Cairo', sans-serif; margin: 0; background: var(--bg); color: #1a1a1a; line-height: 1.6; transition: 0.3s; }
         
-        /* Header & Navigation */
+        /* Header */
         header { 
             background: var(--white); 
             padding: 15px 5%; 
@@ -23,238 +23,294 @@
             z-index: 1000; 
             box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); 
         }
-        .header-left { display: flex; align-items: center; gap: 20px; }
+        .header-right { display: flex; align-items: center; gap: 20px; }
         .logo img { height: 65px; }
-        .brand-container { display: flex; flex-direction: column; text-align: left; gap: 2px; }
-        .main-uni-title { font-weight: 900; font-size: clamp(0.85rem, 2vw, 1.25rem); color: #1a1a1a; margin: 0; line-height: 1.2; }
-        .sub-unit-title { font-weight: 700; font-size: clamp(0.7rem, 1.5vw, 0.95rem); color: var(--red); margin: 0; line-height: 1.2; }
+        .brand-container { display: flex; flex-direction: column; gap: 2px; }
+        .main-uni-title { font-weight: 900; font-size: clamp(0.8rem, 1.8vw, 1.1rem); color: #1a1a1a; margin: 0; line-height: 1.2; }
+        .sub-unit-title { font-weight: 700; font-size: clamp(0.7rem, 1.5vw, 0.9rem); color: var(--red); margin: 0; line-height: 1.2; }
         
-        .back-btn { 
-            background: #f1f5f9; color: var(--black); text-decoration: none; padding: 10px 20px; 
-            border-radius: 8px; font-weight: 700; font-size: 0.95rem; transition: 0.3s; 
-            display: flex; align-items: center; gap: 8px; border: 1px solid #e2e8f0;
+        /* Language & Back Buttons */
+        .nav-controls { display: flex; gap: 10px; align-items: center; }
+        .btn-action { 
+            background: #f1f5f9; color: var(--black); text-decoration: none; padding: 8px 18px; 
+            border-radius: 8px; font-weight: 700; font-size: 0.9rem; transition: 0.3s; 
+            display: flex; align-items: center; gap: 8px; border: 1px solid #e2e8f0; cursor: pointer;
+            font-family: 'Cairo', sans-serif;
         }
-        .back-btn:hover { background: var(--red); color: white; border-color: var(--red); }
+        .btn-action:hover { background: var(--red); color: white; border-color: var(--red); }
+        .lang-btn { background: var(--black); color: white; }
 
-        /* Hero Section */
+        /* Hero */
         .hero { 
             background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://ejust.edu.eg/storage/EventsPhoto/top-min%20(1).jpg') no-repeat center/cover; 
-            color: white; padding: 100px 5%; text-align: center; 
+            color: white; padding: 80px 5%; text-align: center; 
         }
-        .hero h1 { font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 900; margin-bottom: 15px; }
-        .hero p { font-size: clamp(1.1rem, 2vw, 1.3rem); max-width: 800px; margin: 0 auto; color: #e2e8f0; font-weight: 600; }
+        .hero h1 { font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 900; margin-bottom: 15px; }
+        .hero p { font-size: clamp(1rem, 2vw, 1.2rem); max-width: 800px; margin: 0 auto; color: #e2e8f0; font-weight: 600; }
 
-        /* Common Section Styles */
-        .section-container { padding: 80px 5%; max-width: 1200px; margin: 0 auto; }
-        .section-title { font-size: 2.2rem; color: var(--red); position: relative; display: inline-block; margin-bottom: 40px; font-weight: 900; text-align: center; width: 100%; }
+        /* Sections */
+        .section-container { padding: 60px 5%; max-width: 1200px; margin: 0 auto; }
+        .section-title { font-size: 2rem; color: var(--red); position: relative; display: inline-block; margin-bottom: 40px; font-weight: 900; text-align: center; width: 100%; }
         .section-title::after { content: ""; width: 50px; height: 4px; background: var(--black); position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); border-radius: 2px; }
 
-        /* About Section */
-        .about-text { text-align: center; font-size: 1.2rem; color: var(--gray); max-width: 900px; margin: 0 auto; line-height: 1.8; font-weight: 600; }
-        .about-text strong { color: var(--black); }
+        .about-text { text-align: center; font-size: 1.15rem; color: var(--gray); max-width: 950px; margin: 0 auto; line-height: 1.8; font-weight: 600; }
 
         /* Services Grid */
-        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 40px; }
-        .service-card { background: white; padding: 30px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); transition: 0.3s; border-top: 4px solid transparent; }
-        .service-card:hover { transform: translateY(-5px); border-top-color: var(--red); box-shadow: 0 20px 25px -5px rgba(196,18,48,0.1); }
-        .service-card i { font-size: 2.5rem; color: var(--red); margin-bottom: 20px; }
-        .service-card h3 { margin: 0 0 15px 0; font-weight: 800; color: var(--black); font-size: 1.3rem; }
-        .service-card p { margin: 0; color: var(--gray); font-size: 0.95rem; }
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 30px; }
+        .service-card { background: white; padding: 25px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: 0.3s; border-top: 4px solid var(--red); }
+        .service-card:hover { transform: translateY(-5px); box-shadow: 0 15px 25px rgba(0,0,0,0.1); }
+        .service-card i { font-size: 2.2rem; color: var(--red); margin-bottom: 15px; display: block; }
+        .service-card h3 { margin: 0 0 12px 0; font-weight: 800; color: var(--black); font-size: 1.2rem; }
+        .service-card p { margin: 0; color: var(--gray); font-size: 0.95rem; text-align: justify; }
 
-        /* Why Us Section */
-        .why-us-section { background: white; padding: 80px 5%; }
-        .why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto; }
-        .why-card { display: flex; gap: 20px; align-items: flex-start; }
-        .why-number { background: #fef2f2; color: var(--red); font-size: 1.8rem; font-weight: 900; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 12px; flex-shrink: 0; }
-        .why-text h3 { margin: 0 0 10px 0; font-weight: 800; font-size: 1.2rem; }
+        /* Why Us */
+        .why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 20px; }
+        .why-card { display: flex; gap: 20px; align-items: flex-start; background: #fff; padding: 20px; border-radius: 12px; }
+        .why-number { background: #fef2f2; color: var(--red); font-size: 1.5rem; font-weight: 900; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 10px; flex-shrink: 0; }
+        .why-text h3 { margin: 0 0 8px 0; font-weight: 800; font-size: 1.1rem; }
         .why-text p { margin: 0; color: var(--gray); font-size: 0.95rem; }
-        
+
+        /* Portfolio */
+        .portfolio-list { max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px; }
+        .portfolio-item { display: flex; align-items: center; gap: 20px; background: white; padding: 20px; border-radius: 10px; border-right: 4px solid var(--red); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .portfolio-item i { font-size: 1.8rem; color: #cbd5e1; }
+        .portfolio-info h3 { margin: 0 0 5px 0; font-weight: 800; font-size: 1.1rem; }
+        .portfolio-info p { margin: 0; color: var(--gray); font-size: 0.95rem; }
         .highlight { color: var(--red); font-weight: 800; }
 
-        /* Portfolio Section */
-        .portfolio-list { max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
-        .portfolio-item { display: flex; align-items: center; gap: 20px; background: white; padding: 25px; border-radius: 12px; border-left: 4px solid var(--red); box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .portfolio-item i { font-size: 2rem; color: #cbd5e1; }
-        .portfolio-info h3 { margin: 0 0 5px 0; font-weight: 800; font-size: 1.2rem; }
-        .portfolio-info p { margin: 0; color: var(--gray); font-size: 1rem; }
+        /* Footer Contacts */
+        .bottom-contact-bar { background: var(--black); color: var(--white); padding: 30px 5%; display: flex; justify-content: center; align-items: center; gap: 30px; font-size: 0.9rem; flex-wrap: wrap; direction: ltr; }
+        .contact-item { display: flex; align-items: center; gap: 12px; }
+        .contact-item i { color: var(--red); font-size: 1.2rem; }
+        .contact-divider { width: 1px; height: 30px; background: #444; }
 
-        /* Bottom Contact */
-        .bottom-contact-bar { background: var(--black); color: var(--white); padding: 40px 5%; display: flex; justify-content: center; align-items: center; gap: 40px; font-size: 0.95rem; flex-wrap: wrap; margin-top: 50px; }
-        .contact-item { display: flex; align-items: center; gap: 15px; }
-        .contact-item i { color: var(--red); font-size: 1.4rem; }
-        .contact-divider { width: 1px; height: 40px; background: #444; }
-        .email-list { display: flex; flex-direction: column; line-height: 1.5; font-weight: 600; }
-        .address-text { max-width: 350px; line-height: 1.5; }
-        footer { background: #000000; color: #94a3b8; text-align: center; padding: 20px 5%; font-size: 0.9rem; border-top: 1px solid #222; }
+        footer { background: #000000; color: #94a3b8; text-align: center; padding: 15px 5%; font-size: 0.85rem; border-top: 1px solid #222; }
 
-        @media (max-width: 900px) {
-            header { flex-direction: column; gap: 15px; text-align: center; }
-            .header-left { flex-direction: column; gap: 10px; }
-            .brand-container { text-align: center; }
-            .bottom-contact-bar { flex-direction: column; text-align: center; gap: 25px; }
+        /* Language Switching Classes */
+        [lang="en"] .portfolio-item { border-right: none; border-left: 4px solid var(--red); }
+        [lang="en"] .header-right { flex-direction: row-reverse; }
+        [lang="en"] .brand-container, [lang="en"] .why-text { text-align: left; }
+        
+        .lang-en-content { display: none; }
+        .lang-ar-content { display: block; }
+
+        html[dir="ltr"] .lang-en-content { display: block; }
+        html[dir="ltr"] .lang-ar-content { display: none; }
+
+        @media (max-width: 768px) {
+            header { flex-direction: column; gap: 15px; }
+            .bottom-contact-bar { flex-direction: column; gap: 20px; }
             .contact-divider { display: none; }
-            .portfolio-item { flex-direction: column; text-align: center; }
-            .portfolio-item i { display: none; }
         }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="header-left">
+    <div class="header-right">
         <div class="logo">
             <img src="https://ejust.edu.eg/assets/img/logo.png" alt="E-JUST Logo">
         </div>
         <div class="brand-container">
-            <div class="main-uni-title">Egypt-Japan University of Science and Technology</div>
-            <div class="sub-unit-title">Civil Engineering Testing and Consulting Unit - CETC</div>
+            <!-- Ar Title -->
+            <div class="lang-ar-content">
+                <div class="main-uni-title">الجامعة المصرية اليابانية للعلوم والتكنولوجيا</div>
+                <div class="sub-unit-title">وحدة اختبارات واستشارات الهندسة المدنية - CETC</div>
+            </div>
+            <!-- En Title -->
+            <div class="lang-en-content">
+                <div class="main-uni-title">Egypt-Japan University of Science and Technology</div>
+                <div class="sub-unit-title">Civil Engineering Testing and Consulting Unit - CETC</div>
+            </div>
         </div>
     </div>
-    <a href="/" class="back-btn"><i class="fas fa-arrow-left"></i> Home Page</a>
+    
+    <div class="nav-controls">
+        <button class="btn-action lang-btn" id="langToggle" onclick="toggleLanguage()">English</button>
+        <a href="/" class="btn-action" id="homeText"><i class="fas fa-home"></i> الرئيسية</a>
+    </div>
 </header>
 
+<!-- Hero Section -->
 <section class="hero">
-    <h1>Engineering Excellence & Innovation</h1>
-    <p>Bridging the gap between world-class academic research and industrial application in Egypt and the Middle East.</p>
+    <div class="lang-ar-content">
+        <h1>التميز الهندسي والابتكار</h1>
+        <p>الجسر الذي يربط بين البحث الأكاديمي المتقدم والتطبيق الميداني العملي في مصر والشرق الأوسط.</p>
+    </div>
+    <div class="lang-en-content">
+        <h1>Engineering Excellence & Innovation</h1>
+        <p>Bridging the gap between world-class academic research and industrial application in Egypt and the Middle East.</p>
+    </div>
 </section>
 
 <!-- About Us -->
 <div class="section-container">
-    <h2 class="section-title">About Us</h2>
-    <p class="about-text">
-        The <strong>Civil Engineering Testing and Consulting Unit (CETC)</strong> is a specialized technical arm operating under the <strong>Center of Innovative Technology (CINTECH)</strong> at E-JUST. We bridge the gap between world-class academic research and industrial application by providing comprehensive testing services for construction materials, roadworks, soil, and foundations. As part of a unique Egyptian-Japanese partnership, we bring unmatched precision and innovation to the region’s construction sector.
-    </p>
+    <h2 class="section-title" id="titleAbout">من نحن؟</h2>
+    <div class="lang-ar-content about-text">
+        تعد وحدة <strong>CETC</strong> الركيزة الفنية المتخصصة تحت مظلة مركز التكنولوجيا الابتكارية ودعم الصناعة (<strong>CINTECH</strong>) بالجامعة المصرية اليابانية. نحن متخصصون في تقديم خدمات فنية متكاملة واختبارات دقيقة لمواد البناء، أعمال الطرق، التربة، والأساسات. رؤيتنا تهدف إلى دعم قطاع الإنشاءات عبر نقل المعرفة العلمية اليابانية والمصرية إلى واقع ملموس.
+    </div>
+    <div class="lang-en-content about-text">
+        The <strong>CETC</strong> unit is the specialized technical arm of the Center of Innovative Technology (<strong>CINTECH</strong>) at E-JUST. We provide comprehensive testing services for construction materials, roads, soil, and foundations. Our vision is to support the construction sector by bridging academic research with industrial application.
+    </div>
 </div>
 
 <!-- Services -->
-<div style="background: #ffffff; padding: 60px 0;">
-    <div class="section-container" style="padding-top: 0; padding-bottom: 0;">
-        <h2 class="section-title">Our Engineering Services & Disciplines</h2>
-        <div class="services-grid">
-            <div class="service-card">
-                <i class="fas fa-building"></i>
-                <h3>Structural Engineering</h3>
-                <p>Rigorous testing on concrete materials and masonry, along with structural integrity assessments and load testing conducted to international standards.</p>
-            </div>
-            <div class="service-card">
-                <i class="fas fa-layer-group"></i>
-                <h3>Geotechnical Engineering</h3>
-                <p>Comprehensive site investigations, expert foundation recommendations, and quality control for earthworks, including backfilling and compaction testing.</p>
-            </div>
-            <div class="service-card">
-                <i class="fas fa-vials"></i>
-                <h3>Materials Engineering</h3>
-                <p>Development of optimized concrete mix designs and feasibility testing for raw materials to ensure high-performance production.</p>
-            </div>
-            <div class="service-card">
-                <i class="fas fa-road"></i>
-                <h3>Transportation Engineering</h3>
-                <p>Specialized design and planning for infrastructure, featuring asphalt surface layer testing and comprehensive bituminous material analysis.</p>
-            </div>
-            <div class="service-card">
-                <i class="fas fa-tools"></i>
-                <h3>Building Units & Calibration</h3>
-                <p>Quality assurance for masonry units (blocks/interlock) and professional calibration for batching plants and hydraulic equipment.</p>
-            </div>
+<div style="background: #ffffff; padding: 20px 0;">
+    <div class="section-container">
+        <h2 class="section-title" id="titleServices">خدماتنا وتخصصاتنا الهندسية</h2>
+        <div class="services-grid" id="servicesGrid">
+            <!-- سيتم تعبئتها بواسطة JS بناءً على اللغة -->
         </div>
     </div>
 </div>
 
-<!-- Why Partner With Us -->
+<!-- Why Us -->
 <div class="section-container">
-    <h2 class="section-title">Why Partner with CETC?</h2>
-    <div class="why-grid">
-        <div class="why-card">
-            <div class="why-number">1</div>
-            <div class="why-text">
-                <h3>Japanese Standards, Egyptian Expertise</h3>
-                <p>We leverage the <strong>"E-JUST" philosophy of excellence</strong>, ensuring every test meets the highest international benchmarks.</p>
-            </div>
-        </div>
-        <div class="why-card">
-            <div class="why-number">2</div>
-            <div class="why-text">
-                <h3>A Legacy of Trust</h3>
-                <p>Our expertise is trusted by major national authorities and international consultants, including the Engineering Authority of the Armed Forces, Ministry of Transport, <strong>SYSTRA</strong>, and <strong>ECG</strong>.</p>
-            </div>
-        </div>
-        <div class="why-card">
-            <div class="why-number">3</div>
-            <div class="why-text">
-                <h3>Proven Operational Capacity</h3>
-                <p>With a track record of successfully managing over <span class="highlight">30,000 specialized tests</span>, we have the logistical and technical strength to meet strict project timelines without compromising quality.</p>
-            </div>
-        </div>
+    <h2 class="section-title" id="titleWhy">لماذا تختار وحدة CETC؟</h2>
+    <div class="why-grid" id="whyGrid">
+        <!-- سيتم تعبئتها بواسطة JS بناءً على اللغة -->
     </div>
 </div>
 
 <!-- Portfolio -->
-<div style="background: #ffffff; padding: 60px 0;">
-    <div class="section-container" style="padding-top: 0; padding-bottom: 0;">
-        <h2 class="section-title">Distinguished Project Portfolio</h2>
-        <p style="text-align: center; color: var(--gray); margin-bottom: 40px; font-size: 1.1rem; font-weight: 600;">We take pride in being a strategic partner for Egypt’s most ambitious national developments:</p>
-        
-        <div class="portfolio-list">
-            <div class="portfolio-item">
-                <i class="fas fa-train"></i>
-                <div class="portfolio-info">
-                    <h3>High-Speed Rail (HSR)</h3>
-                    <p>Conducted over <span class="highlight">6,000 tests</span> for tracks, flyovers, and strategic bridges.</p>
-                </div>
-            </div>
-            <div class="portfolio-item">
-                <i class="fas fa-seedling"></i>
-                <div class="portfolio-info">
-                    <h3>New Delta Project</h3>
-                    <p>Supported land reclamation and infrastructure with <span class="highlight">4,000+ tests</span>.</p>
-                </div>
-            </div>
-            <div class="portfolio-item">
-                <i class="fas fa-city"></i>
-                <div class="portfolio-info">
-                    <h3>Social Housing Initiatives</h3>
-                    <p>Performed <span class="highlight">7,000+ tests</span> for the "Housing for All Egyptians" initiative.</p>
-                </div>
-            </div>
-            <div class="portfolio-item">
-                <i class="fas fa-industry"></i>
-                <div class="portfolio-info">
-                    <h3>Industrial & Infrastructure Leaders</h3>
-                    <p>Trusted by global and local giants such as <strong>ALSTOM</strong>, <strong>Vodafone Egypt</strong>, <strong>ELARABY Group</strong>, and <strong>Borg El Arab International Airport</strong>.</p>
-                </div>
-            </div>
+<div style="background: #ffffff; padding: 20px 0;">
+    <div class="section-container">
+        <h2 class="section-title" id="titlePortfolio">سجل حافل من الإنجازات</h2>
+        <div class="portfolio-list" id="portfolioList">
+            <!-- سيتم تعبئتها بواسطة JS بناءً على اللغة -->
         </div>
     </div>
 </div>
 
 <!-- Contact Bottom Bar -->
 <div class="bottom-contact-bar">
-    <div class="contact-item">
-        <i class="fas fa-phone-alt"></i>
-        <span>16448</span>
-    </div>
-    
+    <div class="contact-item"><i class="fas fa-phone-alt"></i><span>16448</span></div>
     <div class="contact-divider"></div>
-    
-    <div class="contact-item">
-        <i class="fas fa-envelope"></i>
-        <div class="email-list">
-            <span>Cetc.unit@ejust.edu.eg</span>
-            <span>CINTECH@ejust.edu.eg</span>
-        </div>
-    </div>
-    
+    <div class="contact-item"><i class="fas fa-envelope"></i><span>Cetc.unit@ejust.edu.eg</span></div>
     <div class="contact-divider"></div>
-    
-    <div class="contact-item">
-        <i class="fas fa-map-marker-alt"></i>
-        <span class="address-text">E-JUST New Campus, Administrative Building,<br>P.O. Box 179, New Borg El-Arab City Postal Code 21934, Alexandria, Egypt</span>
+    <div class="contact-item"><i class="fas fa-map-marker-alt"></i>
+        <span class="lang-ar-content">برج العرب الجديدة، الإسكندرية، مصر</span>
+        <span class="lang-en-content">New Borg El-Arab, Alexandria, Egypt</span>
     </div>
 </div>
 
-<footer>
-    <p>&copy; 2026 Civil Engineering Testing and Consulting Unit (CETC) - E-JUST</p>
+<footer id="footerText">
+    &copy; 2026 وحدة اختبارات واستشارات الهندسة المدنية (CETC) - E-JUST
 </footer>
+
+<script>
+    const content = {
+        ar: {
+            home: '<i class="fas fa-home"></i> الرئيسية',
+            langBtn: 'English',
+            titles: { about: 'من نحن؟', services: 'خدماتنا وتخصصاتنا الهندسية', why: 'لماذا تختار وحدة CETC؟', portfolio: 'سجل حافل من الإنجازات' },
+            footer: '&copy; 2026 وحدة اختبارات واستشارات الهندسة المدنية (CETC) - E-JUST',
+            services: [
+                { icon: 'fa-building', h: 'هندسة الإنشاءات', p: 'اختبارات العناصر الخرسانية وتقييم السلامة الإنشائية وفق المواصفات الدولية.' },
+                { icon: 'fa-layer-group', h: 'الهندسة الجيوتقنية', p: 'دراسات التربة، توصيات الأساسات، واختبارات ضبط جودة الأعمال الترابية.' },
+                { icon: 'fa-vials', h: 'هندسة المواد', p: 'تطوير تصميمات الخلطات الخرسانية واختبارات صلاحية المواد الخام.' },
+                { icon: 'fa-road', h: 'هندسة الطرق', p: 'اختبار طبقات الرصف الإسفلتية والمواد البيتومينية بأحدث المعدات.' },
+                { icon: 'fa-tools', h: 'المعايرة والجودة', p: 'معايرة محطات خلط الخرسانة والمعدات واختبار جودة وحدات البناء.' }
+            ],
+            why: [
+                { n: '١', h: 'معايير يابانية', p: 'نطبق فلسفة التميز اليابانية لضمان دقة النتائج ومطابقتها للمعايير العالمية.' },
+                { n: '٢', h: 'إرث من الثقة', p: 'شريك موثوق لكبرى الجهات السيادية والوزارات والمكاتب الاستشارية الدولية.' },
+                { n: '٣', h: 'قدرة تشغيلية', p: 'إدارة أكثر من ٣٠,٠٠٠ اختبار متخصص مع الالتزام التام بالجداول الزمنية.' }
+            ],
+            portfolio: [
+                { icon: 'fa-train', h: 'القطار الكهربائي السريع', p: 'تنفيذ أكثر من <span class="highlight">٦,٠٠٠ اختبار</span> للمسارات والكباري.' },
+                { icon: 'fa-seedling', h: 'مشروع الدلتا الجديدة', p: 'دعم البنية التحتية بأكثر من <span class="highlight">٤,٠٠٠ اختبار</span>.' },
+                { icon: 'fa-city', h: 'الإسكان الاجتماعي', p: 'أكثر من <span class="highlight">٧,٠٠٠ اختبار</span> لمبادرة سكن لكل المصريين.' },
+                { icon: 'fa-industry', h: 'دعم الصناعة', p: 'شراكات مع قادة الصناعة مثل ALSTOM، فودافون، ومجموعة العربي.' }
+            ]
+        },
+        en: {
+            home: '<i class="fas fa-home"></i> Home',
+            langBtn: 'العربية',
+            titles: { about: 'About Us', services: 'Engineering Services', why: 'Why Partner with CETC?', portfolio: 'Project Portfolio' },
+            footer: '&copy; 2026 Civil Engineering Testing & Consulting Unit (CETC) - E-JUST',
+            services: [
+                { icon: 'fa-building', h: 'Structural Engineering', p: 'Rigorous testing on concrete and structural integrity assessments.' },
+                { icon: 'fa-layer-group', h: 'Geotechnical Engineering', p: 'Site investigations, foundation expert advice, and earthworks QC.' },
+                { icon: 'fa-vials', h: 'Materials Engineering', p: 'Optimized concrete mix designs and raw material feasibility testing.' },
+                { icon: 'fa-road', h: 'Transportation Engineering', p: 'Asphalt surface testing and bituminous material analysis.' },
+                { icon: 'fa-tools', h: 'Calibration & QA', p: 'Batching plant calibration and quality assurance for masonry units.' }
+            ],
+            why: [
+                { n: '1', h: 'Japanese Standards', p: 'Leveraging the E-JUST philosophy to meet international benchmarks.' },
+                { n: '2', h: 'Legacy of Trust', p: 'Trusted by national authorities and top international consultants.' },
+                { n: '3', h: 'Operational Capacity', p: 'Managing over 30,000 specialized tests with strict timeline adherence.' }
+            ],
+            portfolio: [
+                { icon: 'fa-train', h: 'High-Speed Rail (HSR)', p: 'Conducted over <span class="highlight">6,000 tests</span> for tracks and bridges.' },
+                { icon: 'fa-seedling', h: 'New Delta Project', p: 'Supported infrastructure with <span class="highlight">4,000+ tests</span>.' },
+                { icon: 'fa-city', h: 'Social Housing', p: 'Over <span class="highlight">7,000 tests</span> for national housing initiatives.' },
+                { icon: 'fa-industry', h: 'Industrial Leaders', p: 'Trusted by ALSTOM, Vodafone Egypt, and ELARABY Group.' }
+            ]
+        }
+    };
+
+    function toggleLanguage() {
+        const html = document.getElementById('mainHtml');
+        const isAr = html.dir === 'rtl';
+        const newLang = isAr ? 'en' : 'ar';
+        
+        html.dir = isAr ? 'ltr' : 'rtl';
+        html.lang = newLang;
+        
+        updateUI(newLang);
+    }
+
+    function updateUI(lang) {
+        const data = content[lang];
+        document.getElementById('langToggle').textContent = data.langBtn;
+        document.getElementById('homeText').innerHTML = data.home;
+        document.getElementById('footerText').innerHTML = data.footer;
+        
+        // Titles
+        document.getElementById('titleAbout').textContent = data.titles.about;
+        document.getElementById('titleServices').textContent = data.titles.services;
+        document.getElementById('titleWhy').textContent = data.titles.why;
+        document.getElementById('titlePortfolio').textContent = data.titles.portfolio;
+
+        // Services
+        const sGrid = document.getElementById('servicesGrid');
+        sGrid.innerHTML = data.services.map(s => `
+            <div class="service-card">
+                <i class="fas ${s.icon}"></i>
+                <h3>${s.h}</h3>
+                <p>${s.p}</p>
+            </div>
+        `).join('');
+
+        // Why Us
+        const wGrid = document.getElementById('whyGrid');
+        wGrid.innerHTML = data.why.map(w => `
+            <div class="why-card">
+                <div class="why-number">${w.n}</div>
+                <div class="why-text">
+                    <h3>${w.h}</h3>
+                    <p>${w.p}</p>
+                </div>
+            </div>
+        `).join('');
+
+        // Portfolio
+        const pList = document.getElementById('portfolioList');
+        pList.innerHTML = data.portfolio.map(p => `
+            <div class="portfolio-item">
+                <i class="fas ${p.icon}"></i>
+                <div class="portfolio-info">
+                    <h3>${p.h}</h3>
+                    <p>${p.p}</p>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // Initial Load
+    updateUI('ar');
+</script>
 
 </body>
 </html>

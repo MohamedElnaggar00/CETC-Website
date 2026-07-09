@@ -3,168 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تسجيل الدخول - منصة إدارة CETC</title>
+    <title>تسجيل الدخول - CETC</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --red: #C41230; --black: #1a1a1a; --gray: #f8f9fa; }
+        :root { --red: #C41230; --black: #0f172a; --gray: #f1f5f9; }
+        body { font-family: 'Cairo', sans-serif; margin: 0; display: flex; align-items: center; justify-content: center; min-height: 100vh; background: linear-gradient(rgba(15,23,42,0.8), rgba(15,23,42,0.8)), url('https://ejust.edu.eg/storage/EventsPhoto/top-min%20(1).jpg') center/cover; }
         
-        body {
-            font-family: 'Cairo', sans-serif;
-            margin: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
-                        url('https://ejust.edu.eg/storage/EventsPhoto/top-min%20(1).jpg');
-            background-size: cover;
-            background-position: center;
-        }
+        .login-box { background: rgba(255, 255, 255, 0.98); width: 90%; max-width: 400px; padding: 40px 30px; border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); text-align: center; border-top: 6px solid var(--red); box-sizing: border-box; backdrop-filter: blur(10px); }
+        .logo-box img { max-height: 60px; margin-bottom: 20px; }
+        h2 { margin: 0 0 5px; color: var(--black); font-weight: 800; }
+        p.subtitle { color: #64748b; font-size: 0.9rem; margin-bottom: 30px; }
 
-        .login-container {
-            background: rgba(255, 255, 255, 0.98);
-            width: 100%;
-            max-width: 400px;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-            text-align: center;
-            border-top: 8px solid var(--red);
-            position: relative;
-        }
+        .input-group { margin-bottom: 20px; text-align: right; position: relative; }
+        .input-group label { display: block; margin-bottom: 8px; font-weight: 700; color: #334155; font-size: 0.9rem; }
+        .input-group i { position: absolute; right: 15px; top: 40px; color: #94a3b8; }
+        .input-group input { width: 100%; padding: 12px 40px 12px 15px; border: 2px solid #e2e8f0; border-radius: 12px; font-family: inherit; font-size: 16px; outline: none; transition: 0.3s; box-sizing: border-box; background: var(--gray); }
+        .input-group input:focus { border-color: var(--red); background: #fff; box-shadow: 0 0 0 4px rgba(196,18,48,0.1); }
 
-        .logo-box {
-            background: var(--gray);
-            padding: 15px;
-            border-radius: 12px;
-            display: inline-block;
-            margin-bottom: 20px;
-        }
+        button { width: 100%; padding: 14px; background: var(--red); color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 6px -1px rgba(196,18,48,0.3); }
+        button:hover { background: #a00e26; transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(196,18,48,0.4); }
 
-        .logo-box img {
-            max-height: 70px;
-            display: block;
-        }
-
-        h2 {
-            color: var(--black);
-            margin: 10px 0;
-            font-weight: 800;
-        }
-
-        p.subtitle {
-            color: var(--red);
-            font-weight: 600;
-            margin-bottom: 30px;
-            font-size: 0.9rem;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-            position: relative;
-            text-align: right;
-        }
-
-        .form-group i {
-            position: absolute;
-            right: 15px;
-            top: 42px;
-            color: #888;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 700;
-            color: #555;
-            font-size: 0.9rem;
-        }
-
-        input {
-            width: 100%;
-            padding: 12px 40px 12px 15px;
-            border: 2px solid #eee;
-            border-radius: 10px;
-            font-family: 'Cairo', sans-serif;
-            font-size: 1rem;
-            outline: none;
-            transition: 0.3s;
-            box-sizing: border-box;
-        }
-
-        input:focus {
-            border-color: var(--red);
-            box-shadow: 0 0 10px rgba(196, 18, 48, 0.1);
-        }
-
-        button {
-            width: 100%;
-            padding: 14px;
-            background: var(--red);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.3s;
-            margin-top: 10px;
-        }
-
-        button:hover {
-            background: #a00e26;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(196, 18, 48, 0.3);
-        }
-
-        .back-link {
-            display: block;
-            margin-top: 20px;
-            color: #777;
-            text-decoration: none;
-            font-size: 0.85rem;
-            transition: 0.3s;
-        }
-
-        .back-link:hover {
-            color: var(--red);
-        }
-
-        /* Responsive */
-        @media (max-width: 480px) {
-            .login-container { margin: 20px; padding: 30px 20px; }
-        }
+        .back { display: block; margin-top: 25px; color: #64748b; text-decoration: none; font-size: 0.9rem; transition: 0.3s; }
+        .back:hover { color: var(--red); }
     </style>
 </head>
 <body>
-
-    <div class="login-container">
-        <div class="logo-box">
-            <img src="https://ejust.edu.eg/assets/img/logo.png" alt="E-JUST Logo">
-        </div>
-        
-        <h2>CETC UNIT</h2>
-        <p class="subtitle">منصة الإدارة والتحكم للمركز الاستشاري</p>
-
+    <div class="login-box">
+        <div class="logo-box"><img src="https://ejust.edu.eg/assets/img/logo.png" alt="Logo"></div>
+        <h2>لوحة إدارة CETC</h2>
+        <p class="subtitle">يُرجى إدخال بيانات الاعتماد للوصول للنظام</p>
         <form action="/login" method="POST">
-            <div class="form-group">
+            <div class="input-group">
                 <label>اسم المستخدم</label>
                 <i class="fas fa-user"></i>
-                <input type="text" name="username" placeholder="أدخل اسم المستخدم" required>
+                <input type="text" name="username" required autocomplete="off">
             </div>
-
-            <div class="form-group">
+            <div class="input-group">
                 <label>كلمة المرور</label>
                 <i class="fas fa-lock"></i>
-                <input type="password" name="password" placeholder="أدخل كلمة المرور" required>
+                <input type="password" name="password" required>
             </div>
-
-            <button type="submit">دخول للنظام <i class="fas fa-sign-in-alt"></i></button>
+            <button type="submit">تسجيل الدخول</button>
         </form>
-
-        <a href="/" class="back-link"><i class="fas fa-arrow-right"></i> العودة للرئيسية</a>
+        <a href="/" class="back"><i class="fas fa-arrow-right"></i> العودة للرئيسية</a>
     </div>
-
 </body>
 </html>

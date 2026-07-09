@@ -6,6 +6,8 @@
     <title>CETC Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- مكتبة الرسم البياني Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root { --primary: #C41230; --sidebar: #0a0a0a; --bg: #f4f4f4; --surface: #ffffff; --text: #111111; --text-light: #555555; }
         body { font-family: 'Cairo', sans-serif; margin: 0; background: var(--bg); color: var(--text); overflow: hidden; }
@@ -38,7 +40,7 @@
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 25px; display: none; }
         .stat-card { background: var(--surface); padding: 25px; border-radius: 12px; border-right: 6px solid var(--primary); box-shadow: 0 4px 10px rgba(0,0,0,0.08); text-align: center; }
         .stat-card h3 { margin: 0; font-size: 1.1rem; color: var(--text-light); font-weight: 800; }
-        .stat-val { font-weight: 900; font-size: 1.6rem; margin-top: 8px; color: #000 !important; } /* الأرقام دائماً سوداء */
+        .stat-val { font-weight: 900; font-size: 1.6rem; margin-top: 8px; color: #000 !important; }
 
         /* Modern Table */
         .table-wrapper { background: var(--surface); border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.08); overflow-x: auto; border: 1px solid #ddd; }
@@ -96,6 +98,7 @@
         </aside>
 
         <main class="main-content">
+            <!-- قسم فواتير الشركات (لم يتغير) -->
             <section id="billing-module" class="module active">
                 <h2 style="color:var(--sidebar); border-bottom: 4px solid var(--primary); padding-bottom:10px; display:inline-block; font-weight: 900;">حصر فواتير الشركات</h2>
                 
@@ -106,18 +109,15 @@
                     <button class="tab-btn" onclick="loadData(4, this)"><i class="fas fa-home"></i> مشروع ديارنا</button>
                 </div>
                 
-                <!-- تم ترتيب الصناديق من اليمين لليسار حسب الصورة -->
                 <div class="stats-grid" id="stat-billing">
                     <div class="stat-card">
                         <h3>صافي المديونية</h3>
                         <div id="d-rec" class="stat-val">0</div>
                     </div>
-                    
                     <div class="stat-card">
                         <h3>المبلغ المستق</h3>
                         <div id="d-bal" class="stat-val">0</div>
                     </div>
-                    
                     <div class="stat-card">
                         <h3>اجمالي التوريد</h3>
                         <div id="d-due" class="stat-val">0</div>
@@ -132,17 +132,45 @@
                 </div>
             </section>
 
+            <!-- قسم الإيرادات الشهرية (تم تحديثه) -->
             <section id="monthly-module" class="module">
                 <h2 style="color:var(--sidebar); border-bottom: 4px solid var(--primary); padding-bottom:10px; display:inline-block; font-weight: 900;">الايرادات الشهرية</h2>
-                <div class="tab-group"><button class="tab-btn active" onclick="loadData(5, this)"><i class="fas fa-chart-pie"></i> كافة الايرادات</button></div>
-                <div class="table-wrapper">
-                    <table><thead><tr id="h-monthly"></tr></thead><tbody id="b-monthly"></tbody></table>
+                
+                <div class="tab-group">
+                    <button class="tab-btn" onclick="loadIncomeData('2024', this)"><i class="fas fa-calendar"></i> إيرادات 2024</button>
+                    <button class="tab-btn" onclick="loadIncomeData('2025', this)"><i class="fas fa-calendar"></i> إيرادات 2025</button>
+                    <button class="tab-btn" onclick="loadIncomeData('2026', this)"><i class="fas fa-calendar"></i> إيرادات 2026</button>
                 </div>
+
+                <!-- جدول الإيرادات -->
+                <div class="table-wrapper" style="margin-bottom: 25px;">
+                    <table style="min-width: 100%;">
+                        <thead id="h-monthly"></thead>
+                        <tbody id="b-monthly">
+                            <tr><td colspan="3" style="padding:40px;">الرجاء اختيار السنة لعرض الإيرادات...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- الرسم البياني للإيرادات -->
+                <div style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.08); border: 1px solid #ddd;">
+                    <canvas id="incomeChart" height="100"></canvas>
+                </div>
+            </section>
+            
+            <section id="reports-module" class="module">
+                <!-- محتوى قسم التقارير إذا أردت برمجته لاحقاً -->
+            </section>
+            
+            <section id="revenue-module" class="module">
+                <!-- محتوى قسم متابعة الإيرادات إذا أردت برمجته لاحقاً -->
             </section>
         </main>
     </div>
 
     <script>
+        let incomeChartInstance = null; // لحفظ وتحديث الرسم البياني
+
         function switchMod(name, btn) {
             document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
             if(btn && !btn.hasAttribute('href')) btn.classList.add('active');
@@ -150,7 +178,6 @@
             document.getElementById(name + '-module').classList.add('active');
         }
 
-        // دالة تنسيق الأرقام بكسر عشري واحد كحد أقصى للكسور
         function formatNumber(val) {
             if (val === undefined || val === null || isNaN(parseFloat(val))) return '-';
             const num = parseFloat(val);
@@ -160,11 +187,13 @@
             return num.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
         }
 
+        // دالة جلب فواتير الشركات (النظام القديم)
         async function loadData(id, btn) {
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('#billing-module .tab-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            const mod = document.querySelector('.module.active').id.split('-')[0];
-            const h = document.getElementById('h-'+mod), b = document.getElementById('b-'+mod);
+            
+            const h = document.getElementById('h-billing');
+            const b = document.getElementById('b-billing');
             
             try {
                 b.innerHTML = '<tr><td colspan="10" class="loading"><i class="fas fa-circle-notch fa-spin"></i> جاري مزامنة البيانات...</td></tr>';
@@ -206,11 +235,9 @@
                                     td.textContent = formatNumber(val);
                                     
                                     const headerText = headers[idx] || '';
-                                    // عمود المبلغ المستحق: يبقى أسود دائماً حتى لو كان موجباً. السالب فقط يكون أحمر.
                                     if (headerText.includes('المستحق') || headerText.includes('مستحق')) {
                                         if (val < 0) td.classList.add('val-negative');
                                     } else {
-                                        // باقي الأعمدة تظهر خضراء للموجب وحمراء للسالب
                                         if (val > 0) td.classList.add('val-positive');
                                         else if (val < 0) td.classList.add('val-negative');
                                     }
@@ -223,31 +250,149 @@
 
                             tr.appendChild(td);
                             
-                            // الحساب الإجمالي
                             if(idx === dueColIndex) due += parseFloat(c) || 0;
                             if(idx === recColIndex) rec += parseFloat(c) || 0;
                         });
                         b.appendChild(tr);
                     });
                     
-                    if(mod === 'billing') {
-                        document.getElementById('stat-billing').style.display = 'grid';
-                        
-                        // 1. المديوينة
-                        document.getElementById('d-rec').textContent = formatNumber(rec) + ' ج.م';
-                        
-                        // 2. المستحق
-                        document.getElementById('d-bal').textContent = formatNumber(due - rec) + ' ج.م';
-                        
-                        // 3. التوريد
-                        document.getElementById('d-due').textContent = formatNumber(due) + ' ج.م';
-                    }
+                    document.getElementById('stat-billing').style.display = 'grid';
+                    document.getElementById('d-rec').textContent = formatNumber(rec) + ' ج.م';
+                    document.getElementById('d-bal').textContent = formatNumber(due - rec) + ' ج.م';
+                    document.getElementById('d-due').textContent = formatNumber(due) + ' ج.م';
+                    
                 } else {
                     b.innerHTML = '<tr><td colspan="10" style="padding: 30px; font-weight: bold;">لا توجد بيانات مسجلة.</td></tr>';
                 }
             } catch (err) { 
                 b.innerHTML = '<tr><td colspan="10" style="color:red; padding: 30px; font-weight: bold;">خطأ في جلب البيانات من الخادم!</td></tr>'; 
             }
+        }
+
+        // دالة جلب الإيرادات الشهرية الجديدة
+        async function loadIncomeData(year, btn) {
+            document.querySelectorAll('#monthly-module .tab-btn').forEach(b => b.classList.remove('active'));
+            if(btn) btn.classList.add('active');
+
+            const h = document.getElementById('h-monthly');
+            const b = document.getElementById('b-monthly');
+
+            try {
+                b.innerHTML = '<tr><td colspan="3" class="loading"><i class="fas fa-circle-notch fa-spin"></i> جاري جلب الإيرادات...</td></tr>';
+                h.innerHTML = '';
+
+                const res = await fetch(`/get-data/${year}`);
+                const data = await res.json();
+
+                b.innerHTML = '';
+
+                if(data.length > 1) {
+                    // 1. العناوين (الصف الأول)
+                    const headers = data[0];
+                    const trH = document.createElement('tr');
+                    for(let i=0; i<3; i++) {
+                        const th = document.createElement('th');
+                        th.textContent = headers[i] || '-';
+                        trH.appendChild(th);
+                    }
+                    h.appendChild(trH);
+
+                    // مصفوفات الرسم البياني
+                    const chartLabels = [];
+                    const chartDataValues = [];
+
+                    // 2. بناء الجدول
+                    data.slice(1).forEach(row => {
+                        if(!row || row.length === 0) return;
+                        
+                        // تجاهل الصفوف الفارغة تماماً
+                        if(row.every(cell => cell === undefined || cell === null || cell === '')) return;
+
+                        const tr = document.createElement('tr');
+                        for(let i=0; i<3; i++) {
+                            const td = document.createElement('td');
+                            let cellValue = row[i];
+
+                            if (i === 2 && cellValue !== undefined && !isNaN(parseFloat(cellValue))) {
+                                td.textContent = formatNumber(cellValue);
+                                td.classList.add('val-positive'); 
+                            } else {
+                                td.textContent = cellValue || '-';
+                            }
+                            tr.appendChild(td);
+                        }
+                        b.appendChild(tr);
+
+                        // تجهيز بيانات الرسم البياني وتجاهل صف (Total)
+                        const firstColStr = String(row[0] || '').toLowerCase();
+                        if (!firstColStr.includes("total") && row[1]) {
+                            chartLabels.push(row[1]); 
+                            chartDataValues.push(parseFloat(row[2]) || 0); 
+                        }
+                    });
+
+                    // رسم المنحنى
+                    drawIncomeChart(year, chartLabels, chartDataValues);
+
+                } else {
+                    b.innerHTML = '<tr><td colspan="3" style="padding: 30px; font-weight: bold;">لا توجد بيانات إيرادات مسجلة.</td></tr>';
+                    if(incomeChartInstance) incomeChartInstance.destroy();
+                }
+            } catch (err) { 
+                b.innerHTML = '<tr><td colspan="3" style="color:red; padding: 30px; font-weight: bold;">خطأ في جلب البيانات من الخادم!</td></tr>'; 
+            }
+        }
+
+        // دالة رسم المنحنى
+        function drawIncomeChart(year, labels, data) {
+            const ctx = document.getElementById('incomeChart').getContext('2d');
+
+            if (incomeChartInstance) {
+                incomeChartInstance.destroy(); // مسح الرسم القديم
+            }
+
+            // تدرج لوني باللون الأحمر
+            let gradient = ctx.createLinearGradient(0, 0, 0, 400);
+            gradient.addColorStop(0, 'rgba(196, 18, 48, 0.4)'); 
+            gradient.addColorStop(1, 'rgba(196, 18, 48, 0.0)');
+
+            incomeChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: `إيرادات سنة ${year} (جنيه مصري)`,
+                        data: data,
+                        borderColor: '#C41230',
+                        backgroundColor: gradient,
+                        borderWidth: 3,
+                        pointBackgroundColor: '#ffffff',
+                        pointBorderColor: '#C41230',
+                        pointBorderWidth: 2,
+                        pointRadius: 5,
+                        pointHoverRadius: 7,
+                        fill: true,
+                        tension: 0.4 // منحنى انسيابي
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { labels: { font: { family: 'Cairo', size: 14 } } },
+                        tooltip: { titleFont: { family: 'Cairo' }, bodyFont: { family: 'Cairo' } }
+                    },
+                    scales: {
+                        x: { ticks: { font: { family: 'Cairo', weight: 'bold' } } },
+                        y: {
+                            ticks: {
+                                font: { family: 'Cairo', weight: 'bold' },
+                                callback: function(value) { return formatNumber(value); }
+                            },
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
         }
     </script>
 </body>

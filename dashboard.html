@@ -15,11 +15,8 @@
         /* Sidebar */
         .sidebar { width: 280px; background: var(--sidebar); display: flex; flex-direction: column; transition: 0.3s; z-index: 100; box-shadow: 4px 0 15px rgba(0,0,0,0.15); }
         .sidebar-header { padding: 25px; text-align: center; border-bottom: 1px solid #222; background: #000; }
-        
-        /* تصميم صندوق اللوجو الأبيض */
         .logo-box { background: #ffffff; padding: 12px 15px; border-radius: 12px; display: inline-block; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
         .logo-box img { max-height: 45px; display: block; }
-        
         .menu-list { flex-grow: 1; padding: 20px 0; overflow-y: auto; }
         .menu-item { padding: 15px 25px; display: flex; align-items: center; gap: 15px; color: #a0a0a0; font-weight: 700; cursor: pointer; transition: 0.3s; margin: 5px 15px; border-radius: 8px; }
         .menu-item:hover, .menu-item.active { background: var(--primary); color: white; }
@@ -61,11 +58,8 @@
             .app-layout { flex-direction: column; overflow-y: auto; }
             .sidebar { width: 100%; height: auto; padding: 10px; box-sizing: border-box; }
             .sidebar-header { padding: 10px 15px; background: #000; display: flex; justify-content: space-between; align-items: center; border-radius: 8px; }
-            
-            /* تعديل اللوجو في الموبايل */
             .logo-box { padding: 6px 10px; margin: 0; border-radius: 8px; }
             .logo-box img { max-height: 30px; }
-            
             .menu-list { padding: 10px 0; display: flex; flex-direction: row; overflow-x: auto; }
             .menu-list::-webkit-scrollbar { display: none; }
             .menu-item { flex-shrink: 0; padding: 8px 15px; margin: 0 5px; font-size: 0.85rem; }
@@ -82,7 +76,6 @@
     <div class="app-layout">
         <aside class="sidebar">
             <div class="sidebar-header">
-                <!-- المربع الأبيض للوجو -->
                 <div class="logo-box">
                     <img src="https://ejust.edu.eg/assets/img/logo.png" alt="E-JUST Logo">
                 </div>
@@ -107,8 +100,9 @@
                 <h2 style="color:var(--sidebar); border-bottom: 4px solid var(--primary); padding-bottom:10px; display:inline-block; font-weight: 900;">حصر فواتير الشركات</h2>
                 <div class="tab-group">
                     <button class="tab-btn" onclick="loadData(1, this)"><i class="fas fa-folder-open"></i> سجل - 01 LOG</button>
-                    <button class="tab-btn" onclick="loadData(2, this)"><i class="fas fa-building"></i> الحي التاسع</button>
-                    <button class="tab-btn" onclick="loadData(3, this)"><i class="fas fa-water"></i> ترعة الحمام</button>
+                    <!-- تم تعديل أرقام الـ ID لتطابق السيرفر الجديد -->
+                    <button class="tab-btn" onclick="loadData(3, this)"><i class="fas fa-building"></i> الحي التاسع</button>
+                    <button class="tab-btn" onclick="loadData(2, this)"><i class="fas fa-water"></i> ترعة الحمام</button>
                     <button class="tab-btn" onclick="loadData(4, this)"><i class="fas fa-home"></i> مشروع ديارنا</button>
                 </div>
                 <div class="stats-grid" id="stat-billing">
@@ -142,6 +136,16 @@
             document.getElementById(name + '-module').classList.add('active');
         }
 
+        // دالة ذكية لتنسيق الأرقام بكسر عشري واحد فقط في حال وجود كسور فعلياً
+        function formatNumber(val) {
+            if (val === undefined || val === null || isNaN(parseFloat(val))) return '-';
+            const num = parseFloat(val);
+            if (num % 1 !== 0) {
+                return num.toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+            }
+            return num.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+        }
+
         async function loadData(id, btn) {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
@@ -171,7 +175,7 @@
                         }
                     });
 
-                    let due=0, rec=0;
+                    let due = 0, rec = 0;
                     const dueColIndex = (id == 1 || id == 5) ? 4 : 3;
                     const recColIndex = (id == 1 || id == 5) ? 5 : 4;
 
@@ -181,14 +185,27 @@
                         
                         row.forEach((c, idx) => {
                             const td = document.createElement('td'); 
-                            td.textContent = c || '-'; 
                             
+                            // معالجة الأرقام لتظهر بكسر عشري واحد كحد أقصى إن وُجدت
                             if (amountColumns.includes(idx) && c !== undefined && c !== null) {
                                 const val = parseFloat(c);
                                 if (!isNaN(val)) {
-                                    if (val > 0) td.classList.add('val-positive');
-                                    else if (val < 0) td.classList.add('val-negative');
+                                    td.textContent = formatNumber(val);
+                                    
+                                    const headerText = headers[idx] || '';
+                                    // إذا كان العمود هو "المستحق"، يبقى الرقم الموجب باللون الأسود ويتحول للأحمر فقط في حالة السالب
+                                    if (headerText.includes('المستحق') || headerText.includes('مستحق')) {
+                                        if (val < 0) td.classList.add('val-negative');
+                                    } else {
+                                        // الأعمدة المالية الأخرى تأخذ الألوان الكاملة (أخضر للموجب وأحمر للسالب)
+                                        if (val > 0) td.classList.add('val-positive');
+                                        else if (val < 0) td.classList.add('val-negative');
+                                    }
+                                } else {
+                                    td.textContent = c || '-';
                                 }
+                            } else {
+                                td.textContent = c || '-';
                             }
 
                             tr.appendChild(td);
@@ -199,11 +216,18 @@
                         b.appendChild(tr);
                     });
                     
+                    // تم ربط الحسابات ديناميكياً لتطابق الترتيب المطلوب تماماً
                     if(mod === 'billing') {
                         document.getElementById('stat-billing').style.display = 'grid';
-                        document.getElementById('d-due').textContent = due.toLocaleString('en-US') + ' ج.م';
-                        document.getElementById('d-rec').textContent = rec.toLocaleString('en-US') + ' ج.م';
-                        document.getElementById('d-bal').textContent = (due-rec).toLocaleString('en-US') + ' ج.م';
+                        
+                        // خانة إجمالي المستحق تعرض إجمالي التوريد (rec)
+                        document.getElementById('d-due').textContent = formatNumber(rec) + ' ج.م';
+                        
+                        // خانة إجمالي المورد تعرض صافي المديونية (due - rec)
+                        document.getElementById('d-rec').textContent = formatNumber(due - rec) + ' ج.م';
+                        
+                        // خانة صافي المديونية تعرض إجمالي المستحق (due)
+                        document.getElementById('d-bal').textContent = formatNumber(due) + ' ج.م';
                     }
                 } else {
                     b.innerHTML = '<tr><td colspan="10" style="padding: 30px; font-weight: bold;">لا توجد بيانات مسجلة.</td></tr>';

@@ -59,11 +59,9 @@ app.get('/login', (req, res) => {
     res.sendFile(path.join(process.cwd(), 'login.html'));
 });
 
-// عملية تسجيل الدخول: تعتمد كلياً وبشكل مباشر على متغيرات Vercel
 app.post('/login', (req, res) => {
     const { username, password } = req.body;
     
-    // التحقق المباشر من متغيرات البيئة
     const isValidUser = (username === process.env.ADMIN_USER);
     const isValidPass = (password === process.env.ADMIN_PASS);
 
@@ -82,35 +80,61 @@ app.get('/logout', (req, res) => {
     res.redirect('/'); 
 });
 
-// جلب البيانات (يدعم الفواتير والإيرادات معاً)
+// جلب البيانات ذكياً (يتعرف على نوع الملف ويحمله بالصيغة الصحيحة بدون أخطاء)
 app.get('/get-data/:id', checkAuth, async (req, res) => {
     try {
         const id = req.params.id;
         const fileId = fileIds[id];
-        const response = await drive.files.get({ fileId: fileId, alt: 'media' }, { responseType: 'arraybuffer' });
-        const workbook = XLSX.read(response.data, { type: 'buffer' });
         
+        if (!fileId) {
+            return res.status(404).json({ error: "معرف الملف غير مسجل في النظام" });
+        }
+
+        // 1. جلب بيانات نوع الملف أولاً (mimeType)
+        const fileMeta = await drive.files.get({
+            fileId: fileId,
+            fields: 'mimeType'
+        });
+        const mimeType = fileMeta.data.mimeType;
+
+        let response;
+        
+        // 2. إذا كان الملف Google Sheets أصلي، نقوم بتصديره كـ Excel
+        if (mimeType === 'application/vnd.google-apps.spreadsheet') {
+            response = await drive.files.export(
+                {
+                    fileId: fileId,
+                    mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                },
+                { responseType: 'arraybuffer' }
+            );
+        } else {
+            // إذا كان ملف Excel تقليدي مرفوع بصيغة ثنائية
+            response = await drive.files.get(
+                { fileId: fileId, alt: 'media' },
+                { responseType: 'arraybuffer' }
+            );
+        }
+
+        const workbook = XLSX.read(response.data, { type: 'buffer' });
         const isIncomeFile = ["2024", "2025", "2026"].includes(id);
         
         let sheetName = "فواتير الشركات";
         if (isIncomeFile) {
-            // البحث عن التبويبة الخاصة بجدول الإيرادات
             const sheetLower = workbook.SheetNames.map(s => s.toLowerCase());
             const incomeIndex = sheetLower.indexOf("table of income");
             sheetName = incomeIndex !== -1 ? workbook.SheetNames[incomeIndex] : workbook.SheetNames[0];
         }
 
         const sheet = workbook.Sheets[sheetName];
-        if (!sheet) return res.status(404).json({ error: "التبويبة غير موجودة" });
+        if (!sheet) return res.status(404).json({ error: `التبويبة المطلوبة غير موجودة بالملف` });
         
         const fullData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
 
-        // إذا كان ملف إيرادات، نُرجع أول 3 أعمدة فقط
         if (isIncomeFile) {
             return res.json(fullData.map(row => row ? row.slice(0, 3) : []));
         }
 
-        // إذا كان ملف فواتير (النظام القديم)
         const endCol = (id == "1" || id == "5") ? 7 : 6;
         res.json(fullData.map(row => row ? row.slice(1, endCol) : []));
     } catch (error) { 

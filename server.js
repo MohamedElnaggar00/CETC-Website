@@ -42,7 +42,7 @@ const fileIds = {
     "2024": "1XBzfNn6LkHiRNF8s7NQeICn4D4mShyDm",
     "2025": "1ypVYF_Y6L-taMfkHSYly8nONIqEbj46V",
     "2026": "1wGGOGxcrakcSiPZMim_uJKI2RUOLxFm_",
-    "reports": "1366JN3rpYyrdt8Jq27jrlr6eoymtpf3S" // الملف الجديد لمسلسلات التقارير
+    "reports": "1366JN3rpYyrdt8Jq27jrlr6eoymtpf3S" // الملف المخصص للتقارير
 };
 
 // ميدل وير لحماية المسارات
@@ -156,7 +156,7 @@ app.get('/get-report-sheets', checkAuth, async (req, res) => {
     }
 });
 
-// جلب بيانات تبويبة تقرير محددة بالكامل
+// جلب بيانات تبويبة تقرير محددة بالكامل مع الحفاظ على التنسيق الأصلي للملف (الأرقام، العملات، التواريخ)
 app.get('/get-report-data', checkAuth, async (req, res) => {
     try {
         const sheetName = req.query.sheet;
@@ -169,7 +169,8 @@ app.get('/get-report-data', checkAuth, async (req, res) => {
         const sheet = workbook.Sheets[sheetName];
         if (!sheet) return res.status(404).json({ error: `التبويبة '${sheetName}' غير موجودة` });
 
-        const fullData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+        // نستخدم raw: false لتجلب البيانات منسقة تماماً بنصوصها وصيغتها في الإكسيل
+        const fullData = XLSX.utils.sheet_to_json(sheet, { header: 1, raw: false });
         res.json(fullData);
     } catch (error) {
         res.status(500).json({ error: "فشل جلب بيانات التقرير من جوجل درايف", details: error.message });

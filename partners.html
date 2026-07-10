@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شركاء النجاح - CETC E-JUST</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --red: #C41230; --black: #000000; --white: #ffffff; --bg: #f8fafc; --gray: #475569; }
+        body { font-family: 'Cairo', sans-serif; margin: 0; background: var(--bg); color: #1a1a1a; line-height: 1.6; }
+        
+        /* Header */
+        header { 
+            background: var(--white); padding: 15px 5%; display: flex; justify-content: space-between; 
+            align-items: center; border-bottom: 4px solid var(--red); position: sticky; top: 0; 
+            z-index: 1000; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); 
+        }
+        .logo img { height: 60px; }
+        .brand-container { display: flex; flex-direction: column; gap: 2px; }
+        .main-uni-title { font-weight: 900; font-size: clamp(0.8rem, 1.8vw, 1.1rem); color: #1a1a1a; }
+        .sub-unit-title { font-weight: 700; font-size: clamp(0.7rem, 1.5vw, 0.9rem); color: var(--red); }
+        .btn-home { background: #f1f5f9; color: var(--black); text-decoration: none; padding: 8px 20px; border-radius: 8px; font-weight: 700; border: 1px solid #e2e8f0; }
+
+        /* Hero */
+        .hero { 
+            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://ejust.edu.eg/storage/EventsPhoto/top-min%20(1).jpg') no-repeat center/cover; 
+            color: white; padding: 80px 5%; text-align: center; 
+        }
+        .hero h1 { font-size: 2.8rem; font-weight: 900; margin-bottom: 15px; }
+        .hero p { font-size: 1.2rem; max-width: 900px; margin: 0 auto; color: #cbd5e1; font-weight: 600; }
+
+        /* Section Container */
+        .section-container { padding: 60px 5%; max-width: 1200px; margin: 0 auto; }
+        .section-header { text-align: center; margin-bottom: 50px; }
+        .section-header i { font-size: 3rem; color: var(--red); margin-bottom: 15px; }
+        .section-header h2 { font-size: 2.2rem; font-weight: 900; color: var(--black); margin: 0; position: relative; display: inline-block; }
+        .section-header h2::after { content: ""; width: 60px; height: 4px; background: var(--red); position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); }
+        .section-header p { color: var(--gray); margin-top: 20px; font-size: 1.1rem; font-weight: 600; }
+
+        /* Partners Grid */
+        .partners-grid { 
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 20px; margin-top: 30px; 
+        }
+        .partner-card { 
+            background: white; padding: 25px; border-radius: 15px; border: 1px solid #e2e8f0; 
+            transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.03); display: flex; 
+            flex-direction: column; justify-content: center; align-items: center; text-align: center;
+        }
+        .partner-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.08); border-color: var(--red); }
+        .partner-card h3 { margin: 0; font-size: 1.1rem; font-weight: 800; color: #1e293b; line-height: 1.5; }
+        .partner-tag { font-size: 0.75rem; color: var(--red); font-weight: 900; background: #fff1f2; padding: 4px 12px; border-radius: 20px; margin-top: 10px; text-transform: uppercase; }
+
+        .gov-icon { color: #0369a1 !important; } 
+        .private-icon { color: #b91c1c !important; } 
+        .consult-icon { color: #15803d !important; } 
+
+        .bg-white { background: #ffffff; }
+
+        footer { background: #000; color: #94a3b8; text-align: center; padding: 40px 5%; direction: ltr; margin-top: 50px; }
+        .footer-contacts { display: flex; justify-content: center; gap: 20px; margin-bottom: 15px; flex-wrap: wrap; }
+        .footer-contacts span { display: flex; align-items: center; gap: 8px; }
+        .footer-contacts i { color: var(--red); }
+
+        @media (max-width: 768px) {
+            header { flex-direction: column; gap: 15px; text-align: center; }
+            .hero h1 { font-size: 2rem; }
+            .section-header h2 { font-size: 1.6rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo"><img src="https://ejust.edu.eg/assets/img/logo.png" alt="E-JUST"></div>
+    <div class="brand-container">
+        <div class="main-uni-title">الجامعة المصرية اليابانية للعلوم والتكنولوجيا</div>
+        <div class="sub-unit-title">وحدة اختبارات واستشارات الهندسة المدنية - العملاء والشركاء</div>
+    </div>
+    <a href="/" class="btn-home"><i class="fas fa-home"></i> الرئيسية</a>
+</header>
+
+<section class="hero">
+    <h1>شراكات استراتيجية.. ثقة عالمية</h1>
+    <p>نفخر بكوننا الوجهة المعتمدة لكبرى الوزارات المصرية، الشركات العالمية، وأعرق المكاتب الاستشارية الدولية</p>
+</section>
+
+<!-- 1. الجهات الحكومية -->
+<section class="section-container">
+    <div class="section-header">
+        <i class="fas fa-university gov-icon"></i>
+        <h2>الجهات الحكومية والسيادية</h2>
+        <p>المالكة للمشاريع القومية الكبرى في جمهورية مصر العربية</p>
+    </div>
+    <div class="partners-grid">
+        <div class="partner-card"><h3>وزارة النقل (هيئة الطرق والكباري والأنفاق)</h3><span class="partner-tag">شريك استراتيجي</span></div>
+        <div class="partner-card"><h3>الهيئة الهندسية للقوات المسلحة</h3><span class="partner-tag">جهات سيادية</span></div>
+        <div class="partner-card"><h3>وزارة الموارد المائية والري</h3></div>
+        <div class="partner-card"><h3>هيئة المجتمعات العمرانية الجديدة</h3></div>
+        <div class="partner-card"><h3>جهاز مشروعات الخدمة الوطنية</h3></div>
+        <div class="partner-card"><h3>وزارة الطيران المدني (المطارات المصرية)</h3></div>
+        <div class="partner-card"><h3>القوات البحرية المصرية</h3></div>
+        <div class="partner-card"><h3>جهاز مدينة برج العرب الجديدة</h3></div>
+        <div class="partner-card"><h3>جهاز مدينة العلمين الجديدة</h3></div>
+        <div class="partner-card"><h3>الجهاز التنفيذي لمياه الشرب والصرف الصحي</h3></div>
+        <div class="partner-card"><h3>الأزهر الشريف</h3></div>
+        <div class="partner-card"><h3>مدينة البحث العلمي والتطبيقات التكنولوجية</h3></div>
+    </div>
+</section>
+
+<!-- 2. الجهات الخاصة -->
+<section class="section-container bg-white" style="border-radius: 50px 50px 0 0; box-shadow: 0 -10px 30px rgba(0,0,0,0.02);">
+    <div class="section-header">
+        <i class="fas fa-industry private-icon"></i>
+        <h2>القطاع الخاص والشركات العالمية</h2>
+        <p>كبرى الشركات الصناعية والاستثمارية التي تعتمد على CETC في ضبط جودة منشآتها</p>
+    </div>
+    <div class="partners-grid">
+        <div class="partner-card"><h3>شركة ألستوم (ALSTOM) الفرنسية</h3><span class="partner-tag">Global Partner</span></div>
+        <div class="partner-card"><h3>شركة فودافون مصر (VODAFONE)</h3><span class="partner-tag">Telecommunications</span></div>
+        <div class="partner-card"><h3>مجموعة العربي (ELARABY Group)</h3><span class="partner-tag">Industrial Giant</span></div>
+        <div class="partner-card"><h3>مجموعة حديد عز (EZZ Steel)</h3></div>
+        <div class="partner-card"><h3>شركة سيمكس العالمية (CEMEX)</h3></div>
+        <div class="partner-card"><h3>شركة سافيتو مصر (SAVETO)</h3></div>
+        <div class="partner-card"><h3>شركة المواسم للصناعات الغذائية</h3></div>
+        <div class="partner-card"><h3>شركة أوسكار جولد اللوجستية</h3></div>
+        <div class="partner-card"><h3>قرية (EKO) الساحل الشمالي</h3></div>
+        <div class="partner-card"><h3>الجمعية التعاونية للبناء (مهندسي الإسكندرية)</h3></div>
+    </div>
+</section>
+
+<!-- 3. الجهات الاستشارية -->
+<section class="section-container">
+    <div class="section-header">
+        <i class="fas fa-drafting-compass consult-icon"></i>
+        <h2>المكاتب الاستشارية وبيوت الخبرة</h2>
+        <p>أعرق بيوت الخبرة الهندسية محلياً ودولياً التي اعتمدت نتائج وحدة CETC</p>
+    </div>
+    <div class="partners-grid">
+        <div class="partner-card"><h3>سيسترا الفرنسية (SYSTRA)</h3><span class="partner-tag">International Consultant</span></div>
+        <div class="partner-card"><h3>محرم باخوم (ACE)</h3><span class="partner-tag">Consulting Leader</span></div>
+        <div class="partner-card"><h3>جماعة المهندسون الاستشاريون (ECG)</h3></div>
+        <div class="partner-card"><h3>حمزة ومشاركوه (د. ممدوح حمزة)</h3></div>
+        <div class="partner-card"><h3>المركز القومي لبحوث الإسكان والبناء</h3></div>
+        <div class="partner-card"><h3>مكتب هيدرو (Hydro) للدراسات البيئية</h3></div>
+        <div class="partner-card"><h3>مكتب بيت الخبرة (MZECH - د. مدحت أبو زيد)</h3></div>
+        <div class="partner-card"><h3>المكتب الاستشاري (KK - د. خالد قنديل)</h3></div>
+        <div class="partner-card"><h3>المركز الهندسي - جامعة الإسكندرية</h3></div>
+        <div class="partner-card"><h3>مكتب الرائد (د. هشام عرفات)</h3></div>
+        <div class="partner-card"><h3>مكتب ايجيك (EGEC) الهندسي</h3></div>
+        <div class="partner-card"><h3>مكتب سكن للاستشارات الهندسية</h3></div>
+    </div>
+</section>
+
+<footer>
+    <div class="footer-contacts">
+        <span><i class="fas fa-phone-alt"></i> 16448</span>
+        <span><i class="fas fa-envelope"></i> cetc.unit@ejust.edu.eg</span>
+        <span><i class="fas fa-map-marker-alt"></i> New Borg El-Arab, Alexandria, Egypt</span>
+    </div>
+    <p>&copy; 2026 CETC Unit - E-JUST | Trusted by Leaders</p>
+</footer>
+
+</body>
+</html>

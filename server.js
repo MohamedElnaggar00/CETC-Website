@@ -19,9 +19,19 @@ app.use(session({
 }));
 
 // --- 2. إعدادات الوصول لجوجل درايف (Environment Variables) ---
-const privateKey = process.env.GOOGLE_PRIVATE_KEY 
-    ? process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n') 
-    : undefined;
+let privateKey = process.env.GOOGLE_PRIVATE_KEY;
+if (privateKey) {
+    // تنظيف المفتاح تلقائياً من علامات الاقتباس الفردية أو المزدوجة الزائدة التي قد تسبب فشل التوقيع
+    privateKey = privateKey.trim();
+    if (privateKey.startsWith('"') && privateKey.endsWith('"')) {
+        privateKey = privateKey.slice(1, -1);
+    }
+    if (privateKey.startsWith("'") && privateKey.endsWith("'")) {
+        privateKey = privateKey.slice(1, -1);
+    }
+    // استبدال الرموز النصية \n بأسطر جديدة حقيقية
+    privateKey = privateKey.replace(/\\n/g, '\n');
+}
 
 const auth = new google.auth.GoogleAuth({
     credentials: {

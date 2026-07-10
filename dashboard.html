@@ -113,26 +113,40 @@
             document.querySelectorAll('#billing-module .tab-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             const h = document.getElementById('h-billing'), b = document.getElementById('b-billing');
-            b.innerHTML = '<tr><td colspan="10" style="padding:40px;">جاري التحميل...</td></tr>';
-            const res = await fetch(`/get-data/${id}`);
-            const data = await res.json();
-            h.innerHTML = ''; b.innerHTML = '';
-            if(data.length > 2) {
-                data[2].forEach(t => { const th = document.createElement('th'); th.textContent = t || '-'; h.appendChild(th); });
-                data.slice(3).forEach(row => {
-                    if(!row[0]) return;
-                    const tr = document.createElement('tr');
-                    row.forEach((c, idx) => { 
-                        const td = document.createElement('td'); 
-                        td.textContent = c || '-'; 
-                        if(c && !isNaN(parseFloat(c)) && (idx > 2)) {
-                            if(parseFloat(c) > 0) td.classList.add('val-positive');
-                            else if(parseFloat(c) < 0) td.classList.add('val-negative');
-                        }
-                        tr.appendChild(td); 
+            b.innerHTML = '<tr><td colspan="10" class="loading"><i class="fas fa-circle-notch fa-spin"></i> جاري مزامنة البيانات من درايف...</td></tr>';
+            
+            try {
+                const res = await fetch(`/get-data/${id}`);
+                const data = await res.json();
+                
+                h.innerHTML = ''; b.innerHTML = '';
+                
+                if (data.error) {
+                    b.innerHTML = `<tr><td colspan="10" style="color:red; padding:40px; text-align:center; font-weight:bold;">حدث خطأ في جلب البيانات: <br>${data.error}</td></tr>`;
+                    return;
+                }
+
+                if(data.length > 2) {
+                    data[2].forEach(t => { const th = document.createElement('th'); th.textContent = t || '-'; h.appendChild(th); });
+                    data.slice(3).forEach(row => {
+                        if(!row[0]) return;
+                        const tr = document.createElement('tr');
+                        row.forEach((c, idx) => { 
+                            const td = document.createElement('td'); 
+                            td.textContent = c || '-'; 
+                            if(c && !isNaN(parseFloat(c)) && (idx > 2)) {
+                                if(parseFloat(c) > 0) td.classList.add('val-positive');
+                                else if(parseFloat(c) < 0) td.classList.add('val-negative');
+                            }
+                            tr.appendChild(td); 
+                        });
+                        b.appendChild(tr);
                     });
-                    b.appendChild(tr);
-                });
+                } else {
+                    b.innerHTML = '<tr><td colspan="10" style="padding:40px; text-align:center;">لا توجد بيانات مسجلة في هذا الملف.</td></tr>';
+                }
+            } catch (err) {
+                b.innerHTML = `<tr><td colspan="10" style="color:red; padding:40px; text-align:center; font-weight:bold;">فشل الاتصال بالخادم: <br>${err.message}</td></tr>`;
             }
         }
 
@@ -140,24 +154,38 @@
             document.querySelectorAll('#monthly-module .tab-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             const h = document.getElementById('h-monthly'), b = document.getElementById('b-monthly');
-            b.innerHTML = '<tr><td colspan="3" style="padding:40px;">جاري التحميل...</td></tr>';
-            const res = await fetch(`/get-data/${year}`);
-            const data = await res.json();
-            h.innerHTML = ''; b.innerHTML = '';
-            if(data.length > 1) {
-                const trH = document.createElement('tr');
-                data[0].slice(0,3).forEach(t => { const th = document.createElement('th'); th.textContent = t; trH.appendChild(th); });
-                h.appendChild(trH);
-                const labels = [], values = [];
-                data.slice(1).forEach(row => {
-                    if(!row[0] || String(row[0]).toLowerCase().includes('total')) return;
-                    const tr = document.createElement('tr');
-                    row.slice(0,3).forEach((c, i) => { const td = document.createElement('td'); td.textContent = c || '-'; tr.appendChild(td); });
-                    b.appendChild(tr);
-                    labels.push(row[1]); 
-                    values.push(parseFloat(String(row[2]).replace(/,/g, '')) || 0);
-                });
-                drawIncomeChart(year, labels, values);
+            b.innerHTML = '<tr><td colspan="3" class="loading"><i class="fas fa-circle-notch fa-spin"></i> جاري مزامنة البيانات...</td></tr>';
+            
+            try {
+                const res = await fetch(`/get-data/${year}`);
+                const data = await res.json();
+                
+                h.innerHTML = ''; b.innerHTML = '';
+                
+                if (data.error) {
+                    b.innerHTML = `<tr><td colspan="3" style="color:red; padding:40px; text-align:center; font-weight:bold;">حدث خطأ في جلب البيانات: <br>${data.error}</td></tr>`;
+                    return;
+                }
+
+                if(data.length > 1) {
+                    const trH = document.createElement('tr');
+                    data[0].slice(0,3).forEach(t => { const th = document.createElement('th'); th.textContent = t; trH.appendChild(th); });
+                    h.appendChild(trH);
+                    const labels = [], values = [];
+                    data.slice(1).forEach(row => {
+                        if(!row[0] || String(row[0]).toLowerCase().includes('total')) return;
+                        const tr = document.createElement('tr');
+                        row.slice(0,3).forEach((c, i) => { const td = document.createElement('td'); td.textContent = c || '-'; tr.appendChild(td); });
+                        b.appendChild(tr);
+                        labels.push(row[1]); 
+                        values.push(parseFloat(String(row[2]).replace(/,/g, '')) || 0);
+                    });
+                    drawIncomeChart(year, labels, values);
+                } else {
+                    b.innerHTML = '<tr><td colspan="3" style="padding:40px; text-align:center;">لا توجد بيانات مسجلة.</td></tr>';
+                }
+            } catch (err) {
+                b.innerHTML = `<tr><td colspan="3" style="color:red; padding:40px; text-align:center; font-weight:bold;">فشل الاتصال بالخادم: <br>${err.message}</td></tr>`;
             }
         }
 
@@ -187,21 +215,42 @@
         async function loadReportSheets() {
             const select = document.getElementById('report-sheet-select');
             if (select.options.length > 1) return;
-            const res = await fetch('/get-report-sheets');
-            const data = await res.json();
-            select.innerHTML = '<option value="">اختر التقرير...</option>';
-            data.sheets.forEach(s => { const opt = document.createElement('option'); opt.value = s; opt.textContent = s; select.appendChild(opt); });
+            try {
+                const res = await fetch('/get-report-sheets');
+                const data = await res.json();
+                
+                if (data.error) {
+                    select.innerHTML = `<option value="">خطأ: ${data.error}</option>`;
+                    return;
+                }
+                
+                select.innerHTML = '<option value="">اختر التقرير...</option>';
+                data.sheets.forEach(s => { const opt = document.createElement('option'); opt.value = s; opt.textContent = s; select.appendChild(opt); });
+            } catch (err) {
+                select.innerHTML = '<option value="">فشل الاتصال بالخادم</option>';
+            }
         }
 
         async function loadReportData(s) {
             const h = document.getElementById('h-reports'), b = document.getElementById('b-reports');
             if(!s) return;
-            b.innerHTML = '<tr><td colspan="10" style="padding:40px;">جاري التحميل...</td></tr>';
-            const res = await fetch(`/get-report-data?sheet=${encodeURIComponent(s)}`);
-            const data = await res.json();
-            rawReportData = data;
-            currentReportMaxCols = Math.max(...data.map(r => r.length));
-            renderReportTable(data);
+            b.innerHTML = '<tr><td colspan="10" class="loading"><i class="fas fa-circle-notch fa-spin"></i> جاري مزامنة بيانات التقرير...</td></tr>';
+            
+            try {
+                const res = await fetch(`/get-report-data?sheet=${encodeURIComponent(s)}`);
+                const data = await res.json();
+                
+                if (data.error) {
+                    b.innerHTML = `<tr><td colspan="10" style="color:red; padding:40px; text-align:center; font-weight:bold;">حدث خطأ في جلب بيانات التقرير: <br>${data.error}</td></tr>`;
+                    return;
+                }
+                
+                rawReportData = data;
+                currentReportMaxCols = Math.max(...data.map(r => r.length));
+                renderReportTable(data);
+            } catch (err) {
+                b.innerHTML = `<tr><td colspan="10" style="color:red; padding:40px; text-align:center; font-weight:bold;">فشل الاتصال بالخادم: <br>${err.message}</td></tr>`;
+            }
         }
 
         function renderReportTable(data) {

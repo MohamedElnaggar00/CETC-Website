@@ -51,30 +51,21 @@ function checkAuth(req, res, next) {
     res.redirect('/login');
 }
 
-// دالة ذكية مساعدة لتحميل ملف الإكسيل كبفر تلقائي بغض النظر عن نوعه على الدرايف
+// دالة ذكية مساعدة لتحميل ملف الإكسيل كبفر تلقائي مع معالجة واضحة للأخطاء
 async function getExcelBuffer(fileId) {
-    const fileMeta = await drive.files.get({
-        fileId: fileId,
-        fields: 'mimeType'
-    });
-    const mimeType = fileMeta.data.mimeType;
-
-    let response;
-    if (mimeType === 'application/vnd.google-apps.spreadsheet') {
-        response = await drive.files.export(
-            {
-                fileId: fileId,
-                mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-            },
-            { responseType: 'arraybuffer' }
-        );
-    } else {
-        response = await drive.files.get(
-            { fileId: fileId, alt: 'media' },
-            { responseType: 'arraybuffer' }
-        );
+    try {
+        const fileMeta = await drive.files.get({ fileId: fileId, fields: 'mimeType' });
+        const mimeType = fileMeta.data.mimeType;
+        let response;
+        if (mimeType === 'application/vnd.google-apps.spreadsheet') {
+            response = await drive.files.export({ fileId: fileId, mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }, { responseType: 'arraybuffer' });
+        } else {
+            response = await drive.files.get({ fileId: fileId, alt: 'media' }, { responseType: 'arraybuffer' });
+        }
+        return response.data;
+    } catch (err) {
+        throw new Error(`جوجل درايف يرفض الاتصال: ${err.message}`);
     }
-    return response.data;
 }
 
 // --- 3. المسارات (Routes) ---
@@ -118,7 +109,7 @@ app.get('/get-data/:id', checkAuth, async (req, res) => {
         const fileId = fileIds[id];
         
         if (!fileId) {
-            return res.status(404).json({ error: "معرف الملف غير مسجل في النظام" });
+            return res.status(404).json({ error: `المعرف رقم ${id} غير مسجل على الخادم` });
         }
 
         const buffer = await getExcelBuffer(fileId);
@@ -144,7 +135,7 @@ app.get('/get-data/:id', checkAuth, async (req, res) => {
         const endCol = (id == "1" || id == "5") ? 7 : 6;
         res.json(fullData.map(row => row ? row.slice(1, endCol) : []));
     } catch (error) { 
-        res.status(500).json({ error: "فشل الاتصال بجوجل درايف", details: error.message }); 
+        res.status(500).json({ error: error.message }); 
     }
 });
 
@@ -156,11 +147,11 @@ app.get('/get-report-sheets', checkAuth, async (req, res) => {
         const workbook = XLSX.read(buffer, { type: 'buffer' });
         res.json({ sheets: workbook.SheetNames });
     } catch (error) {
-        res.status(500).json({ error: "فشل جلب التبويبات من جوجل درايف", details: error.message });
+        res.status(500).json({ error: error.message });
     }
 });
 
-// جلب بيانات تبويبة تقرير محددة بالكامل مع الحفاظ على التنسيق الأصلي للملف (الأرقام، العملات، التواريخ)
+// جلب بيانات تبويبة تقرير محددة بالكامل
 app.get('/get-report-data', checkAuth, async (req, res) => {
     try {
         const sheetName = req.query.sheet;
@@ -173,15 +164,14 @@ app.get('/get-report-data', checkAuth, async (req, res) => {
         const sheet = workbook.Sheets[sheetName];
         if (!sheet) return res.status(404).json({ error: `التبويبة '${sheetName}' غير موجودة` });
 
-        // نستخدم raw: false لتجلب البيانات منسقة تماماً بنصوصها وصيغتها في الإكسيل
         const fullData = XLSX.utils.sheet_to_json(sheet, { header: 1, raw: false });
         res.json(fullData);
     } catch (error) {
-        res.status(500).json({ error: "فشل جلب بيانات التقرير من جوجل درايف", details: error.message });
+        res.status(500).json({ error: error.message });
     }
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`System running strictly on Environment Variables`));
+app.listen(PORT, () => console.log(`System running`));
 
 module.exports = app;

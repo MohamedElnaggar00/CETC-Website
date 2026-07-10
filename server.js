@@ -1,24 +1,27 @@
 const express = require('express');
-const session = require('express-session');
+const session = require('cookie-session'); // Replaced express-session for stateless Vercel environments
 const { google } = require('googleapis');
 const XLSX = require('xlsx');
 const path = require('path');
 
 const app = express();
 
-// --- 1. الإعدادات الأساسية ---
-app.use(express.static(path.join(process.cwd()))); 
+// Use __dirname for absolute pathing in serverless environments
+app.use(express.static(path.join(__dirname))); 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Encrypted, stateless cookie session (Vercel compatible)
 app.use(session({
-    secret: process.env.SESSION_SECRET || 'cetc-ejust-secure-session',
-    resave: false,
-    saveUninitialized: true,
-    cookie: { maxAge: 24 * 60 * 60 * 1000 }
+    name: 'cetc_session',
+    keys: [process.env.SESSION_SECRET || 'cetc-ejust-fallback-secure-key'],
+    maxAge: 24 * 60 * 60 * 1000, // 24 Hours
+    secure: process.env.NODE_ENV === 'production', // true in production
+    httpOnly: true,
+    sameSite: 'lax'
 }));
 
-// --- 2. إعدادات الوصول لجوجل درايف (Environment Variables) ---
+// Setup Google Drive Client Email & Private Key
 const privateKey = process.env.GOOGLE_PRIVATE_KEY 
     ? process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n') 
     : undefined;
@@ -45,32 +48,34 @@ const fileIds = {
     "reports": "1366JN3rpYyrdt8Jq27jrlr6eoymtpf3S"
 };
 
-// ميدل وير لحماية المسارات
 function checkAuth(req, res, next) {
     if (req.session.loggedIn) return next();
     res.redirect('/login');
 }
 
 async function getExcelBuffer(fileId) {
-    const fileMeta = await drive.files.get({ fileId: fileId, fields: 'mimeType' });
+    const fileMeta = await drive.files.get({ fileId, fields: 'mimeType' });
     const mimeType = fileMeta.data.mimeType;
     let response;
     if (mimeType === 'application/vnd.google-apps.spreadsheet') {
-        response = await drive.files.export({ fileId: fileId, mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }, { responseType: 'arraybuffer' });
+        response = await drive.files.export({ 
+            fileId, 
+            mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' 
+        }, { responseType: 'arraybuffer' });
     } else {
-        response = await drive.files.get({ fileId: fileId, alt: 'media' }, { responseType: 'arraybuffer' });
+        response = await drive.files.get({ fileId, alt: 'media' }, { responseType: 'arraybuffer' });
     }
     return response.data;
 }
 
-// --- 3. المسارات ---
-app.get('/', (req, res) => res.sendFile(path.join(process.cwd(), 'index.html')));
-app.get('/introducing', (req, res) => res.sendFile(path.join(process.cwd(), 'introducing.html')));
-app.get('/portfolio', (req, res) => res.sendFile(path.join(process.cwd(), 'portfolio.html')));
-app.get('/partners', (req, res) => res.sendFile(path.join(process.cwd(), 'partners.html')));
+// Routes
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
+app.get('/introducing', (req, res) => res.sendFile(path.join(__dirname, 'introducing.html')));
+app.get('/portfolio', (req, res) => res.sendFile(path.join(__dirname, 'portfolio.html')));
+app.get('/partners', (req, res) => res.sendFile(path.join(__dirname, 'partners.html')));
 app.get('/login', (req, res) => {
     if (req.session.loggedIn) return res.redirect('/Dashboard');
-    res.sendFile(path.join(process.cwd(), 'login.html'));
+    res.sendFile(path.join(__dirname, 'login.html')); // Make sure login.html exists in your directory
 });
 
 app.post('/login', (req, res) => {
@@ -83,10 +88,13 @@ app.post('/login', (req, res) => {
     }
 });
 
-app.get('/Dashboard', checkAuth, (req, res) => res.sendFile(path.join(process.cwd(), 'dashboard.html')));
-app.get('/logout', (req, res) => { req.session.destroy(); res.redirect('/'); });
+app.get('/Dashboard', checkAuth, (req, res) => res.sendFile(path.join(__dirname, 'dashboard.html')));
+app.get('/logout', (req, res) => { 
+    req.session = null; // Destroys session cookie
+    res.redirect('/'); 
+});
 
-// جلب البيانات (فواتير وإيرادات) - تم تحديثه لمعالجة التواريخ
+// APIs
 app.get('/get-data/:id', checkAuth, async (req, res) => {
     try {
         const id = req.params.id;
@@ -103,14 +111,13 @@ app.get('/get-data/:id', checkAuth, async (req, res) => {
         }
 
         const sheet = workbook.Sheets[sheetName];
-        // استخدام raw: false لضمان جلب النصوص المنسقة (التواريخ) بدلاً من الأرقام الخام
         const fullData = XLSX.utils.sheet_to_json(sheet, { header: 1, raw: false });
 
         if (isIncomeFile) {
             return res.json(fullData.map(row => row ? row.slice(0, 3) : []));
         }
 
-        const endCol = (id == "1" || id == "5") ? 7 : 6;
+        const endCol = (id === "1" || id === "5") ? 7 : 6;
         res.json(fullData.map(row => row ? row.slice(1, endCol) : []));
     } catch (error) { 
         res.status(500).json({ error: error.message }); 
@@ -136,5 +143,5 @@ app.get('/get-report-data', checkAuth, async (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server is running`));
+app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
 module.exports = app;

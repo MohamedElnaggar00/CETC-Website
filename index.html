@@ -7,12 +7,38 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --red: #C41230; --black: #111111; --white: #ffffff; --bg: #f8fafc; --text-gray: #64748b; }
-        body { font-family: 'Cairo', sans-serif; margin: 0; background: var(--bg); color: #1a1a1a; line-height: 1.6; }
+        :root { 
+            --red: #A30F27; /* Darker red for WCAG accessible contrast against white */
+            --red-hover: #820B1D;
+            --black: #0f172a; 
+            --white: #ffffff; 
+            --bg: #f8fafc; 
+            --text-main: #1e293b;
+            --text-gray: #475569; 
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
         
-        /* الهيدر */
+        * { box-sizing: border-box; }
+
+        body { 
+            font-family: 'Cairo', sans-serif; 
+            margin: 0; 
+            background: var(--bg); 
+            color: var(--text-main); 
+            line-height: 1.6; 
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Keyboard Accessibility Indicator */
+        *:focus-visible {
+            outline: 3px solid var(--red);
+            outline-offset: 3px;
+        }
+        
+        /* Modernized Sticky Header */
         header { 
-            background: #ffffff; 
+            background: rgba(255, 255, 255, 0.95); 
+            backdrop-filter: blur(8px);
             padding: 15px 5%; 
             display: flex; 
             justify-content: space-between; 
@@ -21,60 +47,188 @@
             position: sticky; 
             top: 0; 
             z-index: 1000; 
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); 
+            box-shadow: 0 4px 20px -5px rgba(0,0,0,0.05); 
         }
 
-        .logo img { height: 65px; }
+        .logo img { height: 60px; width: auto; display: block; }
 
         .brand-container {
             display: flex;
             flex-direction: column;
-            text-align: left;
+            text-align: right;
             gap: 2px;
         }
 
         .main-uni-title {
-            font-weight: 900;
-            font-size: clamp(0.85rem, 2vw, 1.25rem);
-            color: #1a1a1a;
+            font-weight: 800;
+            font-size: clamp(0.9rem, 2vw, 1.2rem);
+            color: var(--black);
             margin: 0;
             line-height: 1.2;
         }
 
         .sub-unit-title {
             font-weight: 700;
-            font-size: clamp(0.7rem, 1.5vw, 0.95rem);
+            font-size: clamp(0.75rem, 1.5vw, 0.95rem);
             color: var(--red);
             margin: 0;
             line-height: 1.2;
         }
 
-        .hero { background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://ejust.edu.eg/storage/EventsPhoto/top-min%20(1).jpg') no-repeat center/cover; color: white; padding: 100px 5%; text-align: center; }
-        .hero h1 { font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 900; margin-bottom: 20px; }
-        .hero p { font-size: clamp(1rem, 2vw, 1.2rem); max-width: 800px; margin: 0 auto; color: #f1f5f9; }
-
-        .nav-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; padding: 60px 5%; max-width: 1200px; margin: -50px auto 0; position: relative; z-index: 10; }
-        .nav-card { background: #ffffff; padding: 35px 25px; text-align: center; border-radius: 16px; transition: all 0.3s ease; cursor: pointer; text-decoration: none; color: #1a1a1a; border: 1px solid #e2e8f0; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); display: flex; flex-direction: column; align-items: center; gap: 15px; }
-        .nav-card i { font-size: 2.8rem; color: var(--red); background: #fef2f2; padding: 20px; border-radius: 50%; }
-        .nav-card h3 { margin: 0; font-weight: 800; font-size: 1.3rem; }
-        .nav-card p { margin: 0; font-size: 0.95rem; color: var(--text-gray); }
-        .nav-card:hover { transform: translateY(-8px); border-color: var(--red); box-shadow: 0 20px 25px -5px rgba(196,18,48,0.15); }
+        /* Hero Layout with subtle grid overlay */
+        .hero { 
+            background: linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.85)), 
+                        url('https://ejust.edu.eg/storage/EventsPhoto/top-min%20(1).jpg') no-repeat center/cover; 
+            color: white; 
+            padding: 120px 5% 140px; 
+            text-align: center; 
+            position: relative;
+        }
         
-        .admin-btn { background: var(--red); color: white; border: none; }
-        .admin-btn i { color: var(--red); background: white; }
-        .admin-btn p { color: #f1f5f9; }
+        .hero h1 { 
+            font-size: clamp(1.8rem, 4vw, 3rem); 
+            font-weight: 900; 
+            margin: 0 0 20px 0; 
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+        }
 
-        .about { padding: 80px 5% 100px; background: #ffffff; text-align: center; }
-        .section-title { font-size: 2.2rem; color: var(--red); position: relative; display: inline-block; margin-bottom: 35px; font-weight: 900; }
-        .section-title::after { content: ""; width: 50px; height: 4px; background: #1a1a1a; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); border-radius: 2px; }
-        .about p { max-width: 850px; margin: 0 auto; color: #475569; font-size: 1.15rem; font-weight: 600; }
+        .hero p { 
+            font-size: clamp(1rem, 2vw, 1.25rem); 
+            max-width: 800px; 
+            margin: 0 auto; 
+            color: #cbd5e1; 
+            font-weight: 500;
+        }
 
-        /* تعديلات الجزء السفلي المتناسق */
+        /* Modernized Interactive Grid */
+        .nav-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); 
+            gap: 25px; 
+            padding: 0 5%; 
+            max-width: 1200px; 
+            margin: -60px auto 0; 
+            position: relative; 
+            z-index: 10; 
+        }
+
+        .nav-card { 
+            background: var(--white); 
+            padding: 35px 25px; 
+            text-align: center; 
+            border-radius: 16px; 
+            transition: var(--transition); 
+            text-decoration: none; 
+            color: var(--text-main); 
+            border: 1px solid #e2e8f0; 
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            gap: 15px; 
+        }
+
+        .nav-card i { 
+            font-size: 2.2rem; 
+            color: var(--red); 
+            background: #fff5f5; 
+            padding: 20px; 
+            border-radius: 50%; 
+            transition: var(--transition);
+        }
+
+        .nav-card h3 { 
+            margin: 0; 
+            font-weight: 800; 
+            font-size: 1.25rem; 
+        }
+
+        .nav-card p { 
+            margin: 0; 
+            font-size: 0.95rem; 
+            color: var(--text-gray); 
+        }
+
+        /* Hover States with strict micro-interaction scaling */
+        .nav-card:hover, .nav-card:focus { 
+            transform: translateY(-6px); 
+            border-color: var(--red); 
+            box-shadow: 0 20px 30px -8px rgba(163,15,39,0.12); 
+        }
+        
+        .nav-card:hover i {
+            background: var(--red);
+            color: var(--white);
+        }
+        
+        /* Highlight admin card style */
+        .admin-btn { 
+            background: linear-gradient(135deg, var(--black), #1e293b); 
+            color: white;
+            border: none;
+        }
+        
+        .admin-btn i { 
+            color: var(--white); 
+            background: rgba(255,255,255,0.1); 
+        }
+        
+        .admin-btn p { color: #94a3b8; }
+        
+        .admin-btn:hover, .admin-btn:focus {
+            box-shadow: 0 20px 30px -8px rgba(15,23,42,0.3); 
+            border: none;
+        }
+
+        .admin-btn:hover i {
+            background: var(--red);
+            color: var(--white);
+        }
+
+        /* Summary section */
+        .about { 
+            padding: 80px 5% 100px; 
+            background: var(--white); 
+            text-align: center; 
+            margin-top: 50px;
+        }
+
+        .section-title { 
+            font-size: 2rem; 
+            color: var(--red); 
+            position: relative; 
+            display: inline-block; 
+            margin-bottom: 35px; 
+            font-weight: 900; 
+        }
+
+        .section-title::after { 
+            content: ""; 
+            width: 40px; 
+            height: 4px; 
+            background: var(--black); 
+            position: absolute; 
+            bottom: -10px; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            border-radius: 2px; 
+        }
+
+        .about p { 
+            max-width: 800px; 
+            margin: 0 auto; 
+            color: var(--text-gray); 
+            font-size: 1.15rem; 
+            font-weight: 500; 
+            line-height: 1.8;
+        }
+
+        /* Seamless Modern Footer Layout */
         .footer-container {
             background: var(--black);
             color: var(--white);
-            padding: 60px 5% 20px;
-            margin-top: 40px;
+            padding: 60px 5% 30px;
         }
 
         .contact-grid {
@@ -83,7 +237,7 @@
             gap: 40px;
             max-width: 1200px;
             margin: 0 auto 40px;
-            border-bottom: 1px solid #2a2a2a;
+            border-bottom: 1px solid #1e293b;
             padding-bottom: 40px;
         }
 
@@ -111,35 +265,25 @@
         .contact-card .info-text {
             font-size: 0.95rem;
             color: #94a3b8;
-            direction: ltr; /* لضمان ظهور الأرقام والإيميلات بشكل صحيح */
-        }
-
-        .email-list {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
+            direction: ltr; 
         }
 
         .address-text {
             line-height: 1.6;
             max-width: 300px;
-            direction: rtl; /* العنوان يظل للعربية */
+            direction: rtl !important; 
         }
 
         .copyright-bar {
             text-align: center;
             color: #64748b;
             font-size: 0.85rem;
-            padding-top: 10px;
         }
 
-        /* تحسينات الموبايل */
         @media (max-width: 768px) {
             header { flex-direction: column; gap: 15px; text-align: center; }
-            .brand-container { text-align: center; }
-            .hero { padding: 80px 5%; }
-            .contact-grid { gap: 30px; text-align: center; }
-            .section-title { font-size: 1.8rem; }
+            .hero { padding: 80px 5% 100px; }
+            .nav-grid { margin-top: -30px; }
         }
     </style>
 </head>
@@ -147,79 +291,73 @@
 
 <header>
     <div class="logo">
-        <img src="https://ejust.edu.eg/assets/img/logo.png" alt="E-JUST Logo">
+        <img src="https://ejust.edu.eg/assets/img/logo.png" alt="شعار الجامعة المصرية اليابانية للعلوم والتكنولوجيا">
     </div>
     <div class="brand-container">
         <div class="main-uni-title">الجامعة المصرية اليابانية للعلوم والتكنولوجيا</div>
-        <div class="sub-unit-title">وحدة اختبارات واستشارات الهندسة المدنية - CETC unit</div>
+        <div class="sub-unit-title">وحدة اختبارات واستشارات الهندسة المدنية - CETC</div>
     </div>
 </header>
 
-<section class="hero">
-    <h1>CIVIL ENGINEERING TESTING & CONSULTING UNIT (CETC)</h1>
-    <p>وحدة اختبارات واستشارات الهندسة المدنية - خدمات هندسية متكاملة لاختبار مواد البناء والخرسانة والتربة والاسفلت </p>
-</section>
+<main>
+    <section class="hero">
+        <h1>CIVIL ENGINEERING TESTING & CONSULTING UNIT</h1>
+        <p>التميز الأكاديمي والحلول الميدانية لخدمات اختبار مواد البناء، الخرسانة، الطرق والتربة بأعلى المعايير اليابانية.</p>
+    </section>
 
-<div class="nav-grid">
-    <a href="/login" class="nav-card admin-btn">
-        <i class="fas fa-fingerprint"></i>
-        <h3>منصة الإدارة</h3>
-        <p>الدخول لمنظومة حصر الفواتير والإيرادات</p>
-    </a>
-    <a href="/introducing" class="nav-card">
-        <i class="fas fa-sitemap"></i>
-        <h3>التعريف بالمركز</h3>
-        <p>الرؤية، المهام، والهيكل التنظيمي</p>
-    </a>
-    <a href="/portfolio" class="nav-card">
-        <i class="fas fa-building"></i>
-        <h3>سابقة الأعمال</h3>
-        <p>استعراض المشاريع الكبرى المنجزة</p>
-    </a>
-    <a href="/partners" class="nav-card">
-        <i class="fas fa-handshake"></i>
-        <h3>الشركاء والعملاء</h3>
-        <p>كبرى شركات المقاولات والجهات الحكومية</p>
-    </a>
-</div>
+    <nav class="nav-grid" aria-label="أقسام الموقع الرئيسية">
+        <a href="/login" class="nav-card admin-btn">
+            <i class="fas fa-fingerprint" aria-hidden="true"></i>
+            <h3>منصة الإدارة</h3>
+            <p>سجلات الحسابات وضبط جودة الفواتير والإيرادات</p>
+        </a>
+        <a href="/introducing" class="nav-card">
+            <i class="fas fa-sitemap" aria-hidden="true"></i>
+            <h3>التعريف بالمركز</h3>
+            <p>الرؤية الاستراتيجية، الأهداف والهيكل الإداري</p>
+        </a>
+        <a href="/portfolio" class="nav-card">
+            <i class="fas fa-building" aria-hidden="true"></i>
+            <h3>سابقة الأعمال</h3>
+            <p>المشروعات الهندسية والتنموية الكبرى المنفذة</p>
+        </a>
+        <a href="/partners" class="nav-card">
+            <i class="fas fa-handshake" aria-hidden="true"></i>
+            <h3>الشركاء والعملاء</h3>
+            <p>شبكتنا الاستراتيجية من المؤسسات والجهات الحكومية</p>
+        </a>
+    </nav>
 
-<section class="about">
-    <h2 class="section-title">نبذة عن المركز</h2>
-    <p>
-        يهدف المركز الى تقديم اختبارات واستشارات فنية متميزة للمشروعات المدنية القومية والخاصة، ملبيا بذلك احتياجات الافراد والجهات الحكومية والمؤسسات والشركات المنفذة والمكاتب الاستشارية.
-    </p>
-</section>
+    <section class="about">
+        <h2 class="section-title">نبذة عن المركز</h2>
+        <p>
+            تعد وحدة CETC بالجامعة اليابانية صرحًا تقنيًا واستشاريًا يقدم خدمات ضبط الجودة واختبارات السلامة الإنشائية لكبرى المشاريع التنموية والوطنية بجمهورية مصر العربية، معتمدين على أحدث التجهيزات المعملية ونخبة من خبراء الهندسة المدنية.
+        </p>
+    </section>
+</main>
 
-<!-- الجزء السفلي المطور والمتناسق -->
 <footer class="footer-container">
     <div class="contact-grid">
-        <!-- رقم الهاتف -->
         <div class="contact-card">
-            <i class="fas fa-phone-alt"></i>
+            <i class="fas fa-phone-alt" aria-hidden="true"></i>
             <h4>الخط الساخن</h4>
             <div class="info-text">16448</div>
         </div>
-
-        <!-- البريد الإلكتروني -->
         <div class="contact-card">
-            <i class="fas fa-envelope"></i>
+            <i class="fas fa-envelope" aria-hidden="true"></i>
             <h4>البريد الإلكتروني</h4>
-            <div class="info-text email-list">
-                <span>cetc.unit@ejust.edu.eg</span>
-                <span>CINTECH@ejust.edu.eg</span>
+            <div class="info-text">
+                cetc.unit@ejust.edu.eg
             </div>
         </div>
-
-        <!-- العنوان البريدي -->
         <div class="contact-card">
-            <i class="fas fa-map-marker-alt"></i>
+            <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
             <h4>العنوان البريدي</h4>
             <div class="info-text address-text">
-                مدينة برج العرب الجديدة، ص.ب 179، الرمز البريدي 21934، الإسكندرية، مصر.
+                مدينة برج العرب الجديدة، الإسكندرية، مصر.
             </div>
         </div>
     </div>
-
     <div class="copyright-bar">
         <p>&copy; 2026 وحدة اختبارات واستشارات الهندسة المدنية (CETC) - E-JUST | جميع الحقوق محفوظة</p>
     </div>

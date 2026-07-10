@@ -3,95 +3,239 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CETC Dashboard</title>
+    <title>بوابة الإدارة الحسابية - CETC</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        :root { --primary: #C41230; --sidebar: #0a0a0a; --bg: #f4f4f4; --surface: #ffffff; --text: #111111; --text-light: #555555; }
+        :root { 
+            --primary: #A30F27; 
+            --primary-hover: #820B1D;
+            --sidebar: #0f172a; 
+            --bg: #f8fafc; 
+            --surface: #ffffff; 
+            --text: #1e293b; 
+            --text-light: #64748b; 
+            --border: #e2e8f0;
+            --radius: 12px;
+            --transition: all 0.2s ease-in-out;
+        }
+
+        * { box-sizing: border-box; }
         body { font-family: 'Cairo', sans-serif; margin: 0; background: var(--bg); color: var(--text); overflow: hidden; }
+        
+        *:focus-visible {
+            outline: 3px solid var(--primary);
+            outline-offset: 2px;
+        }
+
         .app-layout { display: flex; height: 100vh; overflow: hidden; }
-        .sidebar { width: 280px; background: var(--sidebar); display: flex; flex-direction: column; z-index: 100; box-shadow: 4px 0 15px rgba(0,0,0,0.15); }
-        .sidebar-header { padding: 25px; text-align: center; border-bottom: 1px solid #222; background: #000; }
-        .logo-box { background: #ffffff; padding: 12px 15px; border-radius: 12px; display: inline-block; }
-        .logo-box img { max-height: 45px; display: block; }
+
+        /* Sleek Sidebar Design */
+        .sidebar { 
+            width: 280px; 
+            background: var(--sidebar); 
+            display: flex; 
+            flex-direction: column; 
+            z-index: 100; 
+            box-shadow: 4px 0 25px rgba(0,0,0,0.08); 
+            transition: var(--transition);
+        }
+        .sidebar-header { 
+            padding: 25px; 
+            text-align: center; 
+            border-bottom: 1px solid #1e293b; 
+            background: #090d16; 
+        }
+        .logo-box { background: #ffffff; padding: 10px 15px; border-radius: var(--radius); display: inline-block; }
+        .logo-box img { max-height: 40px; display: block; width: auto; }
+        
         .menu-list { flex-grow: 1; padding: 20px 0; overflow-y: auto; }
-        .menu-item { padding: 15px 25px; display: flex; align-items: center; gap: 15px; color: #a0a0a0; font-weight: 700; cursor: pointer; transition: 0.3s; margin: 5px 15px; border-radius: 8px; }
+        .menu-item { 
+            padding: 14px 20px; 
+            display: flex; 
+            align-items: center; 
+            gap: 15px; 
+            color: #94a3b8; 
+            font-weight: 700; 
+            cursor: pointer; 
+            transition: var(--transition); 
+            margin: 4px 15px; 
+            border-radius: var(--radius); 
+            text-decoration: none;
+        }
         .menu-item:hover, .menu-item.active { background: var(--primary); color: white; }
-        .user-section { padding: 20px; background: #000; text-align: center; border-top: 1px solid #222; }
-        .main-content { flex: 1; overflow-y: auto; padding: 30px; background: var(--bg); }
-        .module { display: none; animation: fadeIn 0.4s ease; }
+        .user-section { padding: 20px; background: #090d16; text-align: center; border-top: 1px solid #1e293b; }
+
+        /* Dashboard Content Wrapper */
+        .main-content { flex: 1; overflow-y: auto; padding: 35px; background: var(--bg); }
+        .module { display: none; animation: fadeIn 0.3s ease-out; }
         .module.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .tab-group { display: flex; gap: 12px; margin-bottom: 25px; flex-wrap: wrap; }
-        .tab-btn { padding: 10px 20px; border: 2px solid #ddd; background: var(--surface); color: var(--text-light); font-weight: 800; border-radius: 8px; cursor: pointer; transition: 0.3s; font-family: inherit; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+        h2.module-title {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: var(--sidebar);
+            margin: 0 0 25px;
+            border-bottom: 4px solid var(--primary);
+            padding-bottom: 8px;
+            display: inline-block;
+        }
+
+        /* Filter Controls & System Tabs */
+        .tab-group { display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; }
+        .tab-btn { 
+            padding: 10px 20px; 
+            border: 1px solid var(--border); 
+            background: var(--surface); 
+            color: var(--text-light); 
+            font-weight: 700; 
+            border-radius: var(--radius); 
+            cursor: pointer; 
+            transition: var(--transition); 
+            font-family: inherit; 
+        }
+        .tab-btn:hover { background: #f1f5f9; border-color: #cbd5e1; }
         .tab-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
-        .control-item { background: var(--surface); border: 2px solid #ddd; border-radius: 8px; padding: 12px 20px; font-family: inherit; font-weight: 700; outline: none; }
-        .table-wrapper { background: var(--surface); border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.08); overflow-x: auto; border: 1px solid #ddd; }
-        table { width: 100%; border-collapse: collapse; min-width: 900px; }
-        th { background: #111; color: #fff; padding: 18px 15px; font-weight: 800; border-bottom: 3px solid var(--primary); }
-        td { padding: 15px; border-bottom: 1px solid #ddd; text-align: center; color: #000; font-weight: 700; }
-        .val-positive { color: #10b981 !important; }
-        .val-negative { color: #ef4444 !important; }
-        .excel-table-wrapper { background: #ffffff; border: 1px solid #b0b0b0; overflow-x: auto; border-radius: 6px; }
-        .excel-table { width: 100%; border-collapse: collapse; font-family: Calibri, sans-serif; font-size: 13.5px; }
-        .excel-table th { background: #f3f3f3; border: 1px solid #b0b0b0; padding: 8px; }
-        .excel-table td { border: 1px solid #d4d4d4; padding: 6px; text-align: center; }
-        @media (max-width: 768px) { .app-layout { flex-direction: column; overflow-y: auto; } .sidebar { width: 100%; } .user-section { display: none; } .main-content { padding: 15px; } }
+
+        .control-item { 
+            background: var(--surface); 
+            border: 1px solid var(--border); 
+            border-radius: var(--radius); 
+            padding: 12px 18px; 
+            font-family: inherit; 
+            font-weight: 700; 
+            outline: none; 
+            transition: var(--transition);
+        }
+        .control-item:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(163,15,39,0.1); }
+
+        /* Custom Modernized Tables */
+        .table-wrapper { 
+            background: var(--surface); 
+            border-radius: var(--radius); 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.02); 
+            overflow: hidden; 
+            border: 1px solid var(--border); 
+            margin-bottom: 30px;
+        }
+        table { width: 100%; border-collapse: collapse; min-width: 900px; text-align: right; }
+        th { 
+            background: #1e293b; 
+            color: #fff; 
+            padding: 16px 20px; 
+            font-weight: 800; 
+            font-size: 0.95rem;
+            border-bottom: 3px solid var(--primary); 
+        }
+        td { padding: 14px 20px; border-bottom: 1px solid var(--border); color: var(--text); font-weight: 700; font-size: 0.9rem; }
+        tr:nth-child(even) td { background-color: #f8fafc; }
+        tr:hover td { background-color: #f1f5f9; }
+
+        .val-positive { color: #059669 !important; font-weight: 800; }
+        .val-negative { color: #dc2626 !important; font-weight: 800; }
+
+        /* Excel View Mode Styling */
+        .excel-table-wrapper { 
+            background: #ffffff; 
+            border: 1px solid var(--border); 
+            overflow-x: auto; 
+            border-radius: var(--radius); 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+        }
+        .excel-table { width: 100%; border-collapse: collapse; font-family: inherit; font-size: 13.5px; }
+        .excel-table th { background: #f1f5f9; border: 1px solid var(--border); padding: 10px; color: var(--text); }
+        .excel-table td { border: 1px solid var(--border); padding: 8px; text-align: center; }
+
+        /* Modernized Pulsing Loading State Skeletons */
+        .skeleton-row { animation: pulse 1.5s infinite ease-in-out; }
+        .skeleton-cell { height: 20px; background: #e2e8f0; border-radius: 4px; margin: 4px 0; }
+        @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
+
+        @media (max-width: 1024px) { 
+            .app-layout { flex-direction: column; height: auto; overflow: visible; } 
+            .sidebar { width: 100%; height: auto; } 
+            .main-content { padding: 20px; } 
+        }
     </style>
 </head>
 <body>
     <div class="app-layout">
         <aside class="sidebar">
             <div class="sidebar-header">
-                <div class="logo-box"><img src="https://ejust.edu.eg/assets/img/logo.png" alt="Logo"></div>
-                <div style="font-weight: 900; color: white; margin-top:10px;">CETC DASHBOARD</div>
+                <div class="logo-box"><img src="https://ejust.edu.eg/assets/img/logo.png" alt="E-JUST Logo"></div>
+                <div style="font-weight: 900; color: white; margin-top:12px; font-size: 1.1rem; letter-spacing: 0.5px;">CETC PORTAL</div>
             </div>
-            <nav class="menu-list">
-                <div class="menu-item active" onclick="switchMod('billing', this)"><i class="fas fa-file-invoice-dollar"></i><span>حصر الفواتير</span></div>
-                <div class="menu-item" onclick="switchMod('monthly', this)"><i class="fas fa-calendar-alt"></i><span>الايرادات الشهرية</span></div>
-                <div class="menu-item" onclick="switchMod('reports', this)"><i class="fas fa-list-ol"></i><span>مسلسلات التقارير</span></div>
-                <a href="/logout" class="menu-item" style="color: #ff4444;"><i class="fas fa-sign-out-alt"></i><span>خروج</span></a>
+            <nav class="menu-list" aria-label="لوحة تحكم الإدارة">
+                <button class="menu-item active" onclick="switchMod('billing', this)" style="background: none; border: none; width: calc(100% - 30px); text-align: right;"><i class="fas fa-file-invoice-dollar"></i><span>حصر الفواتير</span></button>
+                <button class="menu-item" onclick="switchMod('monthly', this)" style="background: none; border: none; width: calc(100% - 30px); text-align: right;"><i class="fas fa-calendar-alt"></i><span>الإيرادات الشهرية</span></button>
+                <button class="menu-item" onclick="switchMod('reports', this)" style="background: none; border: none; width: calc(100% - 30px); text-align: right;"><i class="fas fa-list-ol"></i><span>مسلسلات التقارير</span></button>
+                <a href="/logout" class="menu-item" style="color: #ef4444;"><i class="fas fa-sign-out-alt"></i><span>تسجيل الخروج</span></a>
             </nav>
-            <div class="user-section"><div style="color: white; font-weight: 800;">مسؤول النظام</div></div>
+            <div class="user-section">
+                <div style="color: #94a3b8; font-weight: 800; font-size: 0.85rem;"><i class="fas fa-user-shield" style="margin-left: 6px;"></i>مسؤول النظام المالي</div>
+            </div>
         </aside>
 
         <main class="main-content">
+            <!-- Billing Module -->
             <section id="billing-module" class="module active">
-                <h2 style="border-bottom: 4px solid var(--primary); padding-bottom:10px; display:inline-block; font-weight: 900;">حصر فواتير الشركات</h2>
-                <div class="tab-group">
-                    <button class="tab-btn" onclick="loadData(1, this)">سجل - 01 LOG</button>
-                    <button class="tab-btn" onclick="loadData(2, this)">الحي التاسع</button>
-                    <button class="tab-btn" onclick="loadData(3, this)">ترعة الحمام</button>
-                    <button class="tab-btn" onclick="loadData(4, this)">مشروع ديارنا</button>
+                <h2 class="module-title">حصر فواتير الشركات والمشروعات</h2>
+                <div class="tab-group" role="tablist" aria-label="سجلات المشروعات">
+                    <button class="tab-btn" role="tab" onclick="loadData(1, this)">سجل - 01 LOG</button>
+                    <button class="tab-btn" role="tab" onclick="loadData(2, this)">الحي التاسع</button>
+                    <button class="tab-btn" role="tab" onclick="loadData(3, this)">ترعة الحمام</button>
+                    <button class="tab-btn" role="tab" onclick="loadData(4, this)">مشروع ديارنا</button>
                 </div>
                 <div class="table-wrapper">
-                    <table><thead><tr id="h-billing"></tr></thead><tbody id="b-billing"><tr><td colspan="10" style="padding:40px;">اختر المشروع...</td></tr></tbody></table>
+                    <table>
+                        <thead>
+                            <tr id="h-billing"></tr>
+                        </thead>
+                        <tbody id="b-billing">
+                            <tr><td colspan="10" style="padding:40px; color: var(--text-light);">يرجى اختيار المشروع للتحميل...</td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </section>
 
+            <!-- Revenue Module -->
             <section id="monthly-module" class="module">
-                <h2 style="border-bottom: 4px solid var(--primary); padding-bottom:10px; display:inline-block; font-weight: 900;">الايرادات الشهرية</h2>
-                <div class="tab-group">
-                    <button class="tab-btn" onclick="loadIncomeData('2024', this)">إيرادات 2024</button>
-                    <button class="tab-btn" onclick="loadIncomeData('2025', this)">إيرادات 2025</button>
-                    <button class="tab-btn" onclick="loadIncomeData('2026', this)">إيرادات 2026</button>
+                <h2 class="module-title">الإيرادات والتحليلات المالية</h2>
+                <div class="tab-group" role="tablist" aria-label="السنة المالية">
+                    <button class="tab-btn" role="tab" onclick="loadIncomeData('2024', this)">إيرادات عام 2024</button>
+                    <button class="tab-btn" role="tab" onclick="loadIncomeData('2025', this)">إيرادات عام 2025</button>
+                    <button class="tab-btn" role="tab" onclick="loadIncomeData('2026', this)">إيرادات عام 2026</button>
                 </div>
-                <div class="table-wrapper" style="margin-bottom: 25px;">
-                    <table><thead id="h-monthly"></thead><tbody id="b-monthly"><tr><td colspan="3" style="padding:40px;">اختر السنة...</td></tr></tbody></table>
+                <div class="table-wrapper">
+                    <table>
+                        <thead id="h-monthly"></thead>
+                        <tbody id="b-monthly">
+                            <tr><td colspan="3" style="padding:40px; color: var(--text-light);">يرجى اختيار السنة الحسابية للتحميل...</td></tr>
+                        </tbody>
+                    </table>
                 </div>
-                <div style="background: white; padding: 20px; border-radius: 12px; border: 1px solid #ddd;">
-                    <canvas id="incomeChart" height="100"></canvas>
+                <div style="background: white; padding: 25px; border-radius: var(--radius); border: 1px solid var(--border); box-shadow: 0 4px 20px rgba(0,0,0,0.02);">
+                    <canvas id="incomeChart" height="120"></canvas>
                 </div>
             </section>
 
+            <!-- Reports Module -->
             <section id="reports-module" class="module">
-                <h2 style="border-bottom: 4px solid var(--primary); padding-bottom:10px; display:inline-block; font-weight: 900; margin-bottom: 25px;">مسلسلات التقارير</h2>
+                <h2 class="module-title">مسلسلات التقارير الفنية المعززة</h2>
                 <div style="display: flex; gap: 15px; margin-bottom: 25px; flex-wrap: wrap;">
-                    <select id="report-sheet-select" class="control-item" onchange="loadReportData(this.value)" style="flex: 1;"><option value="">تحميل التقارير...</option></select>
-                    <input type="text" id="report-search-input" class="control-item" placeholder="بحث..." onkeyup="filterReportTable()" style="flex: 1.5;">
+                    <select id="report-sheet-select" class="control-item" onchange="loadReportData(this.value)" style="flex: 1;" aria-label="قائمة فئات التقارير">
+                        <option value="">تحميل التقارير...</option>
+                    </select>
+                    <input type="text" id="report-search-input" class="control-item" placeholder="البحث في المستندات..." onkeyup="filterReportTable()" style="flex: 1.5;" aria-label="مربع بحث التقارير">
                 </div>
-                <div class="excel-table-wrapper"><table class="excel-table"><thead id="h-reports"></thead><tbody id="b-reports"></tbody></table></div>
+                <div class="excel-table-wrapper">
+                    <table class="excel-table">
+                        <thead id="h-reports"></thead>
+                        <tbody id="b-reports"></tbody>
+                    </table>
+                </div>
             </section>
         </main>
     </div>
@@ -100,6 +244,21 @@
         let incomeChartInstance = null;
         let rawReportData = [];
         let currentReportMaxCols = 0;
+
+        function showSkeleton(bodyId, colsCount = 6, rowsCount = 4) {
+            const body = document.getElementById(bodyId);
+            body.innerHTML = '';
+            for(let r=0; r<rowsCount; r++) {
+                const tr = document.createElement('tr');
+                tr.className = 'skeleton-row';
+                for(let c=0; c<colsCount; c++) {
+                    const td = document.createElement('td');
+                    td.innerHTML = `<div class="skeleton-cell"></div>`;
+                    tr.appendChild(td);
+                }
+                body.appendChild(tr);
+            }
+        }
 
         function switchMod(name, btn) {
             document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
@@ -112,52 +271,69 @@
         async function loadData(id, btn) {
             document.querySelectorAll('#billing-module .tab-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
+            
+            showSkeleton('b-billing', 6, 5);
+            
             const h = document.getElementById('h-billing'), b = document.getElementById('b-billing');
-            b.innerHTML = '<tr><td colspan="10" style="padding:40px;">جاري التحميل...</td></tr>';
-            const res = await fetch(`/get-data/${id}`);
-            const data = await res.json();
-            h.innerHTML = ''; b.innerHTML = '';
-            if(data.length > 2) {
-                data[2].forEach(t => { const th = document.createElement('th'); th.textContent = t || '-'; h.appendChild(th); });
-                data.slice(3).forEach(row => {
-                    if(!row[0]) return;
-                    const tr = document.createElement('tr');
-                    row.forEach((c, idx) => { 
-                        const td = document.createElement('td'); 
-                        td.textContent = c || '-'; 
-                        if(c && !isNaN(parseFloat(c)) && (idx > 2)) {
-                            if(parseFloat(c) > 0) td.classList.add('val-positive');
-                            else if(parseFloat(c) < 0) td.classList.add('val-negative');
-                        }
-                        tr.appendChild(td); 
+            try {
+                const res = await fetch(`/get-data/${id}`);
+                const data = await res.json();
+                h.innerHTML = ''; b.innerHTML = '';
+                if(data.length > 2) {
+                    data[2].forEach(t => { 
+                        const th = document.createElement('th'); 
+                        th.textContent = t || '-'; 
+                        h.appendChild(th); 
                     });
-                    b.appendChild(tr);
-                });
+                    data.slice(3).forEach(row => {
+                        if(!row[0]) return;
+                        const tr = document.createElement('tr');
+                        row.forEach((c, idx) => { 
+                            const td = document.createElement('td'); 
+                            td.textContent = c || '-'; 
+                            if(c && !isNaN(parseFloat(String(c).replace(/,/g, ''))) && (idx > 2)) {
+                                const parsedVal = parseFloat(String(c).replace(/,/g, ''));
+                                if(parsedVal > 0) td.classList.add('val-positive');
+                                else if(parsedVal < 0) td.classList.add('val-negative');
+                            }
+                            tr.appendChild(td); 
+                        });
+                        b.appendChild(tr);
+                    });
+                }
+            } catch (err) {
+                b.innerHTML = `<tr><td colspan="10" style="color: var(--primary); padding: 40px;">فشل تحميل البيانات: ${err.message}</td></tr>`;
             }
         }
 
         async function loadIncomeData(year, btn) {
             document.querySelectorAll('#monthly-module .tab-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
+            
+            showSkeleton('b-monthly', 3, 4);
+            
             const h = document.getElementById('h-monthly'), b = document.getElementById('b-monthly');
-            b.innerHTML = '<tr><td colspan="3" style="padding:40px;">جاري التحميل...</td></tr>';
-            const res = await fetch(`/get-data/${year}`);
-            const data = await res.json();
-            h.innerHTML = ''; b.innerHTML = '';
-            if(data.length > 1) {
-                const trH = document.createElement('tr');
-                data[0].slice(0,3).forEach(t => { const th = document.createElement('th'); th.textContent = t; trH.appendChild(th); });
-                h.appendChild(trH);
-                const labels = [], values = [];
-                data.slice(1).forEach(row => {
-                    if(!row[0] || String(row[0]).toLowerCase().includes('total')) return;
-                    const tr = document.createElement('tr');
-                    row.slice(0,3).forEach((c, i) => { const td = document.createElement('td'); td.textContent = c || '-'; tr.appendChild(td); });
-                    b.appendChild(tr);
-                    labels.push(row[1]); // سيظهر اسم الشهر هنا لأننا استخدمنا raw: false
-                    values.push(parseFloat(String(row[2]).replace(/,/g, '')) || 0);
-                });
-                drawIncomeChart(year, labels, values);
+            try {
+                const res = await fetch(`/get-data/${year}`);
+                const data = await res.json();
+                h.innerHTML = ''; b.innerHTML = '';
+                if(data.length > 1) {
+                    const trH = document.createElement('tr');
+                    data[0].slice(0,3).forEach(t => { const th = document.createElement('th'); th.textContent = t; trH.appendChild(th); });
+                    h.appendChild(trH);
+                    const labels = [], values = [];
+                    data.slice(1).forEach(row => {
+                        if(!row[0] || String(row[0]).toLowerCase().includes('total')) return;
+                        const tr = document.createElement('tr');
+                        row.slice(0,3).forEach((c, i) => { const td = document.createElement('td'); td.textContent = c || '-'; tr.appendChild(td); });
+                        b.appendChild(tr);
+                        labels.push(row[1]); 
+                        values.push(parseFloat(String(row[2]).replace(/,/g, '')) || 0);
+                    });
+                    drawIncomeChart(year, labels, values);
+                }
+            } catch(err) {
+                b.innerHTML = `<tr><td colspan="3" style="color: var(--primary); padding: 40px;">فشل تحميل البيانات: ${err.message}</td></tr>`;
             }
         }
 
@@ -165,21 +341,25 @@
             const ctx = document.getElementById('incomeChart').getContext('2d');
             if (incomeChartInstance) incomeChartInstance.destroy();
             incomeChartInstance = new Chart(ctx, {
-                type: 'bar', // تغيير النوع إلى Bar Chart
+                type: 'bar',
                 data: {
                     labels: labels,
                     datasets: [{
-                        label: `إيرادات ${year}`,
+                        label: `إجمالي إيرادات ${year}`,
                         data: data,
-                        backgroundColor: 'rgba(196, 18, 48, 0.8)',
-                        borderColor: '#C41230',
-                        borderWidth: 1
+                        backgroundColor: 'rgba(163, 15, 39, 0.85)',
+                        borderColor: '#A30F27',
+                        borderWidth: 1.5,
+                        borderRadius: 6
                     }]
                 },
                 options: { 
                     responsive: true, 
-                    scales: { y: { beginAtZero: true }, x: { ticks: { font: { family: 'Cairo', weight: 'bold' } } } },
-                    plugins: { legend: { labels: { font: { family: 'Cairo' } } } }
+                    scales: { 
+                        y: { beginAtZero: true }, 
+                        x: { ticks: { font: { family: 'Cairo', weight: 'bold' } } } 
+                    },
+                    plugins: { legend: { labels: { font: { family: 'Cairo', weight: 'bold' } } } }
                 }
             });
         }
@@ -189,19 +369,25 @@
             if (select.options.length > 1) return;
             const res = await fetch('/get-report-sheets');
             const data = await res.json();
-            select.innerHTML = '<option value="">اختر التقرير...</option>';
+            select.innerHTML = '<option value="">اختر الفئة المعملية للتقارير...</option>';
             data.sheets.forEach(s => { const opt = document.createElement('option'); opt.value = s; opt.textContent = s; select.appendChild(opt); });
         }
 
         async function loadReportData(s) {
             const h = document.getElementById('h-reports'), b = document.getElementById('b-reports');
             if(!s) return;
-            b.innerHTML = '<tr><td colspan="10" style="padding:40px;">جاري التحميل...</td></tr>';
-            const res = await fetch(`/get-report-data?sheet=${encodeURIComponent(s)}`);
-            const data = await res.json();
-            rawReportData = data;
-            currentReportMaxCols = Math.max(...data.map(r => r.length));
-            renderReportTable(data);
+            
+            showSkeleton('b-reports', 8, 5);
+            
+            try {
+                const res = await fetch(`/get-report-data?sheet=${encodeURIComponent(s)}`);
+                const data = await res.json();
+                rawReportData = data;
+                currentReportMaxCols = Math.max(...data.map(r => r.length));
+                renderReportTable(data);
+            } catch (err) {
+                b.innerHTML = `<tr><td colspan="10" style="color: var(--primary); padding: 40px;">خطأ بالخادم: ${err.message}</td></tr>`;
+            }
         }
 
         function renderReportTable(data) {

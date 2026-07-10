@@ -1,32 +1,24 @@
 const express = require('express');
-const session = require('express-session'); // العودة لـ express-session المستقر الخاص بك
+const session = require('express-session');
 const { google } = require('googleapis');
 const XLSX = require('xlsx');
 const path = require('path');
 
 const app = express();
 
-// إخبار Express بالثقة في البروكسي الخاص بـ Vercel لحفظ الكوكيز
-app.set('trust proxy', 1);
-
-// العودة إلى استخدام process.cwd() لقراءة الملفات بشكل سليم من المجلد الرئيسي
+// --- 1. الإعدادات الأساسية ---
 app.use(express.static(path.join(process.cwd()))); 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// العودة لإعدادات الجلسة الأصلية والمستقرة لديك
 app.use(session({
     secret: process.env.SESSION_SECRET || 'cetc-ejust-secure-session',
     resave: false,
     saveUninitialized: true,
-    cookie: { 
-        maxAge: 24 * 60 * 60 * 1000,
-        secure: process.env.NODE_ENV === 'production', // تعمل كـ Secure فقط عند الرفع الفعلي
-        sameSite: process.env.NODE_ENV === 'production' ? 'lax' : 'lax'
-    }
+    cookie: { maxAge: 24 * 60 * 60 * 1000 }
 }));
 
-// إعدادات الوصول لجوجل درايف (Environment Variables)
+// --- 2. إعدادات الوصول لجوجل درايف (Environment Variables) ---
 const privateKey = process.env.GOOGLE_PRIVATE_KEY 
     ? process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n') 
     : undefined;
@@ -53,13 +45,12 @@ const fileIds = {
     "reports": "1366JN3rpYyrdt8Jq27jrlr6eoymtpf3S"
 };
 
-// ميدل وير لحماية المسارات الأصلي
+// ميدل وير لحماية المسارات
 function checkAuth(req, res, next) {
     if (req.session.loggedIn) return next();
     res.redirect('/login');
 }
 
-// دالة جلب الـ Buffer الأصلية والمستقرة
 async function getExcelBuffer(fileId) {
     const fileMeta = await drive.files.get({ fileId: fileId, fields: 'mimeType' });
     const mimeType = fileMeta.data.mimeType;
@@ -72,7 +63,7 @@ async function getExcelBuffer(fileId) {
     return response.data;
 }
 
-// --- المسارات الأصلية باستخدام process.cwd() ---
+// --- 3. المسارات ---
 app.get('/', (req, res) => res.sendFile(path.join(process.cwd(), 'index.html')));
 app.get('/introducing', (req, res) => res.sendFile(path.join(process.cwd(), 'introducing.html')));
 app.get('/portfolio', (req, res) => res.sendFile(path.join(process.cwd(), 'portfolio.html')));
@@ -95,7 +86,7 @@ app.post('/login', (req, res) => {
 app.get('/Dashboard', checkAuth, (req, res) => res.sendFile(path.join(process.cwd(), 'dashboard.html')));
 app.get('/logout', (req, res) => { req.session.destroy(); res.redirect('/'); });
 
-// جلب البيانات الأصلي والمستقر
+// جلب البيانات (فواتير وإيرادات) - تم تحديثه لمعالجة التواريخ
 app.get('/get-data/:id', checkAuth, async (req, res) => {
     try {
         const id = req.params.id;
@@ -112,6 +103,7 @@ app.get('/get-data/:id', checkAuth, async (req, res) => {
         }
 
         const sheet = workbook.Sheets[sheetName];
+        // استخدام raw: false لضمان جلب النصوص المنسقة (التواريخ) بدلاً من الأرقام الخام
         const fullData = XLSX.utils.sheet_to_json(sheet, { header: 1, raw: false });
 
         if (isIncomeFile) {

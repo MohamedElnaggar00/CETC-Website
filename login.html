@@ -4,282 +4,86 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>تسجيل الدخول - CETC</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { 
-            --red: #A30F27; /* Accessible Crimson */
-            --red-hover: #820B1D;
-            --black: #0f172a; 
-            --white: #ffffff;
-            --bg-gray: #f8fafc; 
-            --border: #e2e8f0;
-            --radius: 12px;
-            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+        :root { --red: #C41230; --black: #0f172a; --gray: #f1f5f9; }
+        body { font-family: 'Cairo', sans-serif; margin: 0; display: flex; align-items: center; justify-content: center; min-height: 100vh; background: linear-gradient(rgba(15,23,42,0.8), rgba(15,23,42,0.8)), url('https://ejust.edu.eg/storage/EventsPhoto/top-min%20(1).jpg') center/cover; }
+        
+        .login-box { background: rgba(255, 255, 255, 0.98); width: 90%; max-width: 400px; padding: 40px 30px; border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); text-align: center; border-top: 6px solid var(--red); box-sizing: border-box; backdrop-filter: blur(10px); }
+        .logo-box img { max-height: 60px; margin-bottom: 20px; }
+        h2 { margin: 0 0 5px; color: var(--black); font-weight: 800; }
+        p.subtitle { color: #64748b; font-size: 0.9rem; margin-bottom: 30px; }
 
-        * { box-sizing: border-box; }
+        .input-group { margin-bottom: 20px; text-align: right; position: relative; }
+        .input-group label { display: block; margin-bottom: 8px; font-weight: 700; color: #334155; font-size: 0.9rem; }
+        .input-group i { position: absolute; right: 15px; top: 40px; color: #94a3b8; }
+        .input-group input { width: 100%; padding: 12px 40px 12px 15px; border: 2px solid #e2e8f0; border-radius: 12px; font-family: inherit; font-size: 16px; outline: none; transition: 0.3s; box-sizing: border-box; background: var(--gray); }
+        .input-group input:focus { border-color: var(--red); background: #fff; box-shadow: 0 0 0 4px rgba(196,18,48,0.1); }
 
-        body { 
-            font-family: 'Cairo', sans-serif; 
-            margin: 0; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            min-height: 100vh; 
-            background: linear-gradient(rgba(15, 23, 42, 0.82), rgba(15, 23, 42, 0.85)), 
-                        url('https://ejust.edu.eg/storage/EventsPhoto/top-min%20(1).jpg') no-repeat center/cover; 
-            padding: 20px;
-        }
-        
-        /* Keyboard Focus Indicator for Accessibility */
-        *:focus-visible { 
-            outline: 3px solid var(--red); 
-            outline-offset: 3px; 
-        }
+        button { width: 100%; padding: 14px; background: var(--red); color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 6px -1px rgba(196,18,48,0.3); display: flex; align-items: center; justify-content: center; gap: 10px; }
+        button:hover { background: #a00e26; transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(196,18,48,0.4); }
+        button:disabled { background: #888888; cursor: not-allowed; transform: none; box-shadow: none; }
 
-        /* Modernized Glass Login Box */
-        .login-box { 
-            background: rgba(255, 255, 255, 0.98); 
-            width: 100%; 
-            max-width: 420px; 
-            padding: 45px 35px; 
-            border-radius: 20px; 
-            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.4); 
-            text-align: center; 
-            border-top: 6px solid var(--red); 
-            backdrop-filter: blur(8px); 
-        }
+        .back { display: block; margin-top: 25px; color: #64748b; text-decoration: none; font-size: 0.9rem; transition: 0.3s; }
+        .back:hover { color: var(--red); }
 
-        .logo-box img { max-height: 55px; margin-bottom: 25px; width: auto; display: inline-block; }
-        
-        h2 { 
-            margin: 0 0 6px; 
-            color: var(--black); 
-            font-weight: 900; 
-            font-size: 1.5rem;
-            letter-spacing: -0.5px;
-        }
-        
-        p.subtitle { 
-            color: #64748b; 
-            font-size: 0.95rem; 
-            margin-bottom: 35px; 
-            font-weight: 600;
-        }
-
-        /* Responsive Form Inputs */
-        .input-group { 
-            margin-bottom: 20px; 
-            text-align: right; 
-            position: relative; 
-        }
-        
-        .input-group label { 
-            display: block; 
-            margin-bottom: 8px; 
-            font-weight: 700; 
-            color: #334155; 
-            font-size: 0.9rem; 
-        }
-        
-        .input-wrapper {
-            position: relative;
-        }
-
-        .input-wrapper i { 
-            position: absolute; 
-            right: 15px; 
-            top: 50%; 
-            transform: translateY(-50%); 
-            color: #94a3b8; 
-            transition: var(--transition);
-        }
-        
-        .input-group input { 
-            width: 100%; 
-            padding: 12px 45px 12px 15px; 
-            border: 1px solid var(--border); 
-            border-radius: var(--radius); 
-            font-family: inherit; 
-            font-size: 0.95rem; 
-            outline: none; 
-            transition: var(--transition); 
-            background: var(--bg-gray); 
-            font-weight: 600;
-        }
-        
-        .input-group input:focus { 
-            border-color: var(--red); 
-            background: var(--white); 
-            box-shadow: 0 0 0 4px rgba(163, 15, 39, 0.1); 
-        }
-
-        .input-group input:focus + i {
-            color: var(--red);
-        }
-
-        /* Premium Buttons */
-        button { 
-            width: 100%; 
-            padding: 14px; 
-            background: var(--red); 
-            color: var(--white); 
-            border: none; 
-            border-radius: var(--radius); 
-            font-family: inherit;
-            font-size: 1rem; 
-            font-weight: 800; 
-            cursor: pointer; 
-            transition: var(--transition); 
-            box-shadow: 0 4px 12px -2px rgba(163, 15, 39, 0.25); 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 10px; 
-        }
-        
-        button:hover, button:focus { 
-            background: var(--red-hover); 
-            transform: translateY(-1px); 
-            box-shadow: 0 8px 20px -4px rgba(163, 15, 39, 0.35); 
-        }
-        
-        button:active {
-            transform: translateY(1px);
-        }
-
-        button:disabled { 
-            background: #cbd5e1; 
-            color: #94a3b8;
-            cursor: not-allowed; 
-            transform: none; 
-            box-shadow: none; 
-        }
-
-        .back { 
-            display: inline-block; 
-            margin-top: 25px; 
-            color: #64748b; 
-            text-decoration: none; 
-            font-size: 0.9rem; 
-            font-weight: 700;
-            transition: var(--transition); 
-        }
-        
-        .back:hover, .back:focus { 
-            color: var(--red); 
-        }
-
-        /* Glassmorphic Error Popup Modal */
-        .popup-overlay { 
-            display: none; 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
-            background: rgba(15, 23, 42, 0.4); 
-            z-index: 2000; 
-            align-items: center; 
-            justify-content: center; 
-            backdrop-filter: blur(4px); 
-        }
-        
-        .popup-box { 
-            background: var(--white); 
-            padding: 35px 30px; 
-            border-radius: 16px; 
-            text-align: center; 
-            max-width: 380px; 
-            width: 90%; 
-            border-top: 6px solid var(--red); 
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); 
-            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-        }
-        
-        .popup-box i { 
-            font-size: 2.8rem; 
-            color: var(--red); 
-            margin-bottom: 15px; 
-            display: inline-block;
-        }
-        
-        .popup-box h3 { 
-            margin: 0 0 10px; 
-            font-weight: 900; 
-            color: var(--black); 
-            font-size: 1.25rem;
-        }
-        
-        .popup-box p { 
-            color: var(--text-gray); 
-            font-size: 0.95rem; 
-            line-height: 1.6; 
-            margin: 0 0 25px; 
-            font-weight: 600; 
-        }
-        
-        .popup-box button { 
-            width: auto; 
-            padding: 10px 35px; 
-            margin: 0 auto; 
-            display: block; 
-        }
+        /* ستايل النافذة المنبثقة للخطأ (Popup) */
+        .popup-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+        .popup-box { background: white; padding: 30px; border-radius: 16px; text-align: center; max-width: 350px; width: 90%; border-top: 6px solid var(--red); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3); animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-sizing: border-box; }
+        .popup-box i { font-size: 3rem; color: var(--red); margin-bottom: 15px; }
+        .popup-box h3 { margin: 0 0 10px; font-weight: 800; color: var(--black); }
+        .popup-box p { color: #64748b; font-size: 0.95rem; line-height: 1.5; margin: 0 0 20px; font-weight: 600; }
+        .popup-box button { width: auto; padding: 10px 30px; margin: 0 auto; display: block; }
 
         @keyframes popIn { 
-            from { transform: scale(0.9); opacity: 0; } 
+            from { transform: scale(0.8); opacity: 0; } 
             to { transform: scale(1); opacity: 1; } 
         }
     </style>
 </head>
 <body>
-    <main class="login-box">
-        <div class="logo-box">
-            <img src="https://ejust.edu.eg/assets/img/logo.png" alt="شعار الجامعة المصرية اليابانية">
-        </div>
+    <div class="login-box">
+        <div class="logo-box"><img src="https://ejust.edu.eg/assets/img/logo.png" alt="Logo"></div>
         <h2>لوحة إدارة CETC</h2>
         <p class="subtitle">يُرجى إدخال بيانات الاعتماد للوصول للنظام</p>
         
+        <!-- تم الاستغناء عن إرسال الفورم المباشر لنتعامل معه برمجياً -->
         <form id="loginForm">
             <div class="input-group">
-                <label for="username">اسم المستخدم</label>
-                <div class="input-wrapper">
-                    <input type="text" id="username" name="username" required autocomplete="username">
-                    <i class="fas fa-user" aria-hidden="true"></i>
-                </div>
+                <label>اسم المستخدم</label>
+                <i class="fas fa-user"></i>
+                <input type="text" name="username" required autocomplete="off">
             </div>
             <div class="input-group">
-                <label for="password">كلمة المرور</label>
-                <div class="input-wrapper">
-                    <input type="password" id="password" name="password" required autocomplete="current-password">
-                    <i class="fas fa-lock" aria-hidden="true"></i>
-                </div>
+                <label>كلمة المرور</label>
+                <i class="fas fa-lock"></i>
+                <input type="password" name="password" required>
             </div>
             <button type="submit" id="submitBtn">تسجيل الدخول</button>
         </form>
-        
-        <a href="/" class="back"><i class="fas fa-arrow-right" style="margin-left: 6px;"></i> العودة للرئيسية</a>
-    </main>
+        <a href="/" class="back"><i class="fas fa-arrow-right"></i> العودة للرئيسية</a>
+    </div>
 
-    <!-- Error Modal Dialog Overlay -->
-    <div class="popup-overlay" id="errorPopup" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="errorMsg">
+    <!-- النافذة المنبثقة للخطأ (Popup Modal) -->
+    <div class="popup-overlay" id="errorPopup">
         <div class="popup-box">
-            <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
-            <h3 id="modal-title">خطأ في الدخول</h3>
+            <i class="fas fa-exclamation-triangle"></i>
+            <h3>خطأ في الدخول</h3>
             <p id="errorMsg">بيانات الدخول غير صحيحة.</p>
-            <button type="button" onclick="closePopup()">حسناً</button>
+            <button onclick="closePopup()">حسناً</button>
         </div>
     </div>
 
     <script>
         document.getElementById('loginForm').addEventListener('submit', async function(e) {
-            e.preventDefault(); 
+            e.preventDefault(); // منع تحديث الصفحة الافتراضي
             
             const username = this.username.value;
             const password = this.password.value;
             const btn = document.getElementById('submitBtn');
             
+            // تحويل حالة الزر إلى جاري التحقق
             const originalText = btn.textContent;
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> جاري التحقق...';
@@ -294,13 +98,16 @@
                 const data = await response.json();
 
                 if (data.success) {
+                    // نجاح الدخول -> التوجيه إلى لوحة التحكم
                     window.location.href = data.redirect;
                 } else {
+                    // فشل الدخول -> عرض الـ Popup دون مسح الحقول
                     showPopup(data.error);
                 }
             } catch (err) {
                 showPopup('فشل الاتصال بالخادم. يرجى التحقق من اتصال الشبكة.');
             } finally {
+                // إعادة الزر لوضعه الطبيعي
                 btn.disabled = false;
                 btn.innerHTML = originalText;
             }

@@ -7,28 +7,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { 
-            --red: #A30F27; 
-            --red-hover: #820B1D;
-            --black: #0f172a; 
-            --white: #ffffff; 
-            --bg: #f8fafc; 
-            --text-main: #1e293b;
-            --text-gray: #475569; 
-            --border: #e2e8f0;
-            --radius: 12px;
-            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        * { box-sizing: border-box; }
-        body { font-family: 'Cairo', sans-serif; margin: 0; background: var(--bg); color: var(--text-main); line-height: 1.6; }
+        :root { --red: #C41230; --black: #000000; --white: #ffffff; --bg: #f8fafc; --gray: #475569; }
+        body { font-family: 'Cairo', sans-serif; margin: 0; background: var(--bg); color: #1a1a1a; line-height: 1.6; transition: 0.3s; }
         
-        *:focus-visible { outline: 3px solid var(--red); outline-offset: 3px; }
-        
-        /* Premium Header */
+        /* Header */
         header { 
-            background: rgba(255, 255, 255, 0.95); 
-            backdrop-filter: blur(8px);
+            background: var(--white); 
             padding: 15px 5%; 
             display: flex; 
             justify-content: space-between; 
@@ -37,147 +21,73 @@
             position: sticky; 
             top: 0; 
             z-index: 1000; 
-            box-shadow: 0 4px 20px -5px rgba(0,0,0,0.05); 
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); 
         }
         .header-right { display: flex; align-items: center; gap: 20px; }
-        .logo img { height: 60px; width: auto; display: block; }
+        .logo img { height: 65px; }
         .brand-container { display: flex; flex-direction: column; gap: 2px; }
-        .main-uni-title { font-weight: 800; font-size: clamp(0.9rem, 1.8vw, 1.15rem); color: var(--black); margin: 0; }
-        .sub-unit-title { font-weight: 700; font-size: clamp(0.75rem, 1.5vw, 0.9rem); color: var(--red); margin: 0; }
+        .main-uni-title { font-weight: 900; font-size: clamp(0.8rem, 1.8vw, 1.1rem); color: #1a1a1a; margin: 0; line-height: 1.2; }
+        .sub-unit-title { font-weight: 700; font-size: clamp(0.7rem, 1.5vw, 0.9rem); color: var(--red); margin: 0; line-height: 1.2; }
         
-        /* Controls */
+        /* Language & Back Buttons */
         .nav-controls { display: flex; gap: 10px; align-items: center; }
         .btn-action { 
-            background: #f1f5f9; 
-            color: var(--black); 
-            text-decoration: none; 
-            padding: 10px 20px; 
-            border-radius: 8px; 
-            font-weight: 700; 
-            font-size: 0.9rem; 
-            transition: var(--transition); 
-            display: flex; 
-            align-items: center; 
-            gap: 8px; 
-            border: 1px solid var(--border); 
-            cursor: pointer;
-            font-family: inherit;
+            background: #f1f5f9; color: var(--black); text-decoration: none; padding: 8px 18px; 
+            border-radius: 8px; font-weight: 700; font-size: 0.9rem; transition: 0.3s; 
+            display: flex; align-items: center; gap: 8px; border: 1px solid #e2e8f0; cursor: pointer;
+            font-family: 'Cairo', sans-serif;
         }
         .btn-action:hover { background: var(--red); color: white; border-color: var(--red); }
-        .lang-btn { background: var(--black); color: white; border: none; }
-        .lang-btn:hover { background: #1e293b; }
+        .lang-btn { background: var(--black); color: white; }
 
         /* Hero */
         .hero { 
-            background: linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.85)), 
-                        url('https://ejust.edu.eg/storage/EventsPhoto/top-min%20(1).jpg') no-repeat center/cover; 
-            color: white; padding: 90px 5%; text-align: center; 
+            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://ejust.edu.eg/storage/EventsPhoto/top-min%20(1).jpg') no-repeat center/cover; 
+            color: white; padding: 80px 5%; text-align: center; 
         }
-        .hero h1 { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 900; margin: 0 0 15px 0; }
-        .hero p { font-size: clamp(1rem, 2vw, 1.2rem); max-width: 800px; margin: 0 auto; color: #cbd5e1; font-weight: 600; }
+        .hero h1 { font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 900; margin-bottom: 15px; }
+        .hero p { font-size: clamp(1rem, 2vw, 1.2rem); max-width: 800px; margin: 0 auto; color: #e2e8f0; font-weight: 600; }
 
         /* Sections */
         .section-container { padding: 60px 5%; max-width: 1200px; margin: 0 auto; }
-        .section-title { 
-            font-size: 2rem; 
-            color: var(--red); 
-            position: relative; 
-            display: inline-block; 
-            margin: 0 0 40px 0; 
-            font-weight: 900; 
-            text-align: center; 
-            width: 100%; 
-        }
-        .section-title::after { 
-            content: ""; 
-            width: 40px; 
-            height: 4px; 
-            background: var(--black); 
-            position: absolute; 
-            bottom: -10px; 
-            left: 50%; 
-            transform: translateX(-50%); 
-            border-radius: 2px; 
-        }
+        .section-title { font-size: 2rem; color: var(--red); position: relative; display: inline-block; margin-bottom: 40px; font-weight: 900; text-align: center; width: 100%; }
+        .section-title::after { content: ""; width: 50px; height: 4px; background: var(--black); position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); border-radius: 2px; }
 
-        .about-text { text-align: justify; font-size: 1.15rem; color: var(--text-gray); max-width: 950px; margin: 0 auto; line-height: 1.8; font-weight: 600; }
+        .about-text { text-align: center; font-size: 1.15rem; color: var(--gray); max-width: 950px; margin: 0 auto; line-height: 1.8; font-weight: 600; }
 
         /* Services Grid */
         .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 30px; }
-        .service-card { 
-            background: white; 
-            padding: 30px; 
-            border-radius: var(--radius); 
-            border: 1px solid var(--border); 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.02); 
-            transition: var(--transition); 
-            border-top: 4px solid var(--red); 
-        }
-        .service-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.06); }
-        .service-card i { font-size: 2.2rem; color: var(--red); margin-bottom: 20px; display: block; }
-        .service-card h3 { margin: 0 0 12px 0; font-weight: 800; color: var(--black); font-size: 1.25rem; }
-        .service-card p { margin: 0; color: var(--text-gray); font-size: 0.95rem; text-align: justify; }
+        .service-card { background: white; padding: 25px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: 0.3s; border-top: 4px solid var(--red); }
+        .service-card:hover { transform: translateY(-5px); box-shadow: 0 15px 25px rgba(0,0,0,0.1); }
+        .service-card i { font-size: 2.2rem; color: var(--red); margin-bottom: 15px; display: block; }
+        .service-card h3 { margin: 0 0 12px 0; font-weight: 800; color: var(--black); font-size: 1.2rem; }
+        .service-card p { margin: 0; color: var(--gray); font-size: 0.95rem; text-align: justify; }
 
-        /* Why Us Layout */
+        /* Why Us */
         .why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 20px; }
-        .why-card { display: flex; gap: 20px; align-items: flex-start; background: #fff; padding: 25px; border-radius: var(--radius); border: 1px solid var(--border); }
-        .why-number { 
-            background: #fff5f5; 
-            color: var(--red); 
-            font-size: 1.5rem; 
-            font-weight: 900; 
-            width: 50px; 
-            height: 50px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            border-radius: 10px; 
-            flex-shrink: 0; 
-        }
-        .why-text h3 { margin: 0 0 8px 0; font-weight: 800; font-size: 1.15rem; }
-        .why-text p { margin: 0; color: var(--text-gray); font-size: 0.95rem; }
+        .why-card { display: flex; gap: 20px; align-items: flex-start; background: #fff; padding: 20px; border-radius: 12px; }
+        .why-number { background: #fef2f2; color: var(--red); font-size: 1.5rem; font-weight: 900; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 10px; flex-shrink: 0; }
+        .why-text h3 { margin: 0 0 8px 0; font-weight: 800; font-size: 1.1rem; }
+        .why-text p { margin: 0; color: var(--gray); font-size: 0.95rem; }
 
-        /* Portfolio Items */
+        /* Portfolio */
         .portfolio-list { max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px; }
-        .portfolio-item { 
-            display: flex; 
-            align-items: center; 
-            gap: 20px; 
-            background: white; 
-            padding: 20px 25px; 
-            border-radius: var(--radius); 
-            border-right: 5px solid var(--red); 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.02); 
-            border-left: 1px solid var(--border);
-            border-top: 1px solid var(--border);
-            border-bottom: 1px solid var(--border);
-        }
-        .portfolio-item i { font-size: 1.8rem; color: #94a3b8; }
-        .portfolio-info h3 { margin: 0 0 5px 0; font-weight: 800; font-size: 1.15rem; }
-        .portfolio-info p { margin: 0; color: var(--text-gray); font-size: 0.95rem; }
+        .portfolio-item { display: flex; align-items: center; gap: 20px; background: white; padding: 20px; border-radius: 10px; border-right: 4px solid var(--red); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .portfolio-item i { font-size: 1.8rem; color: #cbd5e1; }
+        .portfolio-info h3 { margin: 0 0 5px 0; font-weight: 800; font-size: 1.1rem; }
+        .portfolio-info p { margin: 0; color: var(--gray); font-size: 0.95rem; }
         .highlight { color: var(--red); font-weight: 800; }
 
-        /* Contact Bottom Bar */
-        .bottom-contact-bar { 
-            background: var(--black); 
-            color: var(--white); 
-            padding: 30px 5%; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            gap: 30px; 
-            font-size: 0.95rem; 
-            flex-wrap: wrap; 
-            direction: ltr; 
-        }
+        /* Footer Contacts */
+        .bottom-contact-bar { background: var(--black); color: var(--white); padding: 30px 5%; display: flex; justify-content: center; align-items: center; gap: 30px; font-size: 0.9rem; flex-wrap: wrap; direction: ltr; }
         .contact-item { display: flex; align-items: center; gap: 12px; }
         .contact-item i { color: var(--red); font-size: 1.2rem; }
-        .contact-divider { width: 1px; height: 30px; background: #334155; }
+        .contact-divider { width: 1px; height: 30px; background: #444; }
 
-        footer { background: #090d16; color: #64748b; text-align: center; padding: 20px 5%; font-size: 0.85rem; border-top: 1px solid #1e293b; }
+        footer { background: #000000; color: #94a3b8; text-align: center; padding: 15px 5%; font-size: 0.85rem; border-top: 1px solid #222; }
 
-        /* LTR/RTL Styles overrides */
-        [lang="en"] .portfolio-item { border-right: 1px solid var(--border); border-left: 5px solid var(--red); }
+        /* Language Switching Classes */
+        [lang="en"] .portfolio-item { border-right: none; border-left: 4px solid var(--red); }
         [lang="en"] .header-right { flex-direction: row-reverse; }
         [lang="en"] .brand-container, [lang="en"] .why-text { text-align: left; }
         
@@ -202,10 +112,12 @@
             <img src="https://ejust.edu.eg/assets/img/logo.png" alt="E-JUST Logo">
         </div>
         <div class="brand-container">
+            <!-- Ar Title -->
             <div class="lang-ar-content">
                 <div class="main-uni-title">الجامعة المصرية اليابانية للعلوم والتكنولوجيا</div>
                 <div class="sub-unit-title">وحدة اختبارات واستشارات الهندسة المدنية - CETC</div>
             </div>
+            <!-- En Title -->
             <div class="lang-en-content">
                 <div class="main-uni-title">Egypt-Japan University of Science and Technology</div>
                 <div class="sub-unit-title">Civil Engineering Testing and Consulting Unit - CETC</div>
@@ -219,48 +131,58 @@
     </div>
 </header>
 
-<main>
-    <section class="hero">
-        <div class="lang-ar-content">
-            <h1>التميز الهندسي والابتكار</h1>
-            <p>الجسر الذي يربط بين البحث الأكاديمي المتقدم والتطبيق الميداني العملي في مصر والشرق الأوسط.</p>
-        </div>
-        <div class="lang-en-content">
-            <h1>Engineering Excellence & Innovation</h1>
-            <p>Bridging the gap between world-class academic research and industrial application in Egypt and the Middle East.</p>
-        </div>
-    </section>
+<!-- Hero Section -->
+<section class="hero">
+    <div class="lang-ar-content">
+        <h1>التميز الهندسي والابتكار</h1>
+        <p>الجسر الذي يربط بين البحث الأكاديمي المتقدم والتطبيق الميداني العملي في مصر والشرق الأوسط.</p>
+    </div>
+    <div class="lang-en-content">
+        <h1>Engineering Excellence & Innovation</h1>
+        <p>Bridging the gap between world-class academic research and industrial application in Egypt and the Middle East.</p>
+    </div>
+</section>
 
-    <section class="section-container">
-        <h2 class="section-title" id="titleAbout">من نحن؟</h2>
-        <div class="lang-ar-content about-text">
-            تعد وحدة <strong>CETC</strong> الركيزة الفنية المتخصصة تحت مظلة مركز التكنولوجيا الابتكارية ودعم الصناعة (<strong>CINTECH</strong>) بالجامعة المصرية اليابانية. نحن متخصصون في تقديم خدمات فنية متكاملة واختبارات دقيقة لمواد البناء، أعمال الطرق، التربة، والأساسات. رؤيتنا تهدف إلى دعم قطاع الإنشاءات عبر نقل المعرفة العلمية اليابانية والمصرية إلى واقع ملموس.
-        </div>
-        <div class="lang-en-content about-text">
-            The <strong>CETC</strong> unit is the specialized technical arm of the Center of Innovative Technology (<strong>CINTECH</strong>) at E-JUST. We provide comprehensive testing services for construction materials, roads, soil, and foundations. Our vision is to support the construction sector by bridging academic research with industrial application.
-        </div>
-    </section>
+<!-- About Us -->
+<div class="section-container">
+    <h2 class="section-title" id="titleAbout">من نحن؟</h2>
+    <div class="lang-ar-content about-text">
+        تعد وحدة <strong>CETC</strong> الركيزة الفنية المتخصصة تحت مظلة مركز التكنولوجيا الابتكارية ودعم الصناعة (<strong>CINTECH</strong>) بالجامعة المصرية اليابانية. نحن متخصصون في تقديم خدمات فنية متكاملة واختبارات دقيقة لمواد البناء، أعمال الطرق، التربة، والأساسات. رؤيتنا تهدف إلى دعم قطاع الإنشاءات عبر نقل المعرفة العلمية اليابانية والمصرية إلى واقع ملموس.
+    </div>
+    <div class="lang-en-content about-text">
+        The <strong>CETC</strong> unit is the specialized technical arm of the Center of Innovative Technology (<strong>CINTECH</strong>) at E-JUST. We provide comprehensive testing services for construction materials, roads, soil, and foundations. Our vision is to support the construction sector by bridging academic research with industrial application.
+    </div>
+</div>
 
-    <section style="background: #ffffff; padding: 20px 0;">
-        <div class="section-container">
-            <h2 class="section-title" id="titleServices">خدماتنا وتخصصاتنا الهندسية</h2>
-            <div class="services-grid" id="servicesGrid"></div>
+<!-- Services -->
+<div style="background: #ffffff; padding: 20px 0;">
+    <div class="section-container">
+        <h2 class="section-title" id="titleServices">خدماتنا وتخصصاتنا الهندسية</h2>
+        <div class="services-grid" id="servicesGrid">
+            <!-- سيتم تعبئتها بواسطة JS بناءً على اللغة -->
         </div>
-    </section>
+    </div>
+</div>
 
-    <section class="section-container">
-        <h2 class="section-title" id="titleWhy">لماذا تختار وحدة CETC؟</h2>
-        <div class="why-grid" id="whyGrid"></div>
-    </section>
+<!-- Why Us -->
+<div class="section-container">
+    <h2 class="section-title" id="titleWhy">لماذا تختار وحدة CETC؟</h2>
+    <div class="why-grid" id="whyGrid">
+        <!-- سيتم تعبئتها بواسطة JS بناءً على اللغة -->
+    </div>
+</div>
 
-    <section style="background: #ffffff; padding: 20px 0;">
-        <div class="section-container">
-            <h2 class="section-title" id="titlePortfolio">سجل حافل من الإنجازات</h2>
-            <div class="portfolio-list" id="portfolioList"></div>
+<!-- Portfolio -->
+<div style="background: #ffffff; padding: 20px 0;">
+    <div class="section-container">
+        <h2 class="section-title" id="titlePortfolio">سجل حافل من الإنجازات</h2>
+        <div class="portfolio-list" id="portfolioList">
+            <!-- سيتم تعبئتها بواسطة JS بناءً على اللغة -->
         </div>
-    </section>
-</main>
+    </div>
+</div>
 
+<!-- Contact Bottom Bar -->
 <div class="bottom-contact-bar">
     <div class="contact-item"><i class="fas fa-phone-alt"></i><span>16448</span></div>
     <div class="contact-divider"></div>
@@ -282,7 +204,7 @@
             home: '<i class="fas fa-home"></i> الرئيسية',
             langBtn: 'English',
             titles: { about: 'من نحن؟', services: 'خدماتنا وتخصصاتنا الهندسية', why: 'لماذا تختار وحدة CETC؟', portfolio: 'سجل حافل من الإنجازات' },
-            footer: '&copy; 2026 وحدة اختبارات واستشارات الهندسة المدنية (CETC) - E-JUST | جميع الحقوق محفوظة',
+            footer: '&copy; 2026 وحدة اختبارات واستشارات الهندسة المدنية (CETC) - E-JUST',
             services: [
                 { icon: 'fa-building', h: 'هندسة الإنشاءات', p: 'اختبارات العناصر الخرسانية وتقييم السلامة الإنشائية وفق المواصفات الدولية.' },
                 { icon: 'fa-layer-group', h: 'الهندسة الجيوتقنية', p: 'دراسات التربة، توصيات الأساسات، واختبارات ضبط جودة الأعمال الترابية.' },
@@ -306,7 +228,7 @@
             home: '<i class="fas fa-home"></i> Home',
             langBtn: 'العربية',
             titles: { about: 'About Us', services: 'Engineering Services', why: 'Why Partner with CETC?', portfolio: 'Project Portfolio' },
-            footer: '&copy; 2026 Civil Engineering Testing & Consulting Unit (CETC) - E-JUST | All rights reserved.',
+            footer: '&copy; 2026 Civil Engineering Testing & Consulting Unit (CETC) - E-JUST',
             services: [
                 { icon: 'fa-building', h: 'Structural Engineering', p: 'Rigorous testing on concrete and structural integrity assessments.' },
                 { icon: 'fa-layer-group', h: 'Geotechnical Engineering', p: 'Site investigations, foundation expert advice, and earthworks QC.' },
@@ -345,11 +267,13 @@
         document.getElementById('homeText').innerHTML = data.home;
         document.getElementById('footerText').innerHTML = data.footer;
         
+        // Titles
         document.getElementById('titleAbout').textContent = data.titles.about;
         document.getElementById('titleServices').textContent = data.titles.services;
         document.getElementById('titleWhy').textContent = data.titles.why;
         document.getElementById('titlePortfolio').textContent = data.titles.portfolio;
 
+        // Services
         const sGrid = document.getElementById('servicesGrid');
         sGrid.innerHTML = data.services.map(s => `
             <div class="service-card">
@@ -359,6 +283,7 @@
             </div>
         `).join('');
 
+        // Why Us
         const wGrid = document.getElementById('whyGrid');
         wGrid.innerHTML = data.why.map(w => `
             <div class="why-card">
@@ -370,6 +295,7 @@
             </div>
         `).join('');
 
+        // Portfolio
         const pList = document.getElementById('portfolioList');
         pList.innerHTML = data.portfolio.map(p => `
             <div class="portfolio-item">
@@ -382,7 +308,9 @@
         `).join('');
     }
 
+    // Initial Load
     updateUI('ar');
 </script>
+
 </body>
 </html>

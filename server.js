@@ -1,31 +1,32 @@
 const express = require('express');
-const session = require('cookie-session'); // استخدام الكوكيز المشفرة المتوافقة مع Vercel
+const session = require('express-session'); // العودة لـ express-session المستقر الخاص بك
 const { google } = require('googleapis');
 const XLSX = require('xlsx');
 const path = require('path');
 
 const app = express();
 
-// --- 1. تفعيل الثقة في الشبكة الوسيطة لـ Vercel ---
-// هذا السطر يحل مشكلة توجيه الدخول وإرسال الكوكيز الآمنة عبر HTTPS
-app.set('trust proxy', 1); 
+// إخبار Express بالثقة في البروكسي الخاص بـ Vercel لحفظ الكوكيز
+app.set('trust proxy', 1);
 
-// --- 2. الإعدادات الأساسية ---
-app.use(express.static(path.join(__dirname))); 
+// العودة إلى استخدام process.cwd() لقراءة الملفات بشكل سليم من المجلد الرئيسي
+app.use(express.static(path.join(process.cwd()))); 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// --- 3. إعدادات الجلسة الآمنة ---
+// العودة لإعدادات الجلسة الأصلية والمستقرة لديك
 app.use(session({
-    name: 'cetc_session',
-    keys: [process.env.SESSION_SECRET || 'cetc-ejust-fallback-secure-key'],
-    maxAge: 24 * 60 * 60 * 1000, // 24 ساعة
-    secure: process.env.NODE_ENV === 'production', // true فقط عند الرفع الفعلي لضمان عمل الجلسة محلياً بلا مشاكل
-    httpOnly: true,
-    sameSite: 'lax'
+    secret: process.env.SESSION_SECRET || 'cetc-ejust-secure-session',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { 
+        maxAge: 24 * 60 * 60 * 1000,
+        secure: process.env.NODE_ENV === 'production', // تعمل كـ Secure فقط عند الرفع الفعلي
+        sameSite: process.env.NODE_ENV === 'production' ? 'lax' : 'lax'
+    }
 }));
 
-// إعدادات الوصول لجوجل درايف
+// إعدادات الوصول لجوجل درايف (Environment Variables)
 const privateKey = process.env.GOOGLE_PRIVATE_KEY 
     ? process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n') 
     : undefined;
@@ -52,54 +53,49 @@ const fileIds = {
     "reports": "1366JN3rpYyrdt8Jq27jrlr6eoymtpf3S"
 };
 
-// ميدل وير لحماية المسارات
+// ميدل وير لحماية المسارات الأصلي
 function checkAuth(req, res, next) {
-    if (req.session && req.session.loggedIn) return next();
+    if (req.session.loggedIn) return next();
     res.redirect('/login');
 }
 
+// دالة جلب الـ Buffer الأصلية والمستقرة
 async function getExcelBuffer(fileId) {
-    const fileMeta = await drive.files.get({ fileId, fields: 'mimeType' });
+    const fileMeta = await drive.files.get({ fileId: fileId, fields: 'mimeType' });
     const mimeType = fileMeta.data.mimeType;
     let response;
     if (mimeType === 'application/vnd.google-apps.spreadsheet') {
-        response = await drive.files.export({ 
-            fileId, 
-            mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' 
-        }, { responseType: 'arraybuffer' });
+        response = await drive.files.export({ fileId: fileId, mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }, { responseType: 'arraybuffer' });
     } else {
-        response = await drive.files.get({ fileId, alt: 'media' }, { responseType: 'arraybuffer' });
+        response = await drive.files.get({ fileId: fileId, alt: 'media' }, { responseType: 'arraybuffer' });
     }
     return response.data;
 }
 
-// --- المسارات ---
-app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
-app.get('/introducing', (req, res) => res.sendFile(path.join(__dirname, 'introducing.html')));
-app.get('/portfolio', (req, res) => res.sendFile(path.join(__dirname, 'portfolio.html')));
-app.get('/partners', (req, res) => res.sendFile(path.join(__dirname, 'partners.html')));
+// --- المسارات الأصلية باستخدام process.cwd() ---
+app.get('/', (req, res) => res.sendFile(path.join(process.cwd(), 'index.html')));
+app.get('/introducing', (req, res) => res.sendFile(path.join(process.cwd(), 'introducing.html')));
+app.get('/portfolio', (req, res) => res.sendFile(path.join(process.cwd(), 'portfolio.html')));
+app.get('/partners', (req, res) => res.sendFile(path.join(process.cwd(), 'partners.html')));
 app.get('/login', (req, res) => {
-    if (req.session && req.session.loggedIn) return res.redirect('/Dashboard');
-    res.sendFile(path.join(__dirname, 'login.html'));
+    if (req.session.loggedIn) return res.redirect('/Dashboard');
+    res.sendFile(path.join(process.cwd(), 'login.html'));
 });
 
 app.post('/login', (req, res) => {
     const { username, password } = req.body;
     if (username === process.env.ADMIN_USER && password === process.env.ADMIN_PASS && process.env.ADMIN_USER) {
-        req.session.loggedIn = true; // حفظ الجلسة مشفرة في الكوكيز للمتصفح
+        req.session.loggedIn = true;
         res.json({ success: true, redirect: '/Dashboard' });
     } else {
         res.json({ success: false, error: 'بيانات الدخول غير صحيحة' });
     }
 });
 
-app.get('/Dashboard', checkAuth, (req, res) => res.sendFile(path.join(__dirname, 'dashboard.html')));
-app.get('/logout', (req, res) => { 
-    req.session = null; // تدمير كوكيز الجلسة
-    res.redirect('/'); 
-});
+app.get('/Dashboard', checkAuth, (req, res) => res.sendFile(path.join(process.cwd(), 'dashboard.html')));
+app.get('/logout', (req, res) => { req.session.destroy(); res.redirect('/'); });
 
-// جلب البيانات (فواتير وإيرادات)
+// جلب البيانات الأصلي والمستقر
 app.get('/get-data/:id', checkAuth, async (req, res) => {
     try {
         const id = req.params.id;
@@ -122,7 +118,7 @@ app.get('/get-data/:id', checkAuth, async (req, res) => {
             return res.json(fullData.map(row => row ? row.slice(0, 3) : []));
         }
 
-        const endCol = (id === "1" || id === "5") ? 7 : 6;
+        const endCol = (id == "1" || id == "5") ? 7 : 6;
         res.json(fullData.map(row => row ? row.slice(1, endCol) : []));
     } catch (error) { 
         res.status(500).json({ error: error.message }); 
@@ -148,5 +144,5 @@ app.get('/get-report-data', checkAuth, async (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
+app.listen(PORT, () => console.log(`Server is running`));
 module.exports = app;

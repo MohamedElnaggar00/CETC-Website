@@ -1,27 +1,31 @@
 const express = require('express');
-const session = require('cookie-session'); // Replaced express-session for stateless Vercel environments
+const session = require('cookie-session'); // استخدام الكوكيز المشفرة المتوافقة مع Vercel
 const { google } = require('googleapis');
 const XLSX = require('xlsx');
 const path = require('path');
 
 const app = express();
 
-// Use __dirname for absolute pathing in serverless environments
+// --- 1. تفعيل الثقة في الشبكة الوسيطة لـ Vercel ---
+// هذا السطر يحل مشكلة توجيه الدخول وإرسال الكوكيز الآمنة عبر HTTPS
+app.set('trust proxy', 1); 
+
+// --- 2. الإعدادات الأساسية ---
 app.use(express.static(path.join(__dirname))); 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Encrypted, stateless cookie session (Vercel compatible)
+// --- 3. إعدادات الجلسة الآمنة ---
 app.use(session({
     name: 'cetc_session',
     keys: [process.env.SESSION_SECRET || 'cetc-ejust-fallback-secure-key'],
-    maxAge: 24 * 60 * 60 * 1000, // 24 Hours
-    secure: process.env.NODE_ENV === 'production', // true in production
+    maxAge: 24 * 60 * 60 * 1000, // 24 ساعة
+    secure: process.env.NODE_ENV === 'production', // true فقط عند الرفع الفعلي لضمان عمل الجلسة محلياً بلا مشاكل
     httpOnly: true,
     sameSite: 'lax'
 }));
 
-// Setup Google Drive Client Email & Private Key
+// إعدادات الوصول لجوجل درايف
 const privateKey = process.env.GOOGLE_PRIVATE_KEY 
     ? process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n') 
     : undefined;
@@ -48,8 +52,9 @@ const fileIds = {
     "reports": "1366JN3rpYyrdt8Jq27jrlr6eoymtpf3S"
 };
 
+// ميدل وير لحماية المسارات
 function checkAuth(req, res, next) {
-    if (req.session.loggedIn) return next();
+    if (req.session && req.session.loggedIn) return next();
     res.redirect('/login');
 }
 
@@ -68,20 +73,20 @@ async function getExcelBuffer(fileId) {
     return response.data;
 }
 
-// Routes
+// --- المسارات ---
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 app.get('/introducing', (req, res) => res.sendFile(path.join(__dirname, 'introducing.html')));
 app.get('/portfolio', (req, res) => res.sendFile(path.join(__dirname, 'portfolio.html')));
 app.get('/partners', (req, res) => res.sendFile(path.join(__dirname, 'partners.html')));
 app.get('/login', (req, res) => {
-    if (req.session.loggedIn) return res.redirect('/Dashboard');
-    res.sendFile(path.join(__dirname, 'login.html')); // Make sure login.html exists in your directory
+    if (req.session && req.session.loggedIn) return res.redirect('/Dashboard');
+    res.sendFile(path.join(__dirname, 'login.html'));
 });
 
 app.post('/login', (req, res) => {
     const { username, password } = req.body;
     if (username === process.env.ADMIN_USER && password === process.env.ADMIN_PASS && process.env.ADMIN_USER) {
-        req.session.loggedIn = true;
+        req.session.loggedIn = true; // حفظ الجلسة مشفرة في الكوكيز للمتصفح
         res.json({ success: true, redirect: '/Dashboard' });
     } else {
         res.json({ success: false, error: 'بيانات الدخول غير صحيحة' });
@@ -90,11 +95,11 @@ app.post('/login', (req, res) => {
 
 app.get('/Dashboard', checkAuth, (req, res) => res.sendFile(path.join(__dirname, 'dashboard.html')));
 app.get('/logout', (req, res) => { 
-    req.session = null; // Destroys session cookie
+    req.session = null; // تدمير كوكيز الجلسة
     res.redirect('/'); 
 });
 
-// APIs
+// جلب البيانات (فواتير وإيرادات)
 app.get('/get-data/:id', checkAuth, async (req, res) => {
     try {
         const id = req.params.id;

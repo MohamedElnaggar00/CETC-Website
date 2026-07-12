@@ -57,11 +57,23 @@
 
         /* Services Grid */
         .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 30px; }
-        .service-card { background: white; padding: 25px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: 0.3s; border-top: 4px solid var(--red); }
-        .service-card:hover { transform: translateY(-5px); box-shadow: 0 15px 25px rgba(0,0,0,0.1); }
+        .service-card { 
+            background: linear-gradient(rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.92)), var(--bg-img) center/cover no-repeat; 
+            padding: 35px 25px; 
+            border-radius: 12px; 
+            border: 1px solid #e2e8f0; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
+            transition: all 0.3s ease; 
+            border-top: 4px solid var(--red); 
+        }
+        .service-card:hover { 
+            background: linear-gradient(rgba(255, 255, 255, 0.80), rgba(255, 255, 255, 0.80)), var(--bg-img) center/cover no-repeat;
+            transform: translateY(-5px); 
+            box-shadow: 0 15px 25px rgba(0,0,0,0.1); 
+        }
         .service-card i { font-size: 2.2rem; color: var(--red); margin-bottom: 15px; display: block; }
         .service-card h3 { margin: 0 0 12px 0; font-weight: 800; color: var(--black); font-size: 1.2rem; }
-        .service-card p { margin: 0; color: var(--gray); font-size: 0.95rem; text-align: justify; }
+        .service-card p { margin: 0; color: #1e293b; font-size: 0.95rem; text-align: justify; font-weight: 700; }
 
         /* Why Us */
         .why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 20px; }
@@ -84,7 +96,7 @@
         .contact-item i { color: var(--red); font-size: 1.2rem; }
         .contact-divider { width: 1px; height: 30px; background: #444; }
 
-        footer { background: #000000; color: #94a3b8; text-align: center; padding: 15px 5%; font-size: 0.85rem; border-top: 1px solid #222; }
+        footer { background: #000; color: #94a3b8; text-align: center; padding: 15px 5%; font-size: 0.85rem; border-top: 1px solid #222; }
 
         [lang="en"] .portfolio-item { border-right: none; border-left: 4px solid var(--red); }
         [lang="en"] .header-right { flex-direction: row-reverse; }
@@ -191,11 +203,11 @@
             titles: { about: 'من نحن؟', services: 'خدماتنا وتخصصاتنا الهندسية', why: 'لماذا تختار وحدة CETC؟', portfolio: 'سجل حافل من الإنجازات' },
             footer: '&copy; 2026 وحدة اختبارات واستشارات الهندسة المدنية (CETC) - E-JUST',
             services: [
-                { icon: 'fa-building', h: 'هندسة الإنشاءات', p: 'اختبارات العناصر الخرسانية وتقييم السلامة الإنشائية وفق المواصفات الدولية.' },
-                { icon: 'fa-layer-group', h: 'الهندسة الجيوتقنية', p: 'دراسات التربة، توصيات الأساسات، واختبارات ضبط جودة الأعمال الترابية.' },
-                { icon: 'fa-vials', h: 'هندسة المواد', p: 'تطوير تصميمات الخلطات الخرسانية واختبارات صلاحية المواد الخام.' },
-                { icon: 'fa-road', h: 'هندسة الطرق', p: 'اختبار طبقات الرصف الإسفلتية والمواد البيتومينية بأحدث المعدات.' },
-                { icon: 'fa-tools', h: 'المعايرة والجودة', p: 'معايرة محطات خلط الخرسانة والمعدات واختبار جودة وحدات البناء.' }
+                { bg: 'https://t4.ftcdn.net/jpg/00/88/38/55/240_F_88385548_T3Z54Dcg3MnneriZ3MUCdnrfYa2cW6wq.jpg', icon: 'fa-building', h: 'هندسة الإنشاءات', p: 'اختبارات العناصر الخرسانية وتقييم السلامة الإنشائية وفق المواصفات الدولية.' },
+                { bg: 'https://t4.ftcdn.net/jpg/03/45/28/55/240_F_345285565_gp7hsG6er0QKqrv9LDQuz1T9vmeWOXvv.jpg', icon: 'fa-layer-group', h: 'الهندسة الجيوتقنية', p: 'دراسات التربة، توصيات الأساسات، واختبارات ضبط جودة الأعمال الترابية.' },
+                { bg: 'https://t4.ftcdn.net/jpg/02/93/94/19/240_F_293941936_oozjPSmIJXgjBYVNH0f1vJGfRl1n4ihi.jpg', icon: 'fa-vials', h: 'هندسة المواد', p: 'تطوير تصميمات الخلطات الخرسانية واختبارات صلاحية المواد الخام.' },
+                { bg: 'https://t4.ftcdn.net/jpg/02/49/01/57/240_F_249015797_ZIyiI5MSBAv1FSqjf7wJmCYXYayUIkFi.jpg', icon: 'fa-road', h: 'هندسة الطرق', p: 'اختبار طبقات الرصف الإسفلتية والمواد البيتومينية بأحدث المعدات.' },
+                { bg: 'https://t4.ftcdn.net/jpg/02/88/18/59/240_F_288185929_gVZHRUWo9RFQkjulqs5R53n9PB2O5l4b.jpg', icon: 'fa-tools', h: 'المعايرة والجودة', p: 'معايرة محطات خلط الخرسانة والمعدات واختبار جودة وحدات البناء.' }
             ],
             why: [
                 { n: '١', h: 'معايير يابانية', p: 'نطبق فلسفة التميز اليابانية لضمان دقة النتائج ومطابقتها للمعايير العالمية.' },
@@ -215,11 +227,11 @@
             titles: { about: 'About Us', services: 'Engineering Services', why: 'Why Partner with CETC?', portfolio: 'Project Portfolio' },
             footer: '&copy; 2026 Civil Engineering Testing & Consulting Unit (CETC) - E-JUST',
             services: [
-                { icon: 'fa-building', h: 'Structural Engineering', p: 'Rigorous testing on concrete and structural integrity assessments.' },
-                { icon: 'fa-layer-group', h: 'Geotechnical Engineering', p: 'Site investigations, foundation expert advice, and earthworks QC.' },
-                { icon: 'fa-vials', h: 'Materials Engineering', p: 'Optimized concrete mix designs and raw material feasibility testing.' },
-                { icon: 'fa-road', h: 'Transportation Engineering', p: 'Asphalt surface testing and bituminous material analysis.' },
-                { icon: 'fa-tools', h: 'Calibration & QA', p: 'Batching plant calibration and quality assurance for masonry units.' }
+                { bg: 'https://t4.ftcdn.net/jpg/00/88/38/55/240_F_88385548_T3Z54Dcg3MnneriZ3MUCdnrfYa2cW6wq.jpg', icon: 'fa-building', h: 'Structural Engineering', p: 'Rigorous testing on concrete and structural integrity assessments.' },
+                { bg: 'https://t4.ftcdn.net/jpg/03/45/28/55/240_F_345285565_gp7hsG6er0QKqrv9LDQuz1T9vmeWOXvv.jpg', icon: 'fa-layer-group', h: 'Geotechnical Engineering', p: 'Site investigations, foundation expert advice, and earthworks QC.' },
+                { bg: 'https://t4.ftcdn.net/jpg/02/93/94/19/240_F_293941936_oozjPSmIJXgjBYVNH0f1vJGfRl1n4ihi.jpg', icon: 'fa-vials', h: 'Materials Engineering', p: 'Optimized concrete mix designs and raw material feasibility testing.' },
+                { bg: 'https://t4.ftcdn.net/jpg/02/49/01/57/240_F_249015797_ZIyiI5MSBAv1FSqjf7wJmCYXYayUIkFi.jpg', icon: 'fa-road', h: 'Transportation Engineering', p: 'Asphalt surface testing and bituminous material analysis.' },
+                { bg: 'https://t4.ftcdn.net/jpg/02/88/18/59/240_F_288185929_gVZHRUWo9RFQkjulqs5R53n9PB2O5l4b.jpg', icon: 'fa-tools', h: 'Calibration & QA', p: 'Batching plant calibration and quality assurance for masonry units.' }
             ],
             why: [
                 { n: '1', h: 'Japanese Standards', p: 'Leveraging the E-JUST philosophy to meet international benchmarks.' },
@@ -259,7 +271,7 @@
 
         const sGrid = document.getElementById('servicesGrid');
         sGrid.innerHTML = data.services.map(s => `
-            <div class="service-card">
+            <div class="service-card" style="--bg-img: url('${s.bg}');">
                 <i class="fas ${s.icon}"></i>
                 <h3>${s.h}</h3>
                 <p>${s.p}</p>

@@ -58,7 +58,8 @@
         /* Services Grid */
         .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 30px; }
         .service-card { 
-            background: linear-gradient(rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.92)), var(--bg-img) center/cover no-repeat; 
+            /* تخفيف تعتيم الأبيض بنسبة 20% لتظهر الصور بشكل أوضح */
+            background: linear-gradient(rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.72)), var(--bg-img) center/cover no-repeat; 
             padding: 35px 25px; 
             border-radius: 12px; 
             border: 1px solid #e2e8f0; 
@@ -67,13 +68,14 @@
             border-top: 4px solid var(--red); 
         }
         .service-card:hover { 
-            background: linear-gradient(rgba(255, 255, 255, 0.80), rgba(255, 255, 255, 0.80)), var(--bg-img) center/cover no-repeat;
+            /* زيادة وضوح الصور عند الوقوف على البطاقة بنسبة 45% */
+            background: linear-gradient(rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.55)), var(--bg-img) center/cover no-repeat;
             transform: translateY(-5px); 
             box-shadow: 0 15px 25px rgba(0,0,0,0.1); 
         }
         .service-card i { font-size: 2.2rem; color: var(--red); margin-bottom: 15px; display: block; }
-        .service-card h3 { margin: 0 0 12px 0; font-weight: 800; color: var(--black); font-size: 1.2rem; }
-        .service-card p { margin: 0; color: #1e293b; font-size: 0.95rem; text-align: justify; font-weight: 700; }
+        .service-card h3 { margin: 0 0 12px 0; font-weight: 900; color: var(--black); font-size: 1.25rem; text-shadow: 0 1px 1px rgba(255,255,255,0.8); }
+        .service-card p { margin: 0; color: #111111; font-size: 0.95rem; text-align: justify; font-weight: 800; text-shadow: 0 1px 1px rgba(255,255,255,0.8); }
 
         /* Why Us */
         .why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 20px; }

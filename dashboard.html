@@ -127,16 +127,35 @@
                 }
 
                 if(data.length > 2) {
-                    data[2].forEach(t => { const th = document.createElement('th'); th.textContent = t || '-'; h.appendChild(th); });
+                    const headers = data[2];
+                    
+                    // رسم رؤوس الجدول
+                    headers.forEach(t => { 
+                        const th = document.createElement('th'); 
+                        th.textContent = t || '-'; 
+                        h.appendChild(th); 
+                    });
+
+                    // البحث عن مؤشر عمود مبلغ الفاتورة بالاسم ديناميكياً لتلوينه بشكل معزول
+                    let invoiceColIdx = -1;
+                    headers.forEach((t, idx) => {
+                        if (t && (t.includes('فاتورة') || t.includes('الفاتورة'))) {
+                            invoiceColIdx = idx;
+                        }
+                    });
+
                     data.slice(3).forEach(row => {
                         if(!row[0]) return;
                         const tr = document.createElement('tr');
                         row.forEach((c, idx) => { 
                             const td = document.createElement('td'); 
                             td.textContent = c || '-'; 
-                            if(c && !isNaN(parseFloat(c)) && (idx > 2)) {
-                                if(parseFloat(c) > 0) td.classList.add('val-positive');
-                                else if(parseFloat(c) < 0) td.classList.add('val-negative');
+                            
+                            // نلون فقط عمود مبلغ الفاتورة بالضريبة، وتظل الأعمدة الأخرى باللون الأسود الطبيعي
+                            if(idx === invoiceColIdx && c && !isNaN(parseFloat(String(c).replace(/,/g, '')))) {
+                                const val = parseFloat(String(c).replace(/,/g, ''));
+                                if(val > 0) td.classList.add('val-positive');
+                                else if(val < 0) td.classList.add('val-negative');
                             }
                             tr.appendChild(td); 
                         });

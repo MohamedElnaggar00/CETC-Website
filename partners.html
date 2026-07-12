@@ -41,7 +41,7 @@
         /* Partners Grid */
         .partners-grid { 
             display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); 
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
             gap: 20px; 
             margin-top: 30px; 
         }
@@ -62,14 +62,14 @@
             gap: 12px;
         }
         .partner-card img {
-            max-height: 55px;
+            max-height: 52px;
             max-width: 100%;
             object-fit: contain;
             margin-bottom: 5px;
         }
         .partner-card h3 { 
             margin: 0; 
-            font-size: 1.05rem; 
+            font-size: 1rem; 
             font-weight: 800; 
             color: #1e293b; 
             line-height: 1.4;
@@ -90,7 +90,7 @@
             text-transform: uppercase; 
         }
 
-        /* تنسيق مخصص للشعار الأبيض الخاص بـ ECG */
+        /* تنسيق مخصص للشعارات البيضاء */
         .partner-card.dark-bg {
             background: #0f172a; 
             border-color: #1e293b;
@@ -136,7 +136,7 @@
     <p>نفخر بكوننا الوجهة المعتمدة لكبرى الوزارات المصرية، الشركات العالمية، وأعرق المكاتب الاستشارية الدولية</p>
 </section>
 
-<!-- 1. الجهات الحكومية -->
+<!-- 1. الجهات الحكومية والسيادية مرتبة أبجدياً -->
 <section class="section-container">
     <div class="section-header">
         <i class="fas fa-university gov-icon"></i>
@@ -144,72 +144,86 @@
         <p>المالكة للمشاريع القومية الكبرى في جمهورية مصر العربية</p>
     </div>
     <div class="partners-grid">
-        <!-- وزارة النقل -->
+        <!-- الأزهر الشريف -->
         <div class="partner-card">
-            <img src="https://upload.wikimedia.org/wikipedia/ar/c/c5/%D9%88%D8%B2%D8%A7%D8%B1%D8%A9_%D8%A7%D9%84%D9%86%D9%82%D9%84_%28%D9%85%D8%B5%D8%B1%29.png?_=20250518000019" alt="وزارة النقل">
-            <h3>وزارة النقل (هيئة الطرق والكباري والأنفاق)</h3>
-            <span class="partner-tag">شريك استراتيجي</span>
+            <img src="https://azhar.eg/Portals/_default/Skins/Azhar/images/logo-splash-optimized.png" alt="الأزهر الشريف">
+            <h3>الأزهــــر الشــــريف</h3>
         </div>
-        <!-- الهيئة الهندسية -->
+        <!-- الجهاز التنفيذي لمياه الشرب والصرف الصحي -->
         <div class="partner-card">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFnGM9rCKkbQVN12GYUmITMMsCzcqsCiymAO3ZYkd5uw&s=10" alt="الهيئة الهندسية">
+            <img src="https://capw.gov.eg/wp-content/uploads/2025/02/capw_logo-ar-en.png" alt="الجهاز التنفيذي لمياه الشرب والصرف الصحي">
+            <h3>الجهاز التنفيذي لمياه الشرب والصرف الصحي</h3>
+        </div>
+        <!-- الشركة المصرية القابضة للمطارات والملاحة الجوية - وزارة الطيران المدني -->
+        <div class="partner-card">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrX6c_Rp3oQ7n63qbQIZXLtZkCbYs7qHT1_E3cZcv5TDx74gzbG80eot6a&s=10" alt="وزارة الطيران المدني">
+            <h3>الشركة المصرية القابضة للمطارات والملاحة الجوية - وزارة الطيران المدني</h3>
+        </div>
+        <!-- الشركة الوطنية للتبريدات والتوريدات -->
+        <div class="partner-card">
+            <img src="https://www.nspo.com.eg/nspo/images/logos/cooling.png" alt="الشركة الوطنية للتبريدات والتوريدات">
+            <h3>الشركة الوطنية للتبريدات والتوريدات</h3>
+        </div>
+        <!-- الهيئة العامة الطرق والكباري -->
+        <div class="partner-card">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXZfFKvRlupdLGdYxH57EgwcQ7nvk_1bhKHYYSZ_3QGA&s=10" alt="الهيئة العامة الطرق والكباري">
+            <h3>الهيئة العامة الطرق والكباري</h3>
+        </div>
+        <!-- الهيئة القومية للأنفاق -->
+        <div class="partner-card">
+            <img src="https://upload.wikimedia.org/wikipedia/ar/3/31/National_Authority_for_tunnels_logo.png" alt="الهيئة القومية للأنفاق">
+            <h3>الهيئة القومية للأنفاق</h3>
+        </div>
+        <!-- الهيئة الهندسية للقوات المسلحة -->
+        <div class="partner-card">
+            <img src="https://alliedco.org/wp-content/uploads/2023/12/Egy-force.png" alt="الهيئة الهندسية">
             <h3>الهيئة الهندسية للقوات المسلحة</h3>
-            <span class="partner-tag">جهات سيادية</span>
         </div>
-        <!-- وزارة الري -->
+        <!-- جهاز مدينة برج العرب الجديدة -->
         <div class="partner-card">
-            <img src="https://upload.wikimedia.org/wikipedia/ar/b/b3/%D9%88%D8%B2%D8%A7%D8%B1%D8%A9_%D8%A7%D9%84%D9%85%D9%88%D8%A7%D8%B1%D8%AF_%D8%A7%D9%84%D9%85%D8%A7%D8%A6%D9%82%D8%A9_%D9%88%D8%A7%D9%84%D8%B1%D9%82.png" alt="وزارة الري">
-            <h3>وزارة الموارد المائية والري</h3>
-        </div>
-        <!-- هيئة المجتمعات العمرانية -->
-        <div class="partner-card">
-            <img src="https://upload.wikimedia.org/wikipedia/ar/4/44/%D8%B4%D8%B9%D8%A7%D8%B1_%D9%84%D9%8A%D8%A6%D8%A9_%D8%A7%D9%84%D9%85%D8%AC%D8%AA%D9%85%D8%B9%D8%A7%D8%AA_%D8%A7%D9%84%D8%B9%D9%85%D8%B1%D8%A7%D9%86%D9%8A%D8%A9_%D8%A7%D9%84%D8%AC%D8%AF%D9%8A%D8%AF%D8%A9.png" alt="هيئة المجتمعات العمرانية">
-            <h3>هيئة المجتمعات العمرانية الجديدة</h3>
-        </div>
-        <!-- جهاز الخدمة الوطنية -->
-        <div class="partner-card">
-            <img src="https://www.nspo.com.eg/nspo/images/logos/gehaz.png" alt="جهاز الخدمة الوطنية">
-            <h3>جهاز مشروعات الخدمة الوطنية</h3>
-        </div>
-        <!-- وزارة الطيران المدني -->
-        <div class="partner-card">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Egyptian_Ministry_of_Civil_Aviation_emblem.png/640px-Egyptian_Ministry_of_Civil_Aviation_emblem.png" alt="وزارة الطيران المدني">
-            <h3>وزارة الطيران المدني (المطارات المصرية)</h3>
-        </div>
-        <!-- القوات البحرية -->
-        <div class="partner-card">
-            <img src="https://ar.wikipedia.org/wiki/%D9%85%D9%84%D9%81:Egyptian_Naval_Forces_Logo.png" alt="القوات البحرية">
-            <h3>القوات البحرية المصرية</h3>
-        </div>
-        <!-- جهاز مدينة برج العرب -->
-        <div class="partner-card">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Coat_of_arms_of_Egypt_%28Official%29.svg/500px-Coat_of_arms_of_Egypt_%28Official%29.svg.png" alt="شعار الدولة">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b0/New_Borg_El_Arab_city_emblem.png" alt="مدينة برج العرب الجديدة">
             <h3>جهاز مدينة برج العرب الجديدة</h3>
         </div>
         <!-- جهاز مدينة العلمين الجديدة -->
         <div class="partner-card">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Coat_of_arms_of_Egypt_%28Official%29.svg/500px-Coat_of_arms_of_Egypt_%28Official%29.svg.png" alt="شعار الدولة">
+            <img src="https://upload.wikimedia.org/wikipedia/ar/0/0d/New_Alamein_logo.jpg" alt="مدينة العلمين الجديدة">
             <h3>جهاز مدينة العلمين الجديدة</h3>
         </div>
-        <!-- الجهاز التنفيذي لمياه الشرب والصرف الصحي -->
+        <!-- جهاز مشروعات الخدمة الوطنية -->
         <div class="partner-card">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Coat_of_arms_of_Egypt_%28Official%29.svg/500px-Coat_of_arms_of_Egypt_%28Official%29.svg.png" alt="شعار الدولة">
-            <h3>الجهاز التنفيذي لمياه الشرب والصرف الصحي</h3>
+            <img src="https://www.nspo.com.eg/nspo/images/logos/gehaz.png" alt="جهاز الخدمة الوطنية">
+            <h3>جهاز مشروعات الخدمة الوطنية</h3>
         </div>
-        <!-- الأزهر الشريف -->
+        <!-- مدينة البحث العلمي والتطبيقات التكنولوجية -->
         <div class="partner-card">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Al-Azhar_al-Sharif_logo.png/500px-Al-Azhar_al-Sharif_logo.png" alt="الأزهر الشريف">
-            <h3>الأزهر الشريف</h3>
-        </div>
-        <!-- مدينة البحث العلمي -->
-        <div class="partner-card">
-            <img src="https://upload.wikimedia.org/wikipedia/ar/5/5e/SRTA-City_logo.png" alt="مدينة البحث العلمي">
+            <img src="https://srtacity.sci.eg/assets/img/logo.svg" alt="مدينة البحث العلمي">
             <h3>مدينة البحث العلمي والتطبيقات التكنولوجية</h3>
+        </div>
+        <!-- هيئة المجتمعات العمرانية الجديدة - وزارة الإسكان -->
+        <div class="partner-card">
+            <img src="https://scontent.fcai19-3.fna.fbcdn.net/v/t39.30808-6/480212216_1003717421890120_2984954709567467943_n.jpg?stp=dst-jpg_tt6&cstp=mx1468x1467&ctp=s1468x1467&_nc_cat=108&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=8m_Uo7X_lDwQ7kNvwF6bDlc&_nc_oc=Adr2EQEPFmLbvP8m1zHmoDQjBrEGs8cVelaHvuqkp8N2qDXM8fcFkBeRYuko4keYdiQ&_nc_zt=23&_nc_ht=scontent.fcai19-3.fna&_nc_gid=XcJsBeRoJRPel0WE7_q6Vg&_nc_ss=7b289&oh=00_AQD6bOwviXBVURVZDzUtOb3dul9WcSUtpNIqUja8XNJuSw&oe=6A595A6E" alt="هيئة المجتمعات العمرانية">
+            <h3>هيئة المجتمعات العمرانية الجديدة - وزارة الإسكان</h3>
+        </div>
+        <!-- وزارة الدفاع المصرية -->
+        <div class="partner-card">
+            <img src="https://www.mod.gov.eg/ModWebSite/images/ArmedForces.png" alt="وزارة الدفاع المصرية">
+            <h3>وزارة الدفاع المصرية</h3>
+        </div>
+        <!-- وزارة الموارد المائية والري -->
+        <div class="partner-card">
+            <img src="https://www.mwri.gov.eg/wp-content/uploads/2023/05/mwri-logo.png" alt="وزارة الموارد المائية والري">
+            <h3>وزارة الموارد المائية والري</h3>
+        </div>
+        <!-- وزارة النقل -->
+        <div class="partner-card">
+            <img src="https://www.mot.gov.eg/assets/New_Logo.png" alt="وزارة النقل">
+            <h3>وزارة النقل</h3>
+            <span class="partner-tag">شريك استراتيجي</span>
         </div>
     </div>
 </section>
 
-<!-- 2. الجهات الخاصة -->
+<!-- 2. الجهات الخاصة مرتبة أبجدياً -->
 <section class="section-container bg-white" style="border-radius: 50px 50px 0 0; box-shadow: 0 -10px 30px rgba(0,0,0,0.02);">
     <div class="section-header">
         <i class="fas fa-industry private-icon"></i>
@@ -217,63 +231,123 @@
         <p>كبرى الشركات الصناعية والاستثمارية التي تعتمد على CETC في ضبط جودة منشآتها</p>
     </div>
     <div class="partners-grid">
-        <!-- ألستوم -->
+        <!-- ROWAD MODERN ENGINEERING – رواد الهندسة الحديثة -->
         <div class="partner-card">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Alstom_logo.svg/640px-Alstom_logo.svg.png" alt="ALSTOM">
-            <h3>شركة ألستوم (ALSTOM) الفرنسية</h3>
-            <span class="partner-tag">Global Partner</span>
+            <img src="https://rowad-rme.com/wp-content/uploads/Rowad-Logo.png" alt="رواد الهندسة الحديثة">
+            <h3>ROWAD MODERN ENGINEERING – رواد الهندسة الحديثة</h3>
         </div>
-        <!-- فودافون -->
+        <!-- أوراسكوم Orascom Construction -->
         <div class="partner-card">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Vodafone_Logo.svg/640px-Vodafone_Logo.svg.png" alt="VODAFONE">
-            <h3>شركة فودافون مصر (VODAFONE)</h3>
-            <span class="partner-tag">Telecommunications</span>
+            <img src="https://i.logos-download.com/80130/18548-og-ab678feec326c9263efd597790996197.png/Orascom_Construction_Industries_Logo_og.png" alt="أوراسكوم">
+            <h3>أوراسكوم Orascom Construction</h3>
         </div>
-        <!-- العربي جروب -->
+        <!-- السويدي أليكتريك للحلول البيئية -->
         <div class="partner-card">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Elaraby-group-logo.png/1280px-Elaraby-group-logo.png" alt="ELARABY">
+            <img src="https://media.licdn.com/dms/image/v2/C560BAQF2a3ilv6hXXw/company-logo_200_200/company-logo_200_200/0/1631303609923?e=2147483647&v=beta&t=FRwXAhVKd3-SzRYuLwuupVzh0qMMP4ztqosot7wtI8o" alt="السويدي أليكتريك للحلول البيئية">
+            <h3>السويدي أليكتريك للحلول البيئية</h3>
+        </div>
+        <!-- الشركة العربية للصناعة (السويدي الكتريك) -->
+        <div class="partner-card dark-bg">
+            <img src="https://irfiles.technologyverse.com/swdy2/swdy-white-logo.svg" alt="الشركة العربية للصناعة">
+            <h3>الشركة العربية للصناعة (السويدي الكتريك)</h3>
+        </div>
+        <!-- الشركة المصرية للصيانة الذاتية للطرق والمطارات (تحالف ريدكون كونكريت بلس) -->
+        <div class="partner-card">
+            <img src="https://scontent.fcai19-9.fna.fbcdn.net/v/t39.30808-6/300569937_101891522652310_268178304175166739_n.jpg?stp=dst-jpg_tt6&cstp=mx312x312&ctp=s312x312&_nc_cat=101&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=u4VmFowYPssQ7kNvwFH4jyq&_nc_oc=AdpnkUBV2J1ocZsKxPBxQQkJtM4yllseMVsDloD428Hs-3Wfa9qb4bA1wjASFTGErQw&_nc_zt=23&_nc_ht=scontent.fcai19-9.fna&_nc_gid=ilA1-wJUA2G0Bni3Nwjkww&_nc_ss=7b2a8&oh=00_AQBvntky2T_F2MnBF-Iv9xJq54UmXIM28s04fMwHpHwLRQ&oe=6A599D5D" alt="الشركة المصرية للصيانة الذاتية للطرق والمطارات">
+            <h3>الشركة المصرية للصيانة الذاتية للطرق والمطارات (تحالف ريدكون كونكريت بلس)</h3>
+        </div>
+        <!-- مجموعة العربي (ELARABY Group) -->
+        <div class="partner-card">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/3/37/Elaraby-group-logo.png" alt="مجموعة العربي">
             <h3>مجموعة العربي (ELARABY Group)</h3>
             <span class="partner-tag">Industrial Giant</span>
         </div>
-        <!-- حديد عز -->
+        <!-- مجموعة حديد عز (EZZ Steel) -->
         <div class="partner-card">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_xV5mGZ9nWh9LgNIs8_R7B0P87yAEvMOn6A&s" alt="EZZ Steel">
+            <img src="https://www.ezzsteel.com/assets/application/template/logo_arabic-8c0a65b130343c368e4ad2fa8c59e1cb7f780fa4a2f32eaa92ad3f079f2201bf.svg" alt="حديد عز">
             <h3>مجموعة حديد عز (EZZ Steel)</h3>
         </div>
-        <!-- سيمكس -->
+        <!-- شركة الأفق للمقاولات -->
         <div class="partner-card">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Cemex_logo.svg/640px-Cemex_logo.svg.png" alt="CEMEX">
-            <h3>شركة سيمكس العالمية (CEMEX)</h3>
+            <img src="https://media.licdn.com/dms/image/v2/C4E0BAQGBQlUt0Yiecw/company-logo_200_200/company-logo_200_200/0/1631343864330?e=2147483647&v=beta&t=pit5v75vB6XTT7K5sEAJ-ZyEHmO2S7NjlRCHXmerA20" alt="شركة الأفق للمقاولات">
+            <h3>شركة الأفق للمقاولات</h3>
         </div>
-        <!-- سافيتو -->
+        <!-- شركة ألستوم (ALSTOM) الفرنسية -->
         <div class="partner-card">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLbXp28P9p4pS8g0G6tq6nC09C_b76pL6_9g&s" alt="SAVETO">
+            <img src="https://www.alstom.com/sites/alstom.com/files/2019/07/11/Alstom_mobility_by_nature_2019.jpg" alt="ALSTOM">
+            <h3>شركة ألستوم (ALSTOM) الفرنسية</h3>
+            <span class="partner-tag">Global Partner</span>
+        </div>
+        <!-- شركة ايديكس - EDECS -->
+        <div class="partner-card">
+            <img src="https://edecs.fsn1.your-objectstorage.com/fav-icon/group-17.png" alt="شركة ايديكس - EDECS">
+            <h3>شركة ايديكس - EDECS</h3>
+        </div>
+        <!-- شركة جاما للبنية التحتية -->
+        <div class="partner-card">
+            <img src="https://gama.com.eg/wp-content/uploads/2018/12/1543762122_316_6398_logo1-231x70.png" alt="شركة جاما">
+            <h3>شركة جاما للبنية التحتية</h3>
+        </div>
+        <!-- شركة الراغب للمقاولات RCC -->
+        <div class="partner-card">
+            <img src="https://alraghebrcc.com/new/wp-content/uploads/2019/12/logo.jpg" alt="شركة الراغب للمقاولات RCC">
+            <h3>شركة الراغب للمقاولات RCC</h3>
+        </div>
+        <!-- شركة سافيتو مصر (SAVETO) -->
+        <div class="partner-card">
+            <img src="https://www.alrashed.com/images/clients/3a.gif" alt="شركة سافيتو مصر">
             <h3>شركة سافيتو مصر (SAVETO)</h3>
         </div>
-        <!-- المواسم -->
+        <!-- شركة سامكو الوطنية للتشييد -->
         <div class="partner-card">
-            <i class="fas fa-utensils private-icon" style="font-size: 2.8rem; margin-bottom: 5px;"></i>
-            <h3>شركة المواسم للصناعات الغذائية</h3>
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvQJFuqErPXU27CYu0-q54E1iTS0n13bJGdRpJ7mACWgDScNzjTM983eNt&s=10" alt="سامكو">
+            <h3>شركة سامكو الوطنية للتشييد</h3>
         </div>
-        <!-- أوسكار جولد -->
+        <!-- شركة سامكريت - Samcrete Holding -->
         <div class="partner-card">
-            <i class="fas fa-truck private-icon" style="font-size: 2.8rem; margin-bottom: 5px;"></i>
-            <h3>شركة أوسكار جولد اللوجستية</h3>
+            <img src="https://dqprvy8f82hbs.cloudfront.net/website-assets/Samcrete.png" alt="سامكريت">
+            <h3>شركة سامكريت - Samcrete Holding</h3>
         </div>
-        <!-- EKO -->
-        <div class="partner-card">
-            <i class="fas fa-umbrella-beach private-icon" style="font-size: 2.8rem; margin-bottom: 5px;"></i>
-            <h3>قرية (EKO) الساحل الشمالي</h3>
+        <!-- شركة السعداء جروب للتشييد والبناء El-Soadaa Group -->
+        <div class="partner-card dark-bg">
+            <img src="https://elsoadaa.com/wp-content/uploads/2023/07/El-Soadaa-Group-Logo-PNG-Same-Line-White-2048x444.png" alt="شركة السعداء جروب">
+            <h3>شركة السعداء جروب للتشييد والبناء El-Soadaa Group</h3>
         </div>
-        <!-- جمعية البناء -->
+        <!-- شركة الغرابلي للأعمال الهندسية المتكاملة -->
         <div class="partner-card">
-            <i class="fas fa-users private-icon" style="font-size: 2.8rem; margin-bottom: 5px;"></i>
-            <h3>الجمعية التعاونية للبناء (مهندسي الإسكندرية)</h3>
+            <img src="https://media.licdn.com/dms/image/v2/C4D0BAQHmBnLc9r7tOA/company-logo_200_200/company-logo_200_200/0/1631300763666?e=2147483647&v=beta&t=x81vKG7fybXG-aGjZWZ85OrrH-SWkYLMaj2hoaxerWY" alt="شركة الغرابلي">
+            <h3>شركة الغرابلي للأعمال الهندسية المتكاملة</h3>
+        </div>
+        <!-- شركة فودافون مصر (VODAFONE) -->
+        <div class="partner-card">
+            <img src="https://download.logo.wine/logo/Vodafone_Egypt/Vodafone_Egypt-Logo.wine.png" alt="VODAFONE">
+            <h3>شركة فودافون مصر (VODAFONE)</h3>
+            <span class="partner-tag">Telecommunications</span>
+        </div>
+        <!-- شركة قاصد خير للمقاولات العمومية -->
+        <div class="partner-card">
+            <img src="https://i0.wp.com/www.kasedkhair.com/wp-content/uploads/cropped-logo-aklashe-01.png?w=1849&ssl=1" alt="شركة قاصد خير">
+            <h3>شركة قاصد خير للمقاولات العمومية</h3>
+        </div>
+        <!-- شركة المتحدة للمقاولات ورصف الطرق -->
+        <div class="partner-card">
+            <img src="https://media.licdn.com/dms/image/v2/C4E0BAQHkIG5Lv8kSiA/company-logo_200_200/company-logo_200_200/0/1630649629302?e=2147483647&v=beta&t=eEs4EvXCLnm9UjrkrwijwOnd_5lufZ4NPyu7vXq2edE" alt="المتحدة للمقاولات ورصف الطرق">
+            <h3>شركة المتحدة للمقاولات ورصف الطرق</h3>
+        </div>
+        <!-- شركة المدار للمشروعات الهندسية -->
+        <div class="partner-card">
+            <img src="https://www.el-madar.com/wp-content/uploads/2024/06/Main-Logo.png" alt="شركة المدار">
+            <h3>شركة المدار للمشروعات الهندسية</h3>
+        </div>
+        <!-- شركة مدكور القابضة -->
+        <div class="partner-card">
+            <img src="https://www.madkour.com.eg/themes/madkour/img/logos/madkour-holding-logo.svg" alt="شركة مدكور">
+            <h3>شركة مدكور القابضة</h3>
         </div>
     </div>
 </section>
 
-<!-- 3. الجهات الاستشارية -->
+<!-- 3. الجهات الاستشارية مرتبة أبجدياً -->
 <section class="section-container">
     <div class="section-header">
         <i class="fas fa-drafting-compass consult-icon"></i>
@@ -281,67 +355,82 @@
         <p>أعرق بيوت الخبرة الهندسية محلياً ودولياً التي اعتمدت نتائج وحدة CETC</p>
     </div>
     <div class="partners-grid">
-        <!-- سيسترا -->
+        <!-- الرائد للاستشارات الهندسية -->
+        <div class="partner-card">
+            <img src="https://media.licdn.com/dms/image/v2/C4E0BAQGKGLKhKxGalQ/company-logo_200_200/company-logo_200_200/0/1630593559938?e=1785369600&v=beta&t=tUyUhOSS40g-0tMVsdWkuhMVWvN1LwCo9QtM5Xypbo0" alt="الرائد للاستشارات الهندسية">
+            <h3>الرائد للاستشارات الهندسية</h3>
+        </div>
+        <!-- المركز القومي لبحوث الإسكان والبناء -->
+        <div class="partner-card">
+            <img src="https://www.hbrc.edu.eg/images/hbrc-new-logo-final-2-1.jpg" alt="المركز القومي لبحوث الإسكان والبناء">
+            <h3>المركز القومي لبحوث الإسكان والبناء</h3>
+        </div>
+        <!-- المركز الهندسي - جامعة الإسكندرية -->
+        <div class="partner-card">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1dbqG0cY-Ma2eBD5hXLJEcsRcTWC5Ijndy1FBHMgr8ycQ6e-Ik1NIAslE&s=10" alt="جامعة الإسكندرية">
+            <h3>المركز الهندسي - جامعة الإسكندرية</h3>
+        </div>
+        <!-- المكتب الاستشاري الهندسي أ.د. خالد قنديل -->
+        <div class="partner-card">
+            <img src="https://www.dr-khaled-kandil.com/frontend/images/logo.png" alt="المكتب الاستشاري الهندسي أ.د. خالد قنديل">
+            <h3>المكتب الاستشاري الهندسي أ.د. خالد قنديل</h3>
+        </div>
+        <!-- المكتب العربي للتصميمات والاستشارات الهندسية -->
+        <div class="partner-card">
+            <img src="https://arabbureau.com/images/logo_1.png" alt="المكتب العربي">
+            <h3>المكتب العربي للتصميمات والاستشارات الهندسية</h3>
+        </div>
+        <!-- جماعة المهندسون الاستشاريون (ECG) -->
+        <div class="partner-card dark-bg">
+            <img src="https://www.ecgsa.com/wp-content/uploads/2022/09/logowh.png" alt="ECG">
+            <h3>جماعة المهندسون الاستشاريون (ECG)</h3>
+        </div>
+        <!-- د. سعد الجيوشي - SGAC-group -->
+        <div class="partner-card">
+            <img src="https://sgac-group.com/sgacLogo1.png" alt="د. سعد الجيوشي">
+            <h3>د. سعد الجيوشي - SGAC-group</h3>
+        </div>
+        <!-- حمزة ومشاركوه (أ.د ممدوح حمزه) -->
+        <div class="partner-card">
+            <img src="https://manhom.majarracdn.cloud/mgmt/images/81343/%D8%B4%D8%B1%D9%83%D8%A9-%D8%AD%D9%85%D8%B2%D8%A9-%D9%88%D9%85%D8%B4%D8%A7%D8%B1%D9%83%D9%88%D9%87.webp" alt="شركة حمزة ومشاركوه">
+            <h3>حمزة ومشاركوه (أ.د ممدوح حمزه)</h3>
+        </div>
+        <!-- سيسترا الفرنسية (SYSTRA) -->
         <div class="partner-card">
             <img src="https://www.systra.com/egypt/wp-content/uploads/sites/32/2025/12/logo-systra.svg" alt="SYSTRA">
             <h3>سيسترا الفرنسية (SYSTRA)</h3>
             <span class="partner-tag">International Consultant</span>
         </div>
-        <!-- محرم باخوم -->
+        <!-- محرم باخوم (ACE) -->
         <div class="partner-card">
             <img src="https://ace-mb.com/wp-content/uploads/acemb-logo.png" alt="ACE">
             <h3>محرم باخوم (ACE)</h3>
             <span class="partner-tag">Consulting Leader</span>
         </div>
-        <!-- ECG -->
-        <div class="partner-card dark-bg">
-            <img src="https://www.ecgsa.com/wp-content/uploads/2022/09/logowh.png" alt="ECG">
-            <h3>جماعة المهندسون الاستشاريون (ECG)</h3>
-        </div>
-        <!-- حمزة ومشاركوه -->
+        <!-- مكتب بيت الخبرة (مدحت أبو زيد) -->
         <div class="partner-card">
-            <i class="fas fa-drafting-compass consult-icon" style="font-size: 2.8rem; margin-bottom: 5px;"></i>
-            <h3>حمزة ومشاركوه (د. ممدوح حمزة)</h3>
+            <img src="http://www.mzech.com/images/MZECH%20Logoo-final.png" alt="مكتب بيت الخبرة (مدحت أبو زيد)">
+            <h3>مكتب بيت الخبرة (مدحت أبو زيد)</h3>
         </div>
-        <!-- المركز القومي للإسكان -->
+        <!-- مكتب بيت الهندسة Engineering-Home -->
         <div class="partner-card">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Coat_of_arms_of_Egypt_%28Official%29.svg/500px-Coat_of_arms_of_Egypt_%28Official%29.svg.png" alt="المركز القومي للإسكان">
-            <h3>المركز القومي لبحوث الإسكان والبناء</h3>
+            <img src="https://www.engineering-home.com/images/logo-image/ehlogo.png" alt="Engineering-Home">
+            <h3>مكتب بيت الهندسة Engineering-Home</h3>
         </div>
-        <!-- هيدرو -->
+        <!-- مكتب د.عمرو عبدالرحمن (AACE) -->
         <div class="partner-card">
-            <i class="fas fa-water consult-icon" style="font-size: 2.8rem; margin-bottom: 5px;"></i>
-            <h3>مكتب هيدرو (Hydro) للدراسات البيئية</h3>
+            <img src="https://media.licdn.com/dms/image/v2/C4E0BAQGMzxCAptLAmA/company-logo_200_200/company-logo_200_200/0/1630651557004/aace_office_logo?e=1785369600&v=beta&t=hzXZ0ma4SCuvD1HXXXWP9Gt0BEnGID0t9to161yq7F8" alt="مكتب د.عمرو عبدالرحمن">
+            <h3>مكتب د.عمرو عبدالرحمن (AACE)</h3>
         </div>
-        <!-- بيت الخبرة -->
+        <!-- مكتب هيدرو للدراسات الهيدرولوجية والبيئة والبنية التحتية -->
         <div class="partner-card">
-            <i class="fas fa-home consult-icon" style="font-size: 2.8rem; margin-bottom: 5px;"></i>
-            <h3>مكتب بيت الخبرة (MZECH - د. مدحت أبو زيد)</h3>
+            <img src="https://hydro-eg.com/wp-content/uploads/2026/06/Af17f8a82-e70b-4d70-99aa-8a9bc1ac4514-e1783338955902.png" alt="مكتب هيدرو">
+            <h3>مكتب هيدرو للدراسات الهيدرولوجية والبيئة والبنية التحتية</h3>
         </div>
-        <!-- المكتب الاستشاري KK -->
+        <!-- مكتب ايجيك للاستشارات الهندسية -->
         <div class="partner-card">
-            <i class="fas fa-building consult-icon" style="font-size: 2.8rem; margin-bottom: 5px;"></i>
-            <h3>المكتب الاستشاري (KK - د. خالد قنديل)</h3>
-        </div>
-        <!-- المركز الهندسي - جامعة الإسكندرية -->
-        <div class="partner-card">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Alexandria_University_logo.svg/500px-Alexandria_University_logo.svg.png" alt="جامعة الإسكندرية">
-            <h3>المركز الهندسي - جامعة الإسكندرية</h3>
-        </div>
-        <!-- مكتب الرائد -->
-        <div class="partner-card">
-            <i class="fas fa-compass consult-icon" style="font-size: 2.8rem; margin-bottom: 5px;"></i>
-            <h3>مكتب الرائد (د. هشام عرفات)</h3>
-        </div>
-        <!-- مكتب ايجيك -->
-        <div class="partner-card">
-            <i class="fas fa-pencil-ruler consult-icon" style="font-size: 2.8rem; margin-bottom: 5px;"></i>
-            <h3>مكتب ايجيك (EGEC) الهندسي</h3>
-        </div>
-        <!-- مكتب سكن -->
-        <div class="partner-card">
-            <i class="fas fa-hard-hat consult-icon" style="font-size: 2.8rem; margin-bottom: 5px;"></i>
-            <h3>مكتب سكن للاستشارات الهندسية</h3>
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnDWh83eoYLI5H665V6tklTUubg-TGDWeGSSVS_L5JbOcwbdvv502PRnI&s=10" alt="مكتب ايجيك">
+            <h3>مكتب ايجيك للاستشارات الهندسية</h3>
         </div>
     </div>
 </section>

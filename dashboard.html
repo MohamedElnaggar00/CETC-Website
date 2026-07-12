@@ -86,7 +86,7 @@
             </section>
 
             <section id="reports-module" class="module">
-                <h2 style="border-bottom: 4px solid var(--primary); padding-bottom:10px; display:inline-block; font-weight: 900; margin-bottom: 25px;">مسلسلات التقارير</h2>
+                <h2 style="border-bottom: 4px solid var(--primary); padding-bottom:10px; display:inline-block; font-weight: 900;">مسلسلات التقارير</h2>
                 <div style="display: flex; gap: 15px; margin-bottom: 25px; flex-wrap: wrap;">
                     <select id="report-sheet-select" class="control-item" onchange="loadReportData(this.value)" style="flex: 1;"><option value="">تحميل التقارير...</option></select>
                     <input type="text" id="report-search-input" class="control-item" placeholder="بحث..." onkeyup="filterReportTable()" style="flex: 1.5;">
@@ -130,12 +130,8 @@
                     const headers = data[2];
                     
                     // رسم رؤوس الجدول
-                    headers.forEach(t => { 
-                        const th = document.createElement('th'); 
-                        th.textContent = t || '-'; 
-                        h.appendChild(th); 
-                    });
-
+                    headers.forEach(t => { const th = document.createElement('th'); th.textContent = t || '-'; h.appendChild(th); });
+                    
                     // البحث عن مؤشر عمود مبلغ الفاتورة بالاسم ديناميكياً لتلوينه بشكل معزول
                     let invoiceColIdx = -1;
                     headers.forEach((t, idx) => {
@@ -151,7 +147,7 @@
                             const td = document.createElement('td'); 
                             td.textContent = c || '-'; 
                             
-                            // نلون فقط عمود مبلغ الفاتورة بالضريبة، وتظل الأعمدة الأخرى باللون الأسود الطبيعي
+                            // نلون فقط خلايا عمود مبلغ الفاتورة، وتظل الأعمدة الأخرى باللون الأسود الافتراضي
                             if(idx === invoiceColIdx && c && !isNaN(parseFloat(String(c).replace(/,/g, '')))) {
                                 const val = parseFloat(String(c).replace(/,/g, ''));
                                 if(val > 0) td.classList.add('val-positive');

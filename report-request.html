@@ -3,13 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>طلب نسخة من تقرير - CETC E-JUST</title>
-    <link rel="icon" type="image/png" href="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/assets/icon.png">
+    <title>سابقة أعمال CETC - E-JUST</title>
+    
+    <!-- أيقونة تابة المتصفح الموحدة للموقع -->
+    <link rel="icon" type="image/png" href="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/assets/logo.png">
+    
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { --red: #C41230; --black: #000000; --white: #ffffff; --bg: #f8fafc; --gray: #475569; }
-        body { font-family: 'Cairo', sans-serif; margin: 0; background: var(--bg); color: #1a1a1a; display: flex; flex-direction: column; min-height: 100vh; }
+        body { font-family: 'Cairo', sans-serif; margin: 0; background: var(--bg); color: #1a1a1a; line-height: 1.6; }
         
         /* Header Glassmorphism */
         header { 
@@ -31,6 +34,7 @@
         .main-uni-title { font-weight: 900; font-size: clamp(0.8rem, 1.8vw, 1.1rem); color: #1a1a1a; }
         .sub-unit-title { font-weight: 700; font-size: clamp(0.7rem, 1.5vw, 0.9rem); color: var(--red); }
         
+        /* Home Button Glassmorphism */
         .btn-home { 
             background: rgba(241, 245, 249, 0.8); 
             backdrop-filter: blur(8px);
@@ -53,56 +57,92 @@
             box-shadow: 0 4px 15px rgba(196, 12, 48, 0.2);
         }
 
-        /* Container & Card */
-        .content-container {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 5%;
-            background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.8)), url('https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/assets/background.jpg') no-repeat center/cover;
+        /* Hero */
+        .hero { 
+            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/assets/background.jpg') no-repeat center/cover; 
+            color: white; padding: 60px 5%; text-align: center; 
         }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.75);
+        .hero h1 { font-size: 2.5rem; font-weight: 900; margin-bottom: 10px; }
+        .hero p { font-size: 1.1rem; max-width: 800px; margin: 0 auto; color: #cbd5e1; }
+
+        /* Stats Bar Glassmorphism */
+        .stats-bar { 
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+            gap: 20px; max-width: 1200px; margin: -40px auto 40px; padding: 0 20px;
+        }
+        .stat-item { 
+            background: rgba(255, 255, 255, 0.8); 
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-            padding: 50px 30px;
-            max-width: 600px;
-            width: 100%;
-            text-align: center;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.25);
-            box-sizing: border-box;
+            padding: 25px; 
+            border-radius: 12px; 
+            text-align: center; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+            border-bottom: 4px solid var(--red);
         }
-        .glass-card i {
-            font-size: 4rem;
-            color: var(--red);
-            margin-bottom: 25px;
-            animation: bounce 2s infinite;
+        .stat-num { display: block; font-size: 1.8rem; font-weight: 900; color: var(--red); }
+        .stat-label { font-size: 0.9rem; font-weight: 700; color: var(--gray); }
+
+        /* Tabs System Glassmorphism */
+        .tabs-nav { display: flex; justify-content: center; gap: 10px; margin-bottom: 40px; flex-wrap: wrap; padding: 0 20px; }
+        .tab-link { 
+            padding: 12px 25px; 
+            background: rgba(255, 255, 255, 0.8); 
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 2px solid rgba(255, 255, 255, 0.2); 
+            border-radius: 30px; 
+            cursor: pointer; 
+            font-weight: 800; 
+            transition: 0.3s; 
+            color: var(--gray); 
+            font-size: 0.95rem;
         }
-        .glass-card h2 {
-            font-size: 1.8rem;
-            font-weight: 900;
-            color: var(--black);
-            margin: 0 0 15px;
-        }
-        .glass-card p {
-            color: #475569;
-            font-size: 1.1rem;
-            font-weight: 700;
-            line-height: 1.6;
-            margin: 0 0 30px;
+        .tab-link.active { 
+            background: var(--red); 
+            color: white; 
+            border-color: var(--red); 
+            box-shadow: 0 4px 15px rgba(196, 12, 48, 0.2);
         }
 
-        footer { background: #000; color: #94a3b8; text-align: center; padding: 25px 5%; font-size: 0.85rem; border-top: 1px solid #222; }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+        /* Projects Grid */
+        .projects-grid { 
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
+            gap: 25px; padding: 0 5% 60px; max-width: 1200px; margin: 0 auto; 
         }
+        .project-card { 
+            background: white; border-radius: 15px; overflow: hidden; border: 1px solid #e2e8f0; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: 0.3s; display: none;
+        }
+        .project-card.active { display: block; animation: fadeInUp 0.5s ease forwards; }
+        .project-header { background: #fafafa; padding: 20px; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 15px; }
+        .project-header i { font-size: 1.5rem; color: var(--red); background: #fff1f2; padding: 12px; border-radius: 10px; }
+        .project-header h3 { margin: 0; font-size: 1.15rem; font-weight: 800; color: #1a1a1a; }
+        .project-body { padding: 20px; }
+        .project-body ul { padding: 0; margin: 0; list-style: none; }
+        .project-body li { margin-bottom: 10px; font-size: 0.95rem; color: var(--gray); position: relative; padding-right: 20px; font-weight: 600; }
+        .project-body li::before { content: "•"; color: var(--red); position: absolute; right: 0; font-weight: bold; }
+        .highlight-box { background: #f8fafc; padding: 10px 15px; border-radius: 8px; border-right: 3px solid var(--red); margin-top: 15px; font-size: 0.85rem; color: #1e293b; font-weight: 700; }
+
+        /* Technical Scope Section */
+        .technical-section { background: #fff; padding: 60px 5%; border-top: 1px solid #e2e8f0; }
+        .tech-container { max-width: 1100px; margin: 0 auto; }
+        .tech-box { background: var(--bg); padding: 30px; border-radius: 15px; border-right: 6px solid var(--red); }
+        .tech-box h2 { color: var(--red); margin-top: 0; font-weight: 900; }
+        .tech-box p { font-size: 1.1rem; line-height: 1.8; color: #334155; font-weight: 600; text-align: justify; }
+
+        footer { background: #000; color: #94a3b8; text-align: center; padding: 30px 5%; direction: ltr; }
+        .footer-contacts { display: flex; justify-content: center; gap: 20px; margin-bottom: 15px; flex-wrap: wrap; }
+        .footer-contacts span { display: flex; align-items: center; gap: 8px; }
+        .footer-contacts i { color: var(--red); }
+
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
         @media (max-width: 768px) {
             header { flex-direction: column; gap: 15px; text-align: center; }
+            .hero h1 { font-size: 1.8rem; }
+            .stats-bar { grid-template-columns: 1fr 1fr; }
         }
     </style>
 </head>
@@ -112,23 +152,179 @@
     <div class="logo"><img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/assets/logo.png" alt="E-JUST"></div>
     <div class="brand-container">
         <div class="main-uni-title">الجامعة المصرية اليابانية للعلوم والتكنولوجيا</div>
-        <div class="sub-unit-title">وحدة اختبارات واستشارات الهندسة المدنية - طلب تقرير</div>
+        <div class="sub-unit-title">وحدة اختبارات واستشارات الهندسة المدنية - سابقة الأعمال</div>
     </div>
     <a href="/" class="btn-home"><i class="fas fa-home"></i> الرئيسية</a>
 </header>
 
-<div class="content-container">
-    <div class="glass-card">
-        <i class="fas fa-file-signature"></i>
-        <h2>سيتوفر هذا القسم قريباً</h2>
-        <p>نعمل حالياً على بناء وتطوير نموذج طلب واستخراج نسخ التقارير والشهادات الفنية المعتمدة لتقديم خدماتنا إلكترونياً وبأقصى سرعة.</p>
-        <a href="/" class="btn-home" style="display: inline-flex; margin: 0 auto;"><i class="fas fa-arrow-right"></i> العودة للرئيسية</a>
+<section class="hero">
+    <h1>سجل حافل من الإنجازات القومية</h1>
+    <p>نعتز بكوننا شريكاً في أعمال ضبط الجودة في أضخم المشاريع التنموية والإنشائية في جمهورية مصر العربية</p>
+</section>
+
+<!-- Stats Bar -->
+<div class="stats-bar">
+    <div class="stat-item"><span class="stat-num">+30,000</span><span class="stat-label">اختبار ضبط جودة متخصص</span></div>
+    <div class="stat-item"><span class="stat-num">+14</span><span class="stat-label">عاماً من الخبرة للطاقم الفني</span></div>
+    <div class="stat-item"><span class="stat-num">+6,000</span><span class="stat-label">اختبار للقطار السريع</span></div>
+    <div class="stat-item"><span class="stat-num">+7,000</span><span class="stat-label">اختبار للإسكان الاجتماعي</span></div>
+</div>
+
+<!-- Tabs Navigation -->
+<div class="tabs-nav">
+    <div class="tab-link active" onclick="filterProjects('all')">الكل</div>
+    <div class="tab-link" onclick="filterProjects('transport')">النقل والبنية التحتية</div>
+    <div class="tab-link" onclick="filterProjects('industrial')">المشروعات الصناعية</div>
+    <div class="tab-link" onclick="filterProjects('housing')">الإسكان والجامعة</div>
+    <div class="tab-link" onclick="filterProjects('others')">أخرى</div>
+</div>
+
+<!-- Projects Grid -->
+<div class="projects-grid" id="projectsGrid">
+    
+    <!-- النقل -->
+    <div class="project-card active" data-cat="transport">
+        <div class="project-header"><i class="fas fa-train"></i><h3>القطار الكهربائي السريع</h3></div>
+        <div class="project-body">
+            <ul>
+                <li>قطاع الإسكندرية – برج العرب – مطروح</li>
+                <li>اختبار مسار السكة والكباري والبرابخ</li>
+                <li>كباري (جنوب الحمام، الكافوري، المطار...)</li>
+            </ul>
+            <div class="highlight-box">إجراء أكثر من 6000 تجربة تخصصية</div>
+        </div>
+    </div>
+
+    <div class="project-card active" data-cat="transport">
+        <div class="project-header"><i class="fas fa-road"></i><h3>محاور وطرق الإسكندرية</h3></div>
+        <div class="project-body">
+            <ul>
+                <li>مشروع تطوير شرق الإسكندرية وأبوقير</li>
+                <li>كوبري محور السادات (45) الساحلي</li>
+                <li>تطوير طريق حسن علام (مدخل برج العرب)</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- صناعي -->
+    <div class="project-card active" data-cat="industrial">
+        <div class="project-header"><i class="fas fa-industry"></i><h3>المجمعات الصناعية الكبرى</h3></div>
+        <div class="project-body">
+            <ul>
+                <li>مجمع مصانع ألستوم (ALSTOM) العالمية</li>
+                <li>مجمع مصانع جهاز مشروعات الخدمة الوطنية</li>
+                <li>المبنى اللوجستي لمجموعة العربي (ELARABY)</li>
+            </ul>
+            <div class="highlight-box">أكثر من 3100 تجربة لمصانع الألبان والجبن</div>
+        </div>
+    </div>
+
+    <div class="project-card active" data-cat="industrial">
+        <div class="project-header"><i class="fas fa-server"></i><h3>تكنولوجيا وبنية تحتية</h3></div>
+        <div class="project-body">
+            <ul>
+                <li>مركز البيانات (DATA CENTER) لشركة فودافون</li>
+                <li>مصنع الشركة العربية لمواد البناء (SAVETO)</li>
+                <li>محطة الطاقة الشمسية بمدينة البحث العلمي</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- إسكان وجامعة -->
+    <div class="project-card active" data-cat="housing">
+        <div class="project-header"><i class="fas fa-city"></i><h3>الإسكان القومي ببرج العرب</h3></div>
+        <div class="project-body">
+            <ul>
+                <li>مبادرة "سكن لكل المصريين" (الحي التاسع)</li>
+                <li>مشروع "ديارنا" للإسكان الاجتماعي</li>
+            </ul>
+            <div class="highlight-box">إجمالي أكثر من 7000 تجربة ضبط جودة</div>
+        </div>
+    </div>
+
+    <div class="project-card active" data-cat="housing">
+        <div class="project-header"><i class="fas fa-university"></i><h3>منشآت الجامعة اليابانية</h3></div>
+        <div class="project-body">
+            <ul>
+                <li>إنشاء المدينة الجامعية (+6000 تجربة)</li>
+                <li>أعمال إنشاءات المرحلة الثالثة (+3000 تجربة)</li>
+                <li>إسكان الطلاب وأعضاء هيئة التدريس</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- أخرى -->
+    <div class="project-card active" data-cat="others">
+        <div class="project-header"><i class="fas fa-anchor"></i><h3>موانئ ومشروعات بحرية</h3></div>
+        <div class="project-body">
+            <ul>
+                <li>تطوير ميناء أبوقير البحري</li>
+                <li>كباري مشاة مارينا اليخوت بالعلمين</li>
+                <li>نفق توصيل بحيرات مارينا بالامتداد الجنوبي</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="project-card active" data-cat="others">
+        <div class="project-header"><i class="fas fa-seedling"></i><h3>مشروع الدلتا الجديدة</h3></div>
+        <div class="project-body">
+            <ul>
+                <li>استصلاح 362 ألف فدان جنوب الضبعة</li>
+                <li>المسار الناقل لترعة الحمام</li>
+                <li>محطة معالجة صرف صحي بنجر السكر</li>
+            </ul>
+            <div class="highlight-box">تنفيذ أكثر من 4000 تجربة للتربة والخرسانة</div>
+        </div>
     </div>
 </div>
 
+<!-- Technical Scope -->
+<section class="technical-section">
+    <div class="tech-container">
+        <div class="tech-box">
+            <h2>نطاق الخدمات والقدرات التقنية</h2>
+            <p>
+                تمتلك وحدة <strong>CETC</strong> قدرات تقنية واسعة تشمل سلسلة متكاملة من الاختبارات الهندسية لضبط الجودة. بدءاً من <strong>اختبارات التربة والأساسات</strong> (تجارب التحميل الميداني Plate Load، الكثافة الموقعية، والجسات)، وصولاً إلى <strong>المنشآت الخرسانية</strong> (اختبارات الضغط، القلوب الخرسانية Core Test، والاختبارات غير المتلفة). كما يمتد نطاقنا ليشمل <strong>هندسة الطرق</strong> واختبارات مارشال للأسفلت، وتطوير الكود المصري بالتعاون مع كيانات عملاقة مثل "حديد عز" و"سيمكس".
+            </p>
+        </div>
+    </div>
+</section>
+
 <footer>
-    &copy; 2026 وحدة اختبارات واستشارات الهندسة المدنية (CETC) - E-JUST | جميع الحقوق محفوظة
+    <div class="footer-contacts">
+        <span><i class="fas fa-phone-alt"></i> 16448</span>
+        <span><i class="fas fa-envelope"></i> cetc.unit@ejust.edu.eg</span>
+        <span><i class="fas fa-map-marker-alt"></i> New Borg El-Arab, Alexandria, Egypt</span>
+    </div>
+    <p>&copy; 2026 CETC Unit - E-JUST | Engineering Excellence</p>
 </footer>
+
+<script>
+    function filterProjects(cat) {
+        document.querySelectorAll('.tab-link').forEach(btn => {
+            btn.classList.remove('active');
+            if(btn.textContent === (cat === 'all' ? 'الكل' : getCatName(cat))) btn.classList.add('active');
+        });
+
+        document.querySelectorAll('.project-card').forEach(card => {
+            if(cat === 'all' || card.getAttribute('data-cat') === cat) {
+                card.classList.add('active');
+            } else {
+                card.classList.remove('active');
+            }
+        });
+    }
+
+    function getCatName(cat) {
+        const names = {
+            'transport': 'النقل والبنية التحتية',
+            'industrial': 'المشروعات الصناعية',
+            'housing': 'الإسكان والجامعة',
+            'others': 'أخرى'
+        };
+        return names[cat];
+    }
+</script>
 
 </body>
 </html>

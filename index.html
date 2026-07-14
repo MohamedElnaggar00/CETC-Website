@@ -116,7 +116,7 @@
             z-index: 10; 
         }
         .nav-card { 
-            background: rgba(255, 255, 255, 0.75); /* تأثير زجاجي مطابق للهيدر */
+            background: rgba(255, 255, 255, 0.75); 
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             padding: 35px 25px; 
@@ -131,27 +131,34 @@
             display: flex; 
             flex-direction: column; 
             align-items: center; 
+            justify-content: center;
             gap: 15px; 
+            min-height: 250px; /* طول متناسق لجميع البطاقات */
+            box-sizing: border-box;
         }
         .nav-card i { 
             font-size: 2.8rem; 
             color: var(--red); 
-            background: rgba(196, 12, 48, 0.08); /* خلفية حمراء زجاجية ناعمة للايقونة */
+            background: rgba(196, 12, 48, 0.08); 
             padding: 20px; 
             border-radius: 50%; 
             transition: 0.3s ease;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .nav-card h3 { margin: 0; font-weight: 800; font-size: 1.3rem; }
+        .nav-card h3 { margin: 0; font-weight: 800; font-size: 1.25rem; }
         .nav-card p { margin: 0; font-size: 0.95rem; color: var(--text-gray); }
         
         .nav-card:hover { 
-            background: rgba(255, 255, 255, 0.9); /* يزداد وضوح الخلفية عند الهوفر */
+            background: rgba(255, 255, 255, 0.9); 
             transform: translateY(-8px); 
             border-color: var(--red); 
             box-shadow: 0 20px 25px -5px rgba(196,18,48,0.2); 
         }
         
-        /* تفاعلية تحول لون خلفية الأيقونة عند الهوفر */
         .nav-card:hover i {
             background: var(--red);
             color: var(--white);
@@ -308,21 +315,43 @@
         <p>وحدة اختبارات واستشارات الهندسة المدنية - خدمات هندسية متكاملة لاختبار مواد البناء والخرسانة والتربة والاسفلت </p>
     </section>
 
+    <!-- تم توسيع الشبكة لـ 6 بطاقات تفاعلية متناسقة -->
     <div class="nav-grid">
+        <!-- 1. التعريف بالمركز -->
         <a href="/introducing" class="nav-card">
             <i class="fas fa-sitemap"></i>
             <h3>التعريف بالمركز</h3>
             <p>الرؤية، المهام، والهيكل التنظيمي</p>
         </a>
+        <!-- 2. قائمة الخدمات والأسعار (جديد) -->
+        <a href="/services-prices" class="nav-card">
+            <i class="fas fa-tags"></i>
+            <h3>قائمة الخدمات والأسعار</h3>
+            <p>استكشاف أسعار الفحوصات والخدمات الهندسية</p>
+        </a>
+        <!-- 3. سابقة الأعمال -->
         <a href="/portfolio" class="nav-card">
             <i class="fas fa-building"></i>
             <h3>سابقة الأعمال</h3>
             <p>استعراض المشاريع الكبرى المنجزة</p>
         </a>
+        <!-- 4. معرض الصور (جديد) -->
+        <a href="/gallery" class="nav-card">
+            <i class="fas fa-images"></i>
+            <h3>معرض الصور</h3>
+            <p>جولة بصرية داخل معاملنا المتقدمة ومواقع العمل</p>
+        </a>
+        <!-- 5. الشركاء والعملاء -->
         <a href="/partners" class="nav-card">
             <i class="fas fa-handshake"></i>
             <h3>الشركاء والعملاء</h3>
             <p>كبرى شركات المقاولات والجهات الحكومية</p>
+        </a>
+        <!-- 6. طلب نسخة من تقرير (جديد) -->
+        <a href="/report-request" class="nav-card">
+            <i class="fas fa-file-signature"></i>
+            <h3>طلب نسخة من تقرير</h3>
+            <p>تقديم طلب رسمي لاستخراج نسخة من التقارير الفنية</p>
         </a>
     </div>
 

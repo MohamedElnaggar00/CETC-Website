@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>قائمة الخدمات والأسعار - CETC E-JUST</title>
+    <title>قائمة التجهيزات والخدمات - CETC E-JUST</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -30,6 +30,7 @@
         .main-uni-title { font-weight: 900; font-size: clamp(0.8rem, 1.8vw, 1.1rem); color: #1a1a1a; }
         .sub-unit-title { font-weight: 700; font-size: clamp(0.7rem, 1.5vw, 0.9rem); color: var(--red); }
         
+        /* Home Button Glassmorphism */
         .btn-home { 
             background: rgba(241, 245, 249, 0.8); 
             backdrop-filter: blur(8px);
@@ -52,56 +53,307 @@
             box-shadow: 0 4px 15px rgba(196, 12, 48, 0.2);
         }
 
-        /* Container & Card */
+        /* Container */
         .content-container {
             flex: 1;
+            padding: 40px 5% 80px;
+            background: linear-gradient(rgba(15, 23, 42, 0.88), rgba(15, 23, 42, 0.94)), url('https://ejust.edu.eg/storage/EventsPhoto/top-min%20(1).jpg') no-repeat center/cover;
+            background-attachment: scroll;
+        }
+
+        /* Tabs Navigation Glassmorphism */
+        .tabs-nav {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 35px;
+            flex-wrap: wrap;
+        }
+        .tab-link {
+            padding: 12px 25px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 800;
+            font-size: 1rem;
+            transition: 0.3s ease;
+            font-family: inherit;
             display: flex;
             align-items: center;
-            justify-content: center;
-            padding: 40px 5%;
-            background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.8)), url('https://ejust.edu.eg/storage/EventsPhoto/top-min%20(1).jpg') no-repeat center/cover;
+            gap: 10px;
         }
-        .glass-card {
+        .tab-link:hover, .tab-link.active {
+            background: var(--red);
+            border-color: var(--red);
+            box-shadow: 0 8px 20px rgba(196, 12, 48, 0.3);
+            color: white;
+        }
+
+        /* Tab Content Panel */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease forwards;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Search Bar Glassmorphism */
+        .search-wrapper {
+            max-width: 500px;
+            margin: 0 auto 40px;
+            position: relative;
+        }
+        .search-input {
+            width: 100%;
+            padding: 14px 45px 14px 20px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            outline: none;
+            color: white;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 700;
+            box-sizing: border-box;
+            transition: 0.3s;
+        }
+        .search-input::placeholder {
+            color: #94a3b8;
+        }
+        .search-input:focus {
+            border-color: var(--red);
+            background: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 0 15px rgba(196, 12, 48, 0.2);
+        }
+        .search-wrapper i {
+            position: absolute;
+            right: 18px;
+            top: 18px;
+            color: #94a3b8;
+            font-size: 1.1rem;
+        }
+
+        /* Categories Grid for Equipment */
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Category Card Glassmorphism */
+        .category-card {
             background: rgba(255, 255, 255, 0.75);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-            padding: 50px 30px;
-            max-width: 600px;
-            width: 100%;
-            text-align: center;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
             box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
-        .glass-card i {
-            font-size: 4rem;
-            color: var(--red);
-            margin-bottom: 25px;
-            animation: bounce 2s infinite;
+        .category-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--red);
+            box-shadow: 0 15px 30px rgba(196, 12, 48, 0.15);
         }
-        .glass-card h2 {
+
+        .category-header {
+            border-bottom: 2px solid rgba(196, 12, 48, 0.15);
+            padding-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .category-header i {
             font-size: 1.8rem;
+            color: var(--red);
+            background: rgba(196, 12, 48, 0.08);
+            padding: 10px;
+            border-radius: 10px;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .category-header .titles-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .category-header h3 {
+            margin: 0;
+            font-size: 1.15rem;
             font-weight: 900;
             color: var(--black);
-            margin: 0 0 15px;
         }
-        .glass-card p {
-            color: #475569;
-            font-size: 1.1rem;
+        .category-header h4 {
+            margin: 0;
+            font-size: 0.8rem;
             font-weight: 700;
-            line-height: 1.6;
-            margin: 0 0 30px;
+            color: var(--gray);
+            text-transform: uppercase;
+        }
+
+        /* Device List */
+        .device-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .device-item {
+            font-size: 0.9rem;
+            color: #1e293b;
+            font-weight: 700;
+            line-height: 1.5;
+            position: relative;
+            padding-right: 20px;
+            text-align: justify;
+        }
+        .device-item::before {
+            content: "\f0da"; 
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: var(--red);
+            position: absolute;
+            right: 0;
+            top: 1px;
+        }
+
+        /* Excel-Style Table Wrapper */
+        .excel-table-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.85); /* تباين مرتفع جداً لقراءة الحصر المالي */
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            overflow-x: auto;
+            box-sizing: border-box;
+            margin-bottom: 30px;
+        }
+        .excel-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-align: right;
+            min-width: 900px;
+        }
+        .excel-table th {
+            background: #111111;
+            color: #ffffff;
+            padding: 14px 12px;
+            font-weight: 900;
+            border: 1px solid #333;
+            text-align: center;
+        }
+        .excel-table td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            color: #1a1a1a;
+            vertical-align: middle;
+        }
+        .excel-table tr:nth-child(even) {
+            background: rgba(0, 0, 0, 0.02);
+        }
+        .excel-table tr:hover {
+            background: rgba(196, 12, 48, 0.04);
+        }
+        
+        /* Category Dividers inside Table */
+        .excel-table tr.category-row {
+            background: rgba(196, 12, 48, 0.08) !important;
+            font-weight: 900;
+        }
+        .excel-table tr.category-row td {
+            color: var(--red);
+            font-size: 1.1rem;
+            text-align: right;
+            border-bottom: 2px solid var(--red);
+            padding: 14px 15px;
+        }
+        .text-center { text-align: center !important; }
+        .text-bold { font-weight: 900 !important; }
+
+        /* Notes Box Glassmorphism */
+        .notes-box {
+            max-width: 1200px;
+            margin: 40px auto 0;
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            box-sizing: border-box;
+        }
+        .notes-box h4 {
+            margin: 0 0 15px;
+            color: var(--red);
+            font-size: 1.2rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .notes-list {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .notes-item {
+            font-size: 0.9rem;
+            color: #334155;
+            font-weight: 700;
+            position: relative;
+            padding-right: 22px;
+            text-align: justify;
+        }
+        .notes-item::before {
+            content: "\f06a";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: var(--red);
+            position: absolute;
+            right: 0;
+            top: 2px;
         }
 
         footer { background: #000; color: #94a3b8; text-align: center; padding: 25px 5%; font-size: 0.85rem; border-top: 1px solid #222; }
 
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
+
         @media (max-width: 768px) {
             header { flex-direction: column; gap: 15px; text-align: center; }
+            .tabs-nav { gap: 10px; }
+            .tab-link { font-size: 0.9rem; padding: 10px 18px; }
+            .categories-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -111,23 +363,699 @@
     <div class="logo"><img src="https://ejust.edu.eg/assets/img/logo.png" alt="E-JUST"></div>
     <div class="brand-container">
         <div class="main-uni-title">الجامعة المصرية اليابانية للعلوم والتكنولوجيا</div>
-        <div class="sub-unit-title">وحدة اختبارات واستشارات الهندسة المدنية - الخدمات والأسعار</div>
+        <div class="sub-unit-title">وحدة اختبارات واستشارات الهندسة المدنية - دليل الخدمات والأسعار الاسترشادية</div>
     </div>
     <a href="/" class="btn-home"><i class="fas fa-home"></i> الرئيسية</a>
 </header>
 
 <div class="content-container">
-    <div class="glass-card">
-        <i class="fas fa-tags"></i>
-        <h2>سيتوفر هذا القسم قريباً</h2>
-        <p>نعمل حالياً على إعداد وتجهيز قوائم أسعار الفحوصات والخدمات الاستشارية المتكاملة لنوفرها لكم بمرونة تامة.</p>
-        <a href="/" class="btn-home" style="display: inline-flex; margin: 0 auto;"><i class="fas fa-arrow-right"></i> العودة للرئيسية</a>
+    
+    <!-- نظام التبويب البلوري المتطور -->
+    <div class="tabs-nav">
+        <button class="tab-link active" onclick="switchTab('equipment', this)"><i class="fas fa-tools"></i> الأجهزة والتجهيزات المعملية</button>
+        <button class="tab-link" onclick="switchTab('prices', this)"><i class="fas fa-file-invoice-dollar"></i> قائمة الأسعار الاسترشادية</button>
     </div>
+
+    <!-- 1. تبويب التجهيزات والأجهزة المعملية -->
+    <div id="equipment-content" class="tab-content active">
+        <!-- شريط البحث الآني -->
+        <div class="search-wrapper">
+            <input type="text" id="searchInput" class="search-input" placeholder="ابحث عن جهاز أو فحص معملي..." onkeyup="filterEquipment()">
+            <i class="fas fa-search"></i>
+        </div>
+
+        <div class="categories-grid">
+            <!-- 1. ماكينات الضغط والتحميل -->
+            <div class="category-card">
+                <div class="category-header">
+                    <i class="fas fa-cogs"></i>
+                    <div class="titles-wrapper">
+                        <h3>ماكينات الضغط والتحميل</h3>
+                        <h4>Compression & Loading Machines</h4>
+                    </div>
+                </div>
+                <ul class="device-list">
+                    <li class="device-item">ماكينات اختبار الضغط (سعة 2000 و3000 كيلو نيوتن) تستخدم لاختبار مقاومة المواد للكسر والتحمل.</li>
+                    <li class="device-item">روافع التحميل (Jacks) (سعة 25-30 طن) مزودة بمضخات وساعات قياس الضغط لتطبيقات الأحمال الثقيلة.</li>
+                </ul>
+            </div>
+
+            <!-- 2. معدات التربة والجيوتقنية -->
+            <div class="category-card">
+                <div class="category-header">
+                    <i class="fas fa-mountain"></i>
+                    <div class="titles-wrapper">
+                        <h3>معدات التربة والجيوتقنية</h3>
+                        <h4>Soil & Geotechnical Equipment</h4>
+                    </div>
+                </div>
+                <ul class="device-list">
+                    <li class="device-item">جهاز اختبار CBR (سعة 50 كيلو نيوتن) لتقييم قوة تحمل التربة.</li>
+                    <li class="device-item">اختبار صندوق القص المباشر Direct Shear Box.</li>
+                    <li class="device-item">هزاز المناخل : لاستخلاص وفصل المواد وتصنيفها.</li>
+                    <li class="device-item">اختبار التحليل المنخلي (Sieve Analysis) : لتحديد التدرج الحبيبي للتربة.</li>
+                    <li class="device-item">جهاز الكثافة الحقلية (Sand Cone) : لتحديد درجة دمك التربة في الموقع.</li>
+                    <li class="device-item">جهاز إزاحة الرمل : لتحديد نسبة الدمك للتربة ذات الحبيبات الكبيرة (Oversized).</li>
+                    <li class="device-item">جهاز حدود "أتبربرج" (Atterberg) : لتحديد حدي السيولة واللدونة للتربة.</li>
+                    <li class="device-item">جهاز الوزن النوعي (Specific Gravity) : لتحديد الوزن النوعي للتربة.</li>
+                </ul>
+            </div>
+
+            <!-- 3. أجهزة اختبارات الخرسانة -->
+            <div class="category-card">
+                <div class="category-header">
+                    <i class="fas fa-cube"></i>
+                    <div class="titles-wrapper">
+                        <h3>أجهزة اختبارات الخرسانة</h3>
+                        <h4>Concrete Testing Tools</h4>
+                    </div>
+                </div>
+                <ul class="device-list">
+                    <li class="device-item">ماكينة استخراج القلوب الخرسانية (Core Apparatus) لاختبار مقاومة الضغط للخرسانة المتصلدة.</li>
+                    <li class="device-item">مطرقة "شميدت" : لتحديد المقاومة بطريقة غير المتلفة.</li>
+                    <li class="device-item">مخروط الهبوط (Slump Test) لتحديد قوام وتشغيلية الخرسانة الطازجة.</li>
+                    <li class="device-item">هزاز قوالب المكعبات : لضمان دمك العينات الخرسانية بدقة داخل القوالب.</li>
+                    <li class="device-item">خلاطة خرسانة : لتحضير الخلطات الخرسانية التجريبية والمعملية.</li>
+                    <li class="device-item">قوالب المكعبات والأسطوانات : لصب عينات قياسية للخرسانة.</li>
+                </ul>
+            </div>
+
+            <!-- 4. أجهزة اختبارات الأسفلت والبيتومين -->
+            <div class="category-card">
+                <div class="category-header">
+                    <i class="fas fa-road"></i>
+                    <div class="titles-wrapper">
+                        <h3>أجهزة اختبارات الأسفلت والبيتومين</h3>
+                        <h4>Asphalt & Bitumen Devices</h4>
+                    </div>
+                </div>
+                <ul class="device-list">
+                    <li class="device-item">جهاز "مارشال" الرقمي (Digital Marshall) (سعة 3000 كجم) لاختبارات وتصميم الأسفلت.</li>
+                    <li class="device-item">جهاز الغرز الرقمي (Penetrometer) : لتحديد رتبة وجودة البيتومين.</li>
+                    <li class="device-item">جهاز الطرد المركزي (Centrifugal Extractor) لاستخلاص وفصل المواد الرابطة في الأسفلت.</li>
+                    <li class="device-item">ماكينة قطع القلوب الإسفلتية : لاستخراج عينات الأسفلت الميدانية.</li>
+                    <li class="device-item">جهاز استخراج ودمك عينات مارشال : لتجهيز وتحضير عينات الاختبار القياسية.</li>
+                    <li class="device-item">جهاز اختبار نقطة التطرية لليبتومين Ring and ball.</li>
+                </ul>
+            </div>
+
+            <!-- 5. أجهزة اختبارات الأسمنت والمونة -->
+            <div class="category-card">
+                <div class="category-header">
+                    <i class="fas fa-flask"></i>
+                    <div class="titles-wrapper">
+                        <h3>أجهزة اختبارات الأسمنت والمونة</h3>
+                        <h4>Cement & Mortar Equipment</h4>
+                    </div>
+                </div>
+                <ul class="device-list">
+                    <li class="device-item">جهاز "فيكات" (Vicat) : لتعيين زمن الشك والاتساق القياسي للأسمنت.</li>
+                    <li class="device-item">جهاز "لوشاتيليه" (Le Chatelier) : لتحديد مدى تمدد الأسمنت (اختبار الثبات).</li>
+                    <li class="device-item">جهاز "بلين" (Blain) : لتحديد نعومة الأسمنت عن طريق نفاذية الهواء.</li>
+                    <li class="device-item">خلاط المونة الأسمنتية : لخلط وتحضير عينات الأسمنت المعملية.</li>
+                    <li class="device-item">هزاز قوالب الأسمنت: لدمك عينات المونة الأسمنتية بدقة.</li>
+                    <li class="device-item">اختبار نعومة الأسمنت وتحديد معامل النعومة Sf.</li>
+                </ul>
+            </div>
+
+            <!-- 6. معدات التجفيف والمعالجة -->
+            <div class="category-card">
+                <div class="category-header">
+                    <i class="fas fa-thermometer-half"></i>
+                    <div class="titles-wrapper">
+                        <h3>معدات التجفيف والمعالجة</h3>
+                        <h4>Thermal & Curing Equipment</h4>
+                    </div>
+                </div>
+                <ul class="device-list">
+                    <li class="device-item">أفران تجفيف (250 درجة مئوية) : لتجفيف العينات في درجات حرارة عالية.</li>
+                    <li class="device-item">حمام مائي (100 درجة مئوية) : للاختبارات التي تتطلب تحكماً دقيقاً في درجة الحرارة.</li>
+                    <li class="device-item">فرن صهر الكبريت : مخصص لتحضير مادة الكبريت لتسوية أسطح العينات.</li>
+                    <li class="device-item">خزانات معالجة حرارية : للمعالجة القياسية للمكعبات الخرسانية بالماء الساخن.</li>
+                </ul>
+            </div>
+
+            <!-- 7. أجهزة اختبار الركام -->
+            <div class="category-card">
+                <div class="category-header">
+                    <i class="fas fa-layer-group"></i>
+                    <div class="titles-wrapper">
+                        <h3>أجهزة اختبار الركام</h3>
+                        <h4>Aggregate Testing Tools</h4>
+                    </div>
+                </div>
+                <ul class="device-list">
+                    <li class="device-item">جهاز "لوس أنجلوس" (MATEST) : لقياس مقاومة الركام للبري والتآكل.</li>
+                    <li class="device-item">جهاز تعيين قيمة التحطيم (ACV) : لتحديد مقاومة الركام للتحطم تحت الأحمال.</li>
+                    <li class="device-item">قوالب الوزن الحجمي (Unit Weight) : لتحديد الوزن النوعي والحجمي للركام.</li>
+                    <li class="device-item">أدوات الخصائص الكيميائية : لتحديد نسب الكلوريدات (Cl-) والكبريتات (SO3) في الركام.</li>
+                </ul>
+            </div>
+
+            <!-- 8. أجهزة المساحة والقياس -->
+            <div class="category-card">
+                <div class="category-header">
+                    <i class="fas fa-drafting-compass"></i>
+                    <div class="titles-wrapper">
+                        <h3>أجهزة المساحة والقياس</h3>
+                        <h4>Surveying & Measurement</h4>
+                    </div>
+                </div>
+                <ul class="device-list">
+                    <li class="device-item">جهاز المحطة المتكاملة (SOKKIA Total Station FX-202) للقياسات المساحية والمكانية فائقة الدقة.</li>
+                    <li class="device-item">عدادات قياس الإزاحة (1سم، 3سم، 5سم) : لمراقبة الهبوط والتشكلات بدقة متناهية.</li>
+                </ul>
+            </div>
+
+            <!-- 9. موازين عالية الدقة -->
+            <div class="category-card">
+                <div class="category-header">
+                    <i class="fas fa-balance-scale"></i>
+                    <div class="titles-wrapper">
+                        <h3>موازين عالية الدقة</h3>
+                        <h4>High-Precision Weighing</h4>
+                    </div>
+                </div>
+                <ul class="device-list">
+                    <li class="device-item">موازين إلكترونية (MATEST & ELE) (سعة 30 كجم) لأعمال الوزن العامة بالمختبر.</li>
+                    <li class="device-item">موازين دقيقة (500 جم و5000 جم) : للقياسات التي تتطلب دقة متناهية (حساسية عالية).</li>
+                </ul>
+            </div>
+
+            <!-- 10. تحضير العينات وتجهيزها -->
+            <div class="category-card">
+                <div class="category-header">
+                    <i class="fas fa-tools"></i>
+                    <div class="titles-wrapper">
+                        <h3>تحضير العينات وتجهيزها</h3>
+                        <h4>Sample Preparation & Support</h4>
+                    </div>
+                </div>
+                <ul class="device-list">
+                    <li class="device-item">صاروخ طاولة لقطع العينات : لتجهيز وضبط ارتفاعات العينات المعملية بدقة.</li>
+                    <li class="device-item">ضاغط هواء (Air Compressor) لتزويد الأدوات المعملية بالهواء المضغوط اللازم للتشغيل.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. تبويب قائمة الأسعار الاسترشادية المطور (نمط إكسيل مدمج ومفلتر) -->
+    <div id="prices-content" class="tab-content">
+        <!-- شريط البحث المخصص للأسعار -->
+        <div class="search-wrapper">
+            <input type="text" id="pricesSearchInput" class="search-input" placeholder="ابحث باسم الاختبار أو تفاصيله في الجدول..." onkeyup="filterPrices()">
+            <i class="fas fa-search"></i>
+        </div>
+
+        <div class="excel-table-wrapper">
+            <table class="excel-table">
+                <thead>
+                    <tr>
+                        <th style="width: 15%;">الفئة</th>
+                        <th style="width: 25%;">الاختبار</th>
+                        <th style="width: 15%;">سعر الوحدة</th>
+                        <th style="width: 15%;">الحد الأدنى</th>
+                        <th style="width: 30%;">تفاصيل الاختبار</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    <!-- اختبارات التربة -->
+                    <tr class="category-row"><td colspan="5">اختبارات التربة</td></tr>
+                    <tr>
+                        <td class="text-bold">اختبارات التربة</td>
+                        <td>تجربة تحميل بالكود المصري</td>
+                        <td class="text-center text-bold">3000 ج.م</td>
+                        <td class="text-center">1 تجربة</td>
+                        <td>اختبار تحديد جودة الدمك + أقصى إجهاد للتربة</td>
+                    </tr>
+                    <tr>
+                        <td class="text-bold">اختبارات التربة</td>
+                        <td>تجربة تحميل بالغمر لمدة 24 ساعة بالكود المصري</td>
+                        <td class="text-center text-bold">10000 ج.م</td>
+                        <td class="text-center">1 تجربة</td>
+                        <td>اختبار سلوك التربة ذات المشاكل</td>
+                    </tr>
+                    <tr>
+                        <td class="text-bold">اختبارات التربة</td>
+                        <td>تجربة تحميل بالكود الألماني</td>
+                        <td class="text-center text-bold">3000 ج.م</td>
+                        <td class="text-center">1 تجربة</td>
+                        <td>اختبار تحديد معاملات المرونة للتربة + تحديد معامل رد الفعل</td>
+                    </tr>
+                    <tr>
+                        <td class="text-bold">اختبارات التربة</td>
+                        <td>Sand cone</td>
+                        <td class="text-center text-bold">250 ج.م / عينة</td>
+                        <td class="text-center">1250 ج.م طبقة أساس / 1000 طبقة ردم من الرمل</td>
+                        <td>اختبار درجة الدمك في الموقع</td>
+                    </tr>
+                    <tr>
+                        <td class="text-bold">اختبارات التربة</td>
+                        <td>بروكتور رمل</td>
+                        <td class="text-center text-bold">1250 ج.م</td>
+                        <td class="text-center">1 عينة</td>
+                        <td>تحديد الكثافة الجافة القصوى + تحديد نسبة المياه الأصولية</td>
+                    </tr>
+                    <tr>
+                        <td class="text-bold">اختبارات التربة</td>
+                        <td>بروكتور تربة أساس</td>
+                        <td class="text-center text-bold">1750 ج.م</td>
+                        <td class="text-center">1 عينة</td>
+                        <td>تحديد الكثافة الجافة القصوى + تحديد نسبة المياه الأصولية</td>
+                    </tr>
+                    <tr>
+                        <td class="text-bold">اختبارات التربة</td>
+                        <td>تدرج عينة رمل</td>
+                        <td class="text-center text-bold">750 ج.م</td>
+                        <td class="text-center">1 عينة</td>
+                        <td>تدرج منخلي + تصنيف</td>
+                    </tr>
+                    <tr>
+                        <td class="text-bold">اختبارات التربة</td>
+                        <td>تصنيف تربة/سن</td>
+                        <td class="text-center text-bold">2000 ج.م</td>
+                        <td class="text-center">1 عينة</td>
+                        <td>تدرج + حد السيولة واللدونة</td>
+                    </tr>
+                    <tr>
+                        <td class="text-bold">اختبارات التربة</td>
+                        <td>صلاحية رمل</td>
+                        <td class="text-center text-bold">1500 ج.م</td>
+                        <td class="text-center">1 عينة</td>
+                        <td>تدرج + حد السيولة واللدونة + بروكتور</td>
+                    </tr>
+                    <tr>
+                        <td class="text-bold">اختبارات التربة</td>
+                        <td>صلاحية تربة ردم</td>
+                        <td class="text-center text-bold">2500 ج.م</td>
+                        <td class="text-center">1 عينة</td>
+                        <td>تدرج + حد السيولة واللدونة + بروكتور + CBR</td>
+                    </tr>
+                    <tr>
+                        <td class="text-bold">اختبارات التربة</td>
+                        <td>صلاحية طبقة أساس</td>
+                        <td class="text-center text-bold">3000 ج.م</td>
+                        <td class="text-center">1 عينة</td>
+                        <td>تدرج + حد السيولة واللدونة + بروكتور + CBR + وزن نوعي + بري وتآكل + تحديد نسبة الامتصاص</td>
+                    </tr>
+                    <tr>
+                        <td class="text-bold">اختبارات التربة</td>
+                        <td>صلاحية ركام كسر أحجار (سن)</td>
+                        <td class="text-center text-bold">2500 ج.م</td>
+                        <td class="text-center">1 عينة</td>
+                        <td>تدرج + بري وتآكل + وزن نوعي + تحديد نسبة الامتصاص</td>
+                    </tr>
+                    <tr>
+                        <td class="text-bold">اختبارات التربة</td>
+                        <td>اختبار عينات صخر</td>
+                        <td class="text-center text-bold">625 ج.م</td>
+                        <td class="text-center">3 عينات</td>
+                        <td>اختبار الضغط + تحديد الكثافة</td>
+                    </tr>
+
+                    <!-- اختبارات مواد البناء -->
+                    <tr class="category-row"><td colspan="5">اختبارات مواد البناء</td></tr>
+                    <tr>
+                        <td class="text-bold">اختبارات مواد البناء</td>
+                        <td>طوب بناء أسمنتي</td>
+                        <td class="text-center text-bold">1250 ج.م</td>
+                        <td class="text-center">12 طوبة</td>
+                        <td>اختبار الضغط + تحديد الكثافة + تحديد نسبة الامتصاص</td>
+                    </tr>
+                    <tr>
+                        <td class="text-bold">اختبارات مواد البناء</td>
+                        <td>طوب بناء طفلي</td>
+                        <td class="text-center text-bold">1750 ج.م</td>
+                        <td class="text-center">16 طوبة</td>
+                        <td>اختبار الضغط + تحديد الكثافة + تحديد نسبة الامتصاص + درجة التزهير</td>
+                    </tr>
+                    <tr>
+                        <td class="text-bold">اختبارات مواد البناء</td>
+                        <td>مكعبات عينة بردورة</td>
+                        <td class="text-center text-bold">500 ج.م</td>
+                        <td class="text-center">3 عينات</td>
+                        <td>اختبار الضغط + تحديد الكثافة</td>
+                    </tr>
+                    <tr>
+                        <td class="text-bold">اختبارات مواد البناء</td>
+                        <td>بلاط انترلوك</td>
+                        <td class="text-center text-bold">1500 ج.م</td>
+                        <td class="text-center">12 عينة</td>
+                        <td>اختبار الضغط + تحديد الكثافة + تحديد نسبة الامتصاص</td>
+                    </tr>
+
+                    <!-- اختبارات الخرسانة الطازجة والمتصلدة -->
+                    <tr class="category-row"><td colspan="5">اختبارات الخرسانة الطازجة والمتصلدة</td></tr>
+                    <tr>
+                        <td class="text-bold">اختبارات الخرسانة</td>
+                        <td>مطرقة ارتداد</td>
+                        <td class="text-center text-bold">100 ج.م / القراءة</td>
+                        <td class="text-center">30 قراءة (3000 ج.م)</td>
+                        <td>اختبار تحديد جودة العناصر الخرسانية (استرشادي)</td>
+                    </tr>
+                    <tr>
+                        <td class="text-bold">اختبارات الخرسانة</td>
+                        <td>قلب خرساني (كور 3 بوصة)</td>
+                        <td class="text-center text-bold">1000 ج.م / كور</td>
+                        <td class="text-center">3 عينات</td>
+                        <td>اختبار تحديد مقاومة الضغط للعناصر الخرسانية</td>
+                    </tr>
+                    <tr>
+                        <td class="text-bold">اختبارات الخرسانة</td>
+                        <td>قلب خرساني (أكبر من 3 بوصة)</td>
+                        <td class="text-center text-bold">1250 ج.م / كور</td>
+                        <td class="text-center">3 عينات</td>
+                        <td>اختبار تحديد مقاومة الضغط للعناصر الخرسانية</td>
+                    </tr>
+                    <tr>
+                        <td class="text-bold">اختبارات الخرسانة</td>
+                        <td>تكسير جروات</td>
+                        <td class="text-center text-bold">50 ج.م / مكعب<br><small style="color:var(--gray)">150 ج.م للتقرير</small></td>
+                        <td class="text-center">3 مكعبات</td>
+                        <td>تحديد اجهاد الضغط</td>
+                    </tr>
+                    <tr>
+                        <td class="text-bold">اختبارات الخرسانة</td>
+                        <td>تكسير مكعبات خرسانية</td>
+                        <td class="text-center text-bold">40 ج.م / مكعب<br><small style="color:var(--gray)">80 ج.م للتقرير</small></td>
+                        <td class="text-center">3 مكعبات</td>
+                        <td>تحديد اجهاد الضغط</td>
+                    </tr>
+                    <tr>
+                        <td class="text-bold">اختبارات الخرسانة</td>
+                        <td>تكسير أسطوانات خرسانية</td>
+                        <td class="text-center text-bold">100 ج.م / أسطوانة<br><small style="color:var(--gray)">200 ج.م تسوية أسطوانة | 100 ج.م للتقرير</small></td>
+                        <td class="text-center">3 أسطوانات</td>
+                        <td>تحديد اجهاد الضغط</td>
+                    </tr>
+                    <tr>
+                        <td class="text-bold">اختبارات الخرسانة</td>
+                        <td>اختبار مقاومة شد الانفلاق للخرسانة</td>
+                        <td class="text-center text-bold">500 ج.م</td>
+                        <td class="text-center">3 عينات</td>
+                        <td>اختبار عينات مقاومة شد الانفلاق لعينات أسطوانية</td>
+                    </tr>
+                    <tr>
+                        <td class="text-bold">اختبارات الخرسانة</td>
+                        <td>تصميم خلطة خرسانية</td>
+                        <td class="text-center text-bold">10000 ج.م</td>
+                        <td class="text-center">1 خلطة</td>
+                        <td>تصميم خلطة خرسانية شاملة صلاحيات فيزيائية وميكانيكية للمواد</td>
+                    </tr>
+                    <tr>
+                        <td class="text-bold">اختبارات الخرسانة</td>
+                        <td>اختبار خلطة تأكيدية</td>
+                        <td class="text-center text-bold">5000 ج.م</td>
+                        <td class="text-center">1 خلطة</td>
+                        <td>خلط في المعمل بنسب خلط موفرة من قبل العميل</td>
+                    </tr>
+                    <tr>
+                        <td class="text-bold">اختبارات الخرسانة</td>
+                        <td>معالجة مكعبات بأحواض المعالجة</td>
+                        <td class="text-center text-bold">15 ج.م / مكعب (7 أيام أو أقل)<br>25 ج.م / مكعب (28 يوم)</td>
+                        <td class="text-center">-</td>
+                        <td>-</td>
+                    </tr>
+
+                    <!-- ركام الخرسانة -->
+                    <tr class="category-row"><td colspan="5">ركام الخرسانة</td></tr>
+                    <tr>
+                        <td class="text-bold">ركام الخرسانة</td>
+                        <td>اختبار صلاحية ركام خشن</td>
+                        <td class="text-center text-bold">7500 ج.م</td>
+                        <td class="text-center">1 عينة</td>
+                        <td>تدرج + وزن نوعي + وزن حجمي / كثافة + عضوية وتفلطح + تهشيم + بري وتآكل</td>
+                    </tr>
+                    <tr>
+                        <td class="text-bold">ركام الخرسانة</td>
+                        <td>اختبار صلاحية ركام ناعم</td>
+                        <td class="text-center text-bold">5000 ج.م</td>
+                        <td class="text-center">1 عينة</td>
+                        <td>تدرج + وزن نوعي + وزن حجمي / كثافة</td>
+                    </tr>
+
+                    <!-- اختبارات الأسفلت -->
+                    <tr class="category-row"><td colspan="5">اختبارات الأسفلت</td></tr>
+                    <tr>
+                        <td class="text-bold">اختبارات الأسفلت</td>
+                        <td>صلاحية خلطة أسفلتية</td>
+                        <td class="text-center text-bold">3500 ج.م</td>
+                        <td class="text-center">1 خلطة</td>
+                        <td>(مارشال + GMB + استخلاص)</td>
+                    </tr>
+                    <tr>
+                        <td class="text-bold">اختبارات الأسفلت</td>
+                        <td>استخلاص خلطة أسفلتية</td>
+                        <td class="text-center text-bold">1500 ج.م</td>
+                        <td class="text-center">1 عينة</td>
+                        <td>استخلاص الركام وتعيين درجة التطابق مع حدود المواصفات</td>
+                    </tr>
+                    <tr>
+                        <td class="text-bold">اختبارات الأسفلت</td>
+                        <td>اختبار كور أسفلت</td>
+                        <td class="text-center text-bold">200 ج.م / كور</td>
+                        <td class="text-center">3 عينات</td>
+                        <td>(تحديد سمك + درجة دمك)</td>
+                    </tr>
+                    <tr>
+                        <td class="text-bold">اختبارات الأسفلت</td>
+                        <td>اختبار كور أسفلت (مارشال)</td>
+                        <td class="text-center text-bold">300 ج.م / كور</td>
+                        <td class="text-center">3 عينات</td>
+                        <td>(مارشال الثبات والتدفق)</td>
+                    </tr>
+                    <tr>
+                        <td class="text-bold">اختبارات الأسفلت</td>
+                        <td>استخراج كور</td>
+                        <td class="text-center text-bold">400 ج.م / كور</td>
+                        <td class="text-center">3 عينات</td>
+                        <td>استخراج كور</td>
+                    </tr>
+                    <tr>
+                        <td class="text-bold">اختبارات الأسفلت</td>
+                        <td>اختبار الغرز للبيتومين</td>
+                        <td class="text-center text-bold">500 ج.م</td>
+                        <td class="text-center">1 عينة</td>
+                        <td>اختبار تحديد رتبة البيتومين</td>
+                    </tr>
+                    <tr>
+                        <td class="text-bold">اختبارات الأسفلت</td>
+                        <td>اختبار نقطة التطرية</td>
+                        <td class="text-center text-bold">500 ج.م</td>
+                        <td class="text-center">1 عينة</td>
+                        <td>اختبار الكرة والحلقة لتحديد درجة الحرارة لحدوث التطرية للبيتومين</td>
+                    </tr>
+
+                    <!-- اختبارات كسر الأحجار -->
+                    <tr class="category-row"><td colspan="5">اختبارات كسر الأحجار</td></tr>
+                    <tr>
+                        <td class="text-bold">اختبارات كسر الأحجار</td>
+                        <td>اختبار العصوية والتفلطح</td>
+                        <td class="text-center text-bold">750 ج.م</td>
+                        <td class="text-center">1 عينة</td>
+                        <td>اختبار معامل العصوية والتفلطح</td>
+                    </tr>
+                    <tr>
+                        <td class="text-bold">اختبارات كسر الأحجار</td>
+                        <td>اختبار البري والتآكل</td>
+                        <td class="text-center text-bold">750 ج.م</td>
+                        <td class="text-center">1 عينة</td>
+                        <td>اختبار لوس أنجلوس</td>
+                    </tr>
+                    <tr>
+                        <td class="text-bold">اختبارات كسر الأحجار</td>
+                        <td>اختبار التهشيم</td>
+                        <td class="text-center text-bold">500 ج.م</td>
+                        <td class="text-center">1 عينة</td>
+                        <td>اختبار معامل التهشيم للركام</td>
+                    </tr>
+
+                    <!-- استشارات فنية -->
+                    <tr class="category-row"><td colspan="5">استشارات فنية</td></tr>
+                    <tr>
+                        <td class="text-bold">استشارات فنية</td>
+                        <td>تقرير اختبار تحميل على الخوازيق</td>
+                        <td class="text-center text-bold">حسب المشروع</td>
+                        <td class="text-center">3000 ج.م / يوم</td>
+                        <td>تحديد حمل الانهيار للخازوق والهبوط</td>
+                    </tr>
+                    <tr>
+                        <td class="text-bold">استشارات فنية</td>
+                        <td>تقرير جسات فحص التربة وتقرير التربة</td>
+                        <td class="text-center text-bold">حسب المشروع</td>
+                        <td class="text-center">3000 ج.م / يوم</td>
+                        <td>تحديد طبيعة التربة ومناسيب المياه الجوفية ومعاملات التصميم وتقديم توصيات للتأسيس</td>
+                    </tr>
+                    <tr>
+                        <td class="text-bold">استشارات فنية</td>
+                        <td>تقرير اختبار التحميل للعناصر الإنشائية</td>
+                        <td class="text-center text-bold">حسب المشروع</td>
+                        <td class="text-center">3000 ج.م / يوم</td>
+                        <td>اختبار تحميل للبلاطات الخرسانية والأسقف وقياس الهبوط والتشكل</td>
+                    </tr>
+                    <tr>
+                        <td class="text-bold">استشارات فنية</td>
+                        <td>رفع مساحي بمحطة الأرصاد المتكاملة</td>
+                        <td class="text-center text-bold">حسب المشروع</td>
+                        <td class="text-center">3000 ج.م / يوم</td>
+                        <td>Total Station</td>
+                    </tr>
+
+                    <!-- اختبارات الأسمنت -->
+                    <tr class="category-row"><td colspan="5">اختبارات الأسمنت</td></tr>
+                    <tr>
+                        <td class="text-bold">اختبارات الأسمنت</td>
+                        <td>اختبار صلاحية فيزيائية وميكانيكية لعينة أسمنت</td>
+                        <td class="text-center text-bold">5000 ج.م</td>
+                        <td class="text-center">1 عينة</td>
+                        <td>1- اختبار نعومة عينة أسمنت بطريقة منخل 170<br>2- اختبار تحديد زمني الشك الابتدائي والنهائي للعجينة الأسمنتية باستخدام جهاز فيكات<br>3- اختبار تحديد مقاومة الضغط للمونة الأسمنتية<br>4- تحديد الانكماش باستخدام اختبار لوشاتليه</td>
+                    </tr>
+                    <tr>
+                        <td class="text-bold">اختبارات الأسمنت</td>
+                        <td>اختبار نعومة عينة أسمنت بطريقة بلين</td>
+                        <td class="text-center text-bold">750 ج.م</td>
+                        <td class="text-center">1 عينة</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td class="text-bold">اختبارات الأسمنت</td>
+                        <td>اختبار تحديد مقاومة الضغط للمونة الأسمنتية باستخدام جزء منشور تم اختباره انحنائياً</td>
+                        <td class="text-center text-bold">1000 ج.م</td>
+                        <td class="text-center">1 عينة</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td class="text-bold">اختبارات الأسمنت</td>
+                        <td>اختبار تحديد مقاومة الانحناء للمونة الأسمنتية</td>
+                        <td class="text-center text-bold">1000 ج.م</td>
+                        <td class="text-center">1 عينة</td>
+                        <td>-</td>
+                    </tr>
+
+                    <!-- المعايرة -->
+                    <tr class="category-row"><td colspan="5">المعايرة</td></tr>
+                    <tr>
+                        <td class="text-bold">المعايرة</td>
+                        <td>تحقق من معايرة محطة خلط خرسانية</td>
+                        <td class="text-center text-bold">6000 ج.م</td>
+                        <td class="text-center">زيارة</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td class="text-bold">المعايرة</td>
+                        <td>تحقق من معايرة محطة خلط خرسانية + صب خلطة تأكيدية</td>
+                        <td class="text-center text-bold">10000 ج.م</td>
+                        <td class="text-center">زيارة</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td class="text-bold">المعايرة</td>
+                        <td>معايرة جهاز تحميل</td>
+                        <td class="text-center text-bold">2500 ج.م</td>
+                        <td class="text-center">1 جهاز</td>
+                        <td>معايرة المضخة + الجاك</td>
+                    </tr>
+                    <tr>
+                        <td class="text-bold">المعايرة</td>
+                        <td>معايرة عداد إزاحة</td>
+                        <td class="text-center text-bold">600 ج.م</td>
+                        <td class="text-center">1 عداد</td>
+                        <td>-</td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+        <!-- صندوق الملاحظات الرسمي للمركز -->
+        <div class="notes-box">
+            <h4><i class="fas fa-info-circle"></i> ملاحظات وشروط تعاقدية هامة:</h4>
+            <ul class="notes-list">
+                <li class="notes-item">يضاف 1000 ج.م. في حالة جدولة زيارة لإجراء اختبار في الموقع وحدوث تعطيل للعمل من جانب العميل.</li>
+                <li class="notes-item">جميع الأسعار المذكورة غير خاضعة لضريبة القيمة المضافة، وفي حالة طلب فاتورة إلكترونية، يتم دفع قيمة 14% على إجمالي قيمة الاختبارات.</li>
+                <li class="notes-item">يتم تحصيل مبالغ الاختبارات بالكامل قبل البدء في تنفيذها، وفي حالة التأخير عن السداد لمدة 14 يوماً يتم إضافة 20% غرامة تأخير.</li>
+                <li class="notes-item">يجب أن يتم تسليم خطاب رسمي موجه إلى (مدير وحدة اختبارات واستشارات الهندسة المدنية) مع العينات موضحاً به كافة بيانات المشروع، بالإضافة إلى المقاول، المالك، الاستشاري، والاختبارات المطلوبة بدقة، ويكون الخطاب معتمداً من طرف الاستشاري.</li>
+            </ul>
+        </div>
+    </div>
+
 </div>
 
 <footer>
     &copy; 2026 وحدة اختبارات واستشارات الهندسة المدنية (CETC) - E-JUST | جميع الحقوق محفوظة
 </footer>
+
+<script>
+    // التبديل بين التبويبات بنعومة
+    function switchTab(tabId, btn) {
+        document.querySelectorAll('.tab-link').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+        document.getElementById(tabId + '-content').classList.add('active');
+    }
+
+    // فلترة الأجهزة
+    function filterEquipment() {
+        const query = document.getElementById('searchInput').value.toLowerCase().trim();
+        const cards = document.querySelectorAll('.category-card');
+        
+        cards.forEach(card => {
+            let matchesCard = false;
+            const title = card.querySelector('h3').textContent.toLowerCase();
+            const subTitle = card.querySelector('h4').textContent.toLowerCase();
+            const items = card.querySelectorAll('.device-item');
+            
+            if (title.includes(query) || subTitle.includes(query)) {
+                matchesCard = true;
+            }
+            
+            items.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                if (text.includes(query)) {
+                    item.style.display = 'block';
+                    matchesCard = true;
+                } else {
+                    if (query !== '') {
+                        item.style.display = 'none';
+                    } else {
+                        item.style.display = 'block';
+                    }
+                }
+            });
+            
+            if (matchesCard) {
+                card.style.display = 'flex';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
+    // فلترة جدول الأسعار الاسترشادية
+    function filterPrices() {
+        const query = document.getElementById('pricesSearchInput').value.toLowerCase().trim();
+        const rows = document.querySelectorAll('.excel-table tbody tr');
+        
+        rows.forEach(row => {
+            // تجاهل أسطر الفواصل الخاصة بالفئات وتوضيحها فقط في حالة البحث الفارغ
+            if (row.classList.contains('category-row')) {
+                row.style.display = query === '' ? '' : 'none';
+                return;
+            }
+            
+            const testName = row.cells[1] ? row.cells[1].textContent.toLowerCase() : '';
+            const details = row.cells[4] ? row.cells[4].textContent.toLowerCase() : '';
+            
+            if (testName.includes(query) || details.includes(query)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    }
+</script>
 
 </body>
 </html>

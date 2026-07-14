@@ -10,9 +10,11 @@
         :root { --red: #C41230; --black: #111111; --white: #ffffff; --bg: #f8fafc; --text-gray: #64748b; }
         body { font-family: 'Cairo', sans-serif; margin: 0; background: var(--bg); color: #1a1a1a; line-height: 1.6; }
         
-        /* الهيدر */
+        /* الهيدر بتأثير الزجاج البلوري Glassmorphism */
         header { 
-            background: #ffffff; 
+            background: rgba(255, 255, 255, 0.75); /* أبيض شفاف */
+            backdrop-filter: blur(12px); /* تأثير التغبيش */
+            -webkit-backdrop-filter: blur(12px); /* دعم متصفح سفاري */
             padding: 15px 5%; 
             display: flex; 
             justify-content: space-between; 
@@ -21,15 +23,21 @@
             position: sticky; 
             top: 0; 
             z-index: 1000; 
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); 
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05); 
         }
 
-        .logo img { height: 65px; }
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo img { height: 65px; display: block; }
 
         .brand-container {
             display: flex;
             flex-direction: column;
-            text-align: left;
+            text-align: right;
             gap: 2px;
         }
 
@@ -49,27 +57,56 @@
             line-height: 1.2;
         }
 
+        /* زر تسجيل الدخول بتأثير بلوري أحمر Glassmorphism */
+        .btn-login {
+            background: rgba(196, 12, 48, 0.85); /* أحمر شبه شفاف */
+            backdrop-filter: blur(8px); /* تأثير بلوري */
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1); /* إطار ناعم للتأكيد */
+            color: var(--white);
+            text-decoration: none;
+            padding: 10px 22px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(196, 12, 48, 0.2);
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .btn-login:hover {
+            background: rgba(160, 14, 38, 0.95); /* زيادة التعتيم عند الوقوف بالفأرة */
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(196, 12, 48, 0.3);
+        }
+
+        .btn-login i {
+            font-size: 1rem;
+        }
+
+        /* هيرو */
         .hero { background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://ejust.edu.eg/storage/EventsPhoto/top-min%20(1).jpg') no-repeat center/cover; color: white; padding: 100px 5%; text-align: center; }
         .hero h1 { font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 900; margin-bottom: 20px; }
         .hero p { font-size: clamp(1rem, 2vw, 1.2rem); max-width: 800px; margin: 0 auto; color: #f1f5f9; }
 
+        /* شبكة التنقل */
         .nav-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; padding: 60px 5%; max-width: 1200px; margin: -50px auto 0; position: relative; z-index: 10; }
         .nav-card { background: #ffffff; padding: 35px 25px; text-align: center; border-radius: 16px; transition: all 0.3s ease; cursor: pointer; text-decoration: none; color: #1a1a1a; border: 1px solid #e2e8f0; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); display: flex; flex-direction: column; align-items: center; gap: 15px; }
         .nav-card i { font-size: 2.8rem; color: var(--red); background: #fef2f2; padding: 20px; border-radius: 50%; }
         .nav-card h3 { margin: 0; font-weight: 800; font-size: 1.3rem; }
         .nav-card p { margin: 0; font-size: 0.95rem; color: var(--text-gray); }
         .nav-card:hover { transform: translateY(-8px); border-color: var(--red); box-shadow: 0 20px 25px -5px rgba(196,18,48,0.15); }
-        
-        .admin-btn { background: var(--red); color: white; border: none; }
-        .admin-btn i { color: var(--red); background: white; }
-        .admin-btn p { color: #f1f5f9; }
 
         .about { padding: 80px 5% 100px; background: #ffffff; text-align: center; }
         .section-title { font-size: 2.2rem; color: var(--red); position: relative; display: inline-block; margin-bottom: 35px; font-weight: 900; }
         .section-title::after { content: ""; width: 50px; height: 4px; background: #1a1a1a; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); border-radius: 2px; }
         .about p { max-width: 850px; margin: 0 auto; color: #475569; font-size: 1.15rem; font-weight: 600; }
 
-        /* تصميم قسم بيانات التواصل في الأسفل المتناسق */
+        /* تذييل الصفحة */
         .footer-container {
             background: var(--black);
             color: var(--white);
@@ -136,6 +173,7 @@
         /* تحسينات الموبايل */
         @media (max-width: 768px) {
             header { flex-direction: column; gap: 15px; text-align: center; }
+            .header-right { flex-direction: column; gap: 10px; text-align: center; }
             .brand-container { text-align: center; }
             .hero { padding: 80px 5%; }
             .contact-grid { gap: 30px; text-align: center; }
@@ -146,12 +184,17 @@
 <body>
 
 <header>
-    <div class="logo">
-        <img src="https://ejust.edu.eg/assets/img/logo.png" alt="E-JUST Logo">
+    <div class="header-right">
+        <div class="logo">
+            <img src="https://ejust.edu.eg/assets/img/logo.png" alt="E-JUST Logo">
+        </div>
+        <div class="brand-container">
+            <div class="main-uni-title">الجامعة المصرية اليابانية للعلوم والتكنولوجيا</div>
+            <div class="sub-unit-title">وحدة اختبارات واستشارات الهندسة المدنية - CETC unit</div>
+        </div>
     </div>
-    <div class="brand-container">
-        <div class="main-uni-title">الجامعة المصرية اليابانية للعلوم والتكنولوجيا</div>
-        <div class="sub-unit-title">وحدة اختبارات واستشارات الهندسة المدنية - CETC unit</div>
+    <div class="nav-controls">
+        <a href="/login" class="btn-login"><i class="fas fa-sign-in-alt"></i> تسجيل الدخول</a>
     </div>
 </header>
 
@@ -161,11 +204,6 @@
 </section>
 
 <div class="nav-grid">
-    <a href="/login" class="nav-card admin-btn">
-        <i class="fas fa-fingerprint"></i>
-        <h3>منصة الإدارة</h3>
-        <p>الدخول لمنظومة حصر الفواتير والإيرادات</p>
-    </a>
     <a href="/introducing" class="nav-card">
         <i class="fas fa-sitemap"></i>
         <h3>التعريف بالمركز</h3>

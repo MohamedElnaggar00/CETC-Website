@@ -8,7 +8,20 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { --red: #C41230; --black: #000000; --white: #ffffff; --bg: #f8fafc; --gray: #475569; }
-        body { font-family: 'Cairo', sans-serif; margin: 0; background: var(--bg); color: #1a1a1a; line-height: 1.6; transition: 0.3s; }
+        
+        /* ضبط خلفية الصفحة بالكامل بالصورة الأصلية الممتدة مع تأثير الحركة السحابية Fixed */
+        body { 
+            font-family: 'Cairo', sans-serif; 
+            margin: 0; 
+            background: linear-gradient(rgba(15, 23, 42, 0.88), rgba(15, 23, 42, 0.94)), url('https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/assets/background.jpg') no-repeat center/cover; 
+            background-attachment: fixed;
+            color: #ffffff; 
+            line-height: 1.6; 
+            transition: 0.3s; 
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
         
         /* Header Glassmorphism */
         header { 
@@ -27,7 +40,7 @@
         }
         .header-right { display: flex; align-items: center; gap: 20px; }
         .logo img { height: 65px; }
-        .brand-container { display: flex; flex-direction: column; gap: 2px; }
+        .brand-container { display: flex; flex-direction: column; gap: 2px; text-align: right; }
         .main-uni-title { font-weight: 900; font-size: clamp(0.8rem, 1.8vw, 1.1rem); color: #1a1a1a; margin: 0; line-height: 1.2; }
         .sub-unit-title { font-weight: 700; font-size: clamp(0.7rem, 1.5vw, 0.9rem); color: var(--red); margin: 0; line-height: 1.2; }
         
@@ -66,20 +79,49 @@
             background: var(--red) !important;
         }
 
+        /* Content Container */
+        .content-container {
+            flex: 1;
+            padding: 40px 0 80px; 
+            box-sizing: border-box;
+        }
+
         /* Hero */
         .hero { 
-            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/assets/background.jpg') no-repeat center/cover; 
-            color: white; padding: 80px 5%; text-align: center; 
+            background: transparent; 
+            color: white; padding: 60px 5% 40px; text-align: center; 
         }
         .hero h1 { font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 900; margin-bottom: 15px; }
-        .hero p { font-size: clamp(1rem, 2vw, 1.2rem); max-width: 800px; margin: 0 auto; color: #e2e8f0; font-weight: 600; }
+        .hero p { font-size: clamp(1rem, 2vw, 1.2rem); max-width: 800px; margin: 0 auto; color: #cbd5e1; font-weight: 600; }
 
-        /* Sections */
-        .section-container { padding: 60px 5%; max-width: 1200px; margin: 0 auto; }
-        .section-title { font-size: 2rem; color: var(--red); position: relative; display: inline-block; margin-bottom: 40px; font-weight: 900; text-align: center; width: 100%; }
-        .section-title::after { content: ""; width: 50px; height: 4px; background: var(--black); position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); border-radius: 2px; }
+        /* الأقسام ذات المحتوى المحاط بالتنسيق المتناسق */
+        .section-container { padding: 40px 5%; max-width: 1200px; margin: 0 auto; box-sizing: border-box; }
+        
+        /* ترويسة العناوين الأساسية المظلمة */
+        .section-title { font-size: 2rem; color: var(--red) !important; position: relative; display: inline-block; margin-bottom: 40px; font-weight: 900; text-align: center; width: 100%; }
+        .section-title::after { content: ""; width: 50px; height: 4px; background: #1a1a1a; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); border-radius: 2px; }
 
-        .about-text { text-align: center; font-size: 1.15rem; color: var(--gray); max-width: 950px; margin: 0 auto; line-height: 1.8; font-weight: 600; }
+        /* الصناديق الزجاجية الممتدة بالكامل (الأشرطة السحابية الممتدة بعرض الشاشة) */
+        .glass-bar-section {
+            background: rgba(255, 255, 255, 0.75); 
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 60px 5%;
+            width: 100%;
+            box-sizing: border-box;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            margin-bottom: 50px;
+        }
+        
+        /* خط التباين في البار الزجاجي الممتد */
+        .glass-bar-section .section-title::after {
+            background: #1a1a1a;
+        }
+
+        .about-text { text-align: center; font-size: 1.15rem; color: #1e293b; max-width: 950px; margin: 0 auto; line-height: 1.8; font-weight: 700; }
 
         /* Services Grid */
         .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 30px; }
@@ -87,7 +129,7 @@
             background: linear-gradient(rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.72)), var(--bg-img) center/cover no-repeat; 
             padding: 35px 25px; 
             border-radius: 12px; 
-            border: 1px solid #e2e8f0; 
+            border: 1px solid rgba(255, 255, 255, 0.2); 
             box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
             transition: all 0.3s ease; 
             border-top: 4px solid var(--red); 
@@ -101,20 +143,82 @@
         .service-card h3 { margin: 0 0 12px 0; font-weight: 900; color: var(--black); font-size: 1.25rem; text-shadow: 0 1px 1px rgba(255,255,255,0.8); }
         .service-card p { margin: 0; color: #111111; font-size: 0.95rem; text-align: justify; font-weight: 800; text-shadow: 0 1px 1px rgba(255,255,255,0.8); }
 
-        /* Why Us */
+        /* Why Us Grid inside full-width bar */
         .why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 20px; }
-        .why-card { display: flex; gap: 20px; align-items: flex-start; background: #fff; padding: 20px; border-radius: 12px; }
-        .why-number { background: #fef2f2; color: var(--red); font-size: 1.5rem; font-weight: 900; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 10px; flex-shrink: 0; }
-        .why-text h3 { margin: 0 0 8px 0; font-weight: 800; font-size: 1.1rem; }
-        .why-text p { margin: 0; color: var(--gray); font-size: 0.95rem; }
+        .why-card { 
+            display: flex; 
+            gap: 20px; 
+            align-items: flex-start; 
+            background: rgba(255, 255, 255, 0.5); /* متناسق تماماً كبطاقة زجاجية خفيفة */
+            padding: 20px; 
+            border-radius: 12px; 
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+            transition: all 0.3s ease;
+        }
+        .why-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--red);
+            box-shadow: 0 15px 30px rgba(196, 12, 48, 0.15);
+        }
+        .why-number { 
+            background: rgba(196, 12, 48, 0.08); 
+            color: var(--red); 
+            font-size: 1.5rem; 
+            font-weight: 900; 
+            width: 50px; 
+            height: 50px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            border-radius: 10px; 
+            flex-shrink: 0; 
+        }
+        .why-text h3 { margin: 0 0 8px 0; font-weight: 900; font-size: 1.15rem; color: #1a1a1a; }
+        .why-text p { margin: 0; color: #475569; font-size: 0.95rem; font-weight: 700; text-align: justify; }
 
-        /* Portfolio */
-        .portfolio-list { max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px; }
-        .portfolio-item { display: flex; align-items: center; gap: 20px; background: white; padding: 20px; border-radius: 10px; border-right: 4px solid var(--red); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .portfolio-item i { font-size: 1.8rem; color: #cbd5e1; }
-        .portfolio-info h3 { margin: 0 0 5px 0; font-weight: 800; font-size: 1.1rem; }
-        .portfolio-info p { margin: 0; color: var(--gray); font-size: 0.95rem; }
+        /* Portfolio Items inside full-width bar */
+        .portfolio-list { max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px; width: 100%; }
+        .portfolio-item { 
+            display: flex; 
+            align-items: center; 
+            gap: 20px; 
+            background: rgba(255, 255, 255, 0.5); /* زجاج خفيف متناسق تماماً مع بطاقات لماذا تختارنا */
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 20px; 
+            border-radius: 12px; 
+            border-right: 4px solid var(--red); 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02); 
+            transition: 0.3s ease;
+        }
+        .portfolio-item:hover {
+            transform: translateX(-5px);
+            border-color: var(--red);
+            background: rgba(255, 255, 255, 0.85);
+        }
+        .portfolio-item i { 
+            font-size: 1.8rem; 
+            color: var(--red); 
+            background: rgba(196, 12, 48, 0.08); 
+            padding: 12px; 
+            border-radius: 10px; 
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .portfolio-info h3 { margin: 0 0 5px 0; font-weight: 800; font-size: 1.15rem; color: #1a1a1a; text-align: right; }
+        .portfolio-info p { margin: 0; color: #334155; font-size: 0.95rem; font-weight: 700; text-align: right; }
         .highlight { color: var(--red); font-weight: 800; }
+
+        /* الفاصل الداخلي الأنيق بين الفقرتين داخل الشريط الزجاجي الموحد */
+        .section-divider {
+            height: 1px;
+            background: rgba(196, 12, 48, 0.15); /* خط بلوري أحمر ناعم */
+            max-width: 800px;
+            margin: 60px auto;
+        }
 
         /* Footer Contacts */
         .bottom-contact-bar { background: var(--black); color: var(--white); padding: 30px 5%; display: flex; justify-content: center; align-items: center; gap: 30px; font-size: 0.9rem; flex-wrap: wrap; direction: ltr; }
@@ -125,6 +229,7 @@
         footer { background: #000; color: #94a3b8; text-align: center; padding: 15px 5%; font-size: 0.85rem; border-top: 1px solid #222; }
 
         [lang="en"] .portfolio-item { border-right: none; border-left: 4px solid var(--red); }
+        [lang="en"] .portfolio-item:hover { transform: translateX(5px); }
         [lang="en"] .header-right { flex-direction: row-reverse; }
         [lang="en"] .brand-container, [lang="en"] .why-text { text-align: left; }
         
@@ -166,44 +271,63 @@
     </div>
 </header>
 
-<section class="hero">
-    <div class="lang-ar-content">
-        <h1>التميز الهندسي والابتكار</h1>
-        <p>الجسر الذي يربط بين البحث الأكاديمي المتقدم والتطبيق الميداني العملي في مصر والشرق الأوسط.</p>
-    </div>
-    <div class="lang-en-content">
-        <h1>Engineering Excellence & Innovation</h1>
-        <p>Bridging the gap between world-class academic research and industrial application in Egypt and the Middle East.</p>
-    </div>
-</section>
+<div class="content-container">
 
-<div class="section-container">
-    <h2 class="section-title" id="titleAbout">من نحن؟</h2>
-    <div class="lang-ar-content about-text">
-        تعد وحدة <strong>CETC</strong> الركيزة الفنية المتخصصة تحت مظلة مركز التكنولوجيا الابتكارية ودعم الصناعة (<strong>CINTECH</strong>) بالجامعة المصرية اليابانية. نحن متخصصون في تقديم خدمات فنية متكاملة واختبارات دقيقة لمواد البناء، أعمال الطرق، التربة، والأساسات. رؤيتنا تهدف إلى دعم قطاع الإنشاءات عبر نقل المعرفة العلمية اليابانية والمصرية إلى واقع ملموس.
-    </div>
-    <div class="lang-en-content about-text">
-        The <strong>CETC</strong> unit is the specialized technical arm of the Center of Innovative Technology (<strong>CINTECH</strong>) at E-JUST. We provide comprehensive testing services for construction materials, roads, soil, and foundations. Our vision is to support the construction sector by bridging academic research with industrial application.
-    </div>
-</div>
+    <!-- قسم الهيرو المطور والمدمج -->
+    <section class="hero">
+        <div class="lang-ar-content">
+            <h1>التميز الهندسي والابتكار</h1>
+            <p>الجسر الذي يربط بين البحث الأكاديمي المتقدم والتطبيق الميداني العملي في مصر والشرق الأوسط.</p>
+        </div>
+        <div class="lang-en-content">
+            <h1>Engineering Excellence & Innovation</h1>
+            <p>Bridging the gap between world-class academic research and industrial application in Egypt and the Middle East.</p>
+        </div>
+    </section>
 
-<div style="background: #ffffff; padding: 20px 0;">
-    <div class="section-container">
-        <h2 class="section-title" id="titleServices">خدماتنا وتخصصاتنا الهندسية</h2>
-        <div class="services-grid" id="servicesGrid"></div>
+    <!-- 1. بار "من نحن؟" زجاجي ممتد بالكامل يمين ويسار الشاشة -->
+    <div class="glass-bar-section">
+        <h2 class="section-title" id="titleAbout">من نحن؟</h2>
+        <div class="lang-ar-content about-text">
+            تعد وحدة <strong>CETC</strong> الركيزة الفنية المتخصصة تحت مظلة مركز التكنولوجيا الابتكارية ودعم الصناعة (<strong>CINTECH</strong>) بالجامعة المصرية اليابانية. نحن متخصصون في تقديم خدمات فنية متكاملة واختبارات دقيقة لمواد البناء، أعمال الطرق، التربة، والأساسات. رؤيتنا تهدف إلى دعم قطاع الإنشاءات عبر نقل المعرفة العلمية اليابانية والمصرية إلى واقع ملموس.
+        </div>
+        <div class="lang-en-content about-text">
+            The <strong>CETC</strong> unit is the specialized technical arm of the Center of Innovative Technology (<strong>CINTECH</strong>) at E-JUST. We provide comprehensive testing services for construction materials, roads, soil, and foundations. Our vision is to support the construction sector by bridging academic research with industrial application.
+        </div>
     </div>
-</div>
 
-<div class="section-container">
-    <h2 class="section-title" id="titleWhy">لماذا تختار وحدة CETC؟</h2>
-    <div class="why-grid" id="whyGrid"></div>
-</div>
-
-<div style="background: #ffffff; padding: 20px 0;">
-    <div class="section-container">
-        <h2 class="section-title" id="titlePortfolio">سجل حافل من الإنجازات</h2>
-        <div class="portfolio-list" id="portfolioList"></div>
+    <!-- 2. قسم تخصصاتنا الهندسية - شفاف يطفو فوق الخلفية السحابية -->
+    <div style="background: transparent; padding: 20px 0;">
+        <div class="section-container">
+            <h2 class="section-title" id="titleServices" style="color: white !important;">خدماتنا وتخصصاتنا الهندسية</h2>
+            <!-- تعديل خط التأكيد للعنوان العائم ليظهر بالأبيض للوضوح -->
+            <style>#titleServices::after { background: #ffffff !important; }</style>
+            <div class="services-grid" id="servicesGrid"></div>
+        </div>
     </div>
+
+    <!-- 3. المندمج الكبير الموحد: يضم "لماذا تختارنا" و "سجل الإنجازات" معاً في شريط زجاجي واحد ممتد بعرض الشاشة -->
+    <div class="glass-bar-section">
+        <div style="max-width: 1200px; margin: 0 auto; width: 100%;">
+            
+            <!-- الفقرة أ: لماذا تختار وحدة CETC؟ -->
+            <div>
+                <h2 class="section-title" id="titleWhy">لماذا تختار وحدة CETC؟</h2>
+                <div class="why-grid" id="whyGrid"></div>
+            </div>
+
+            <!-- فاصل داخلي ناعم وجميل يفصل بين التبويبين داخل الزجاج دون قطع الخلفية -->
+            <div class="section-divider"></div>
+
+            <!-- الفقرة ب: سجل حافل من الإنجازات -->
+            <div>
+                <h2 class="section-title" id="titlePortfolio">سجل حافل من الإنجازات</h2>
+                <div class="portfolio-list" id="portfolioList"></div>
+            </div>
+
+        </div>
+    </div>
+
 </div>
 
 <div class="bottom-contact-bar">
@@ -243,7 +367,7 @@
             portfolio: [
                 { icon: 'fa-train', h: 'القطار الكهربائي السريع', p: 'تنفيذ أكثر من <span class="highlight">٦,٠0٠ اختبار</span> للمسارات والكباري.' },
                 { icon: 'fa-seedling', h: 'مشروع الدلتا الجديدة', p: 'دعم البنية التحتية بأكثر من <span class="highlight">٤,٠0٠ اختبار</span>.' },
-                { icon: 'fa-city', h: 'الإسكان الاجتماعي', p: 'أكثر من <span class="highlight">٧,٠0٠ اختبار</span> لمبادرة سكن لكل المصريين.' },
+                { icon: 'fa-city', h: 'الإسكان الاجتماعي', p: 'أكثر من <span class="highlight">٧,٠٠٠ اختبار</span> لمبادرة سكن لكل المصريين.' },
                 { icon: 'fa-industry', h: 'دعم الصناعة', p: 'شراكات مع قادة الصناعة مثل ALSTOM، فودافون، ومجموعة العربي.' }
             ]
         },

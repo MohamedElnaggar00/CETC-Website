@@ -2,7 +2,7 @@ const express = require('express');
 const session = require('express-session');
 const pg = require('pg');
 const PgSession = require('connect-pg-simple')(session);
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs'); // تم التحديث لـ bcryptjs لضمان ثبات التشفير السحابي
 const { google } = require('googleapis');
 const XLSX = require('xlsx');
 const path = require('path');
@@ -11,8 +11,8 @@ const app = express();
 
 // --- 1. إعداد اتصال قاعدة البيانات (PostgreSQL Pool لـ Supabase) ---
 const pgPool = new pg.Pool({
-    connectionString: process.env.DATABASE_URL, // الرابط المحدّث من لوحة تحكم Supabase
-    ssl: { rejectUnauthorized: false } // لتأمين الاتصال السحابي بقاعدة البيانات
+    connectionString: process.env.DATABASE_URL, 
+    ssl: { rejectUnauthorized: false } 
 });
 
 // --- 2. الإعدادات الأساسية وإدارة الجلسات السحابية ---
@@ -22,13 +22,13 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(session({
     store: new PgSession({
-        pool: pgPool,             // حفظ الجلسات بداخل قاعدة بيانات Supabase
-        tableName: 'session'      // اسم الجدول المخصص للجلسات
+        pool: pgPool,             
+        tableName: 'session'      
     }),
     secret: process.env.SESSION_SECRET || 'cetc-ejust-secure-session',
     resave: false,
-    saveUninitialized: false, // لمنع إنشاء جلسات فارغة للزوار وحفظ موارد قاعدة البيانات
-    cookie: { maxAge: 24 * 60 * 60 * 1000 } // صلاحية الجلسة: يوم واحد
+    saveUninitialized: false, 
+    cookie: { maxAge: 24 * 60 * 60 * 1000 } 
 }));
 
 // --- 3. إعدادات الوصول لجوجل درايف (Environment Variables) ---
@@ -98,32 +98,38 @@ app.get('/login', (req, res) => {
     res.sendFile(path.join(process.cwd(), 'login.html'));
 });
 
-// مسار التحقق من الهوية الآمن والمشفر باستخدام bcrypt و Supabase
+// مسار تسجيل الدخول المحدث مع سجلات تتبع الأخطاء التشخيصية
 app.post('/login', async (req, res) => {
     const { username, password } = req.body;
     
+    // طباعة سجلات تشخيصية مؤقتة في لوحة Vercel لنتأكد من المشكلة
+    console.log(`[Diagnostic] محاولة دخول باسم المستخدم: ${username}`);
+    
     try {
-        // 1. استعلام للبحث عن المستخدم في قاعدة البيانات بالاسم فقط لتعزيز الأمن
         const queryText = 'SELECT * FROM admins WHERE username = $1';
         const result = await pgPool.query(queryText, [username]);
+        
+        console.log(`[Diagnostic] عدد السجلات المطابقة في قاعدة البيانات: ${result.rows.length}`);
 
         if (result.rows.length > 0) {
             const admin = result.rows[0];
+            console.log(`[Diagnostic] الحساب موجود، شفرة كلمة المرور في قاعدة البيانات تبدأ بـ: ${admin.password.substring(0, 10)}`);
             
-            // 2. مقارنة كلمة المرور المدخلة بالهاش المخزن والمشفر بأمان في قاعدة البيانات
+            // مقارنة كلمة المرور بالهاش المشفر
             const isMatch = await bcrypt.compare(password, admin.password);
+            console.log(`[Diagnostic] نتيجة مطابقة التشفير عبر bcryptjs هي: ${isMatch}`);
 
             if (isMatch) {
                 req.session.loggedIn = true;
                 req.session.adminUser = username;
+                console.log(`[Diagnostic] نجاح مطابقة البيانات بالكامل وتوليد الجلسة بنجاح.`);
                 return res.json({ success: true, redirect: '/Dashboard' });
             }
         }
         
-        // 3. رسالة خطأ موحدة مبهمة لمنع المهاجمين من استنتاج الحسابات الصالحة
         res.json({ success: false, error: 'اسم المستخدم أو كلمة المرور غير صحيحة.' });
     } catch (error) {
-        console.error('Database query error:', error);
+        console.error('[Diagnostic] حدث خطأ في قاعدة البيانات أثناء تسجيل الدخول:', error);
         res.status(500).json({ success: false, error: 'حدث خطأ فني أثناء الاتصال بالخادم السحابي.' });
     }
 });

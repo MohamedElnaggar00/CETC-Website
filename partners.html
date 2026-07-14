@@ -10,17 +10,48 @@
         :root { --red: #C41230; --black: #000000; --white: #ffffff; --bg: #f8fafc; --gray: #475569; }
         body { font-family: 'Cairo', sans-serif; margin: 0; background: var(--bg); color: #1a1a1a; line-height: 1.6; }
         
-        /* Header */
+        /* Header Glassmorphism */
         header { 
-            background: var(--white); padding: 15px 5%; display: flex; justify-content: space-between; 
-            align-items: center; border-bottom: 4px solid var(--red); position: sticky; top: 0; 
-            z-index: 1000; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); 
+            background: rgba(255, 255, 255, 0.75); 
+            backdrop-filter: blur(12px); 
+            -webkit-backdrop-filter: blur(12px); 
+            padding: 15px 5%; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            border-bottom: 4px solid var(--red); 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000; 
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05); 
         }
         .logo img { height: 60px; }
         .brand-container { display: flex; flex-direction: column; gap: 2px; }
         .main-uni-title { font-weight: 900; font-size: clamp(0.8rem, 1.8vw, 1.1rem); color: #1a1a1a; }
         .sub-unit-title { font-weight: 700; font-size: clamp(0.7rem, 1.5vw, 0.9rem); color: var(--red); }
-        .btn-home { background: #f1f5f9; color: var(--black); text-decoration: none; padding: 8px 20px; border-radius: 8px; font-weight: 700; border: 1px solid #e2e8f0; }
+        
+        /* Home Button Glassmorphism */
+        .btn-home { 
+            background: rgba(241, 245, 249, 0.8); 
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2); 
+            color: var(--black); 
+            text-decoration: none; 
+            padding: 8px 20px; 
+            border-radius: 8px; 
+            font-weight: 700; 
+            transition: 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-home:hover {
+            background: var(--red);
+            color: white;
+            border-color: var(--red);
+            box-shadow: 0 4px 15px rgba(196, 12, 48, 0.2);
+        }
 
         /* Hero */
         .hero { 
@@ -201,7 +232,7 @@
         </div>
         <!-- هيئة المجتمعات العمرانية الجديدة - وزارة الإسكان -->
         <div class="partner-card">
-            <img src="https://scontent.fcai19-3.fna.fbcdn.net/v/t39.30808-6/480212216_1003717421890120_2984954709567467943_n.jpg?stp=dst-jpg_tt6&cstp=mx1468x1467&ctp=s1468x1467&_nc_cat=108&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=8m_Uo7X_lDwQ7kNvwF6bDlc&_nc_oc=Adr2EQEPFmLbvP8m1zHmoDQjBrEGs8cVelaHvukp8N2qDXM8fcFkBeRYuko4keYdiQ&_nc_zt=23&_nc_ht=scontent.fcai19-3.fna&_nc_gid=XcJsBeRoJRPel0WE7_q6Vg&_nc_ss=7b289&oh=00_AQD6bOwviXBVURVZDzUtOb3dul9WcSUtpNIqUja8XNJuSw&oe=6A595A6E" alt="هيئة المجتمعات العمرانية">
+            <img src="https://scontent.fcai19-3.fna.fbcdn.net/v/t39.30808-6/480212216_1003717421890120_2984954709567467943_n.jpg?stp=dst-jpg_tt6&cstp=mx1468x1467&ctp=s1468x1467&_nc_cat=108&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=8m_Uo7X_lDwQ7kNvwF6bDlc&_nc_oc=Adr2EQEPFmLbvP8m1zHmoDQjBrEGs8cVelaHvuqkp8N2qDXM8fcFkBeRYuko4keYdiQ&_nc_zt=23&_nc_ht=scontent.fcai19-3.fna&_nc_gid=XcJsBeRoJRPel0WE7_q6Vg&_nc_ss=7b289&oh=00_AQD6bOwviXBVURVZDzUtOb3dul9WcSUtpNIqUja8XNJuSw&oe=6A595A6E" alt="هيئة المجتمعات العمرانية">
             <h3>هيئة المجتمعات العمرانية الجديدة - وزارة الإسكان</h3>
         </div>
         <!-- وزارة الدفاع المصرية -->
@@ -414,7 +445,7 @@
         </div>
         <!-- مكتب بيت الخبرة (مدحت أبو زيد) -->
         <div class="partner-card">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdnROuyJwPRiOlAB65S5jtpQahZvQGhLs_YE1u3KQ-Hrw60gv5tpScRyuZ&s=10" alt="مكتب بيت الخبرة (مدحت أبو زيد)">
+            <img src="http://www.mzech.com/images/MZECH%20Logoo-final.png" alt="مكتب بيت الخبرة (مدحت أبو زيد)">
             <h3>مكتب بيت الخبرة (مدحت أبو زيد)</h3>
         </div>
         <!-- مكتب بيت الهندسة Engineering-Home -->

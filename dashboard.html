@@ -28,24 +28,24 @@
             background: transparent;
         }
 
-        /* شريط جانبي زجاجي بلوري مظلم Glassmorphism */
+        /* شريط جانبي زجاجي بلوري شفاف ومطور بفلتر بلوري عميق */
         .sidebar { 
             width: 280px; 
-            background: rgba(10, 10, 10, 0.65); 
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
+            background: rgba(15, 23, 42, 0.45); /* كحلي زجاجي خفيف جداً لمطابقة لون الخلفية */
+            backdrop-filter: blur(20px); /* فلتر تغبيش بلوري عميق وممتاز */
+            -webkit-backdrop-filter: blur(20px);
             display: flex; 
             flex-direction: column; 
             z-index: 100; 
-            box-shadow: 4px 0 30px rgba(0,0,0,0.3); 
-            border-left: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 4px 0 30px rgba(0,0,0,0.2); 
+            border-left: 1px solid rgba(255, 255, 255, 0.1); /* حافة زجاجية مضيئة خفيفة */
         }
         
         .sidebar-header { 
             padding: 25px; 
             text-align: center; 
             border-bottom: 1px solid rgba(255, 255, 255, 0.08); 
-            background: rgba(0, 0, 0, 0.2); 
+            background: rgba(255, 255, 255, 0.03); /* تندمج داخل الزجاج */
         }
         
         .logo-box { 
@@ -53,7 +53,7 @@
             padding: 12px 15px; 
             border-radius: 12px; 
             display: inline-block; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
         .logo-box img { max-height: 45px; display: block; }
         
@@ -76,7 +76,7 @@
         
         .user-section { 
             padding: 20px; 
-            background: rgba(0, 0, 0, 0.2); 
+            background: rgba(255, 255, 255, 0.03); /* تندمج داخل الزجاج */
             text-align: center; 
             border-top: 1px solid rgba(255, 255, 255, 0.08); 
         }
@@ -204,7 +204,7 @@
     <div class="app-layout">
         <aside class="sidebar">
             <div class="sidebar-header">
-                <div class="logo-box"><img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/assets/logo.png" alt="Logo"></div>
+                <div class="logo-box"><img src="https://ejust.edu.eg/assets/img/logo.png" alt="Logo"></div>
                 <div style="font-weight: 900; color: white; margin-top:10px;">CETC DASHBOARD</div>
             </div>
             <nav class="menu-list">

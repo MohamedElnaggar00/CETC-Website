@@ -2,6 +2,7 @@ const express = require('express');
 const session = require('express-session');
 const pg = require('pg');
 const PgSession = require('connect-pg-simple')(session);
+const bcrypt = require('bcrypt');
 const { google } = require('googleapis');
 const XLSX = require('xlsx');
 const path = require('path');
@@ -10,8 +11,8 @@ const app = express();
 
 // --- 1. إعداد اتصال قاعدة البيانات (PostgreSQL Pool لـ Supabase) ---
 const pgPool = new pg.Pool({
-    connectionString: process.env.DATABASE_URL, // الرابط المنسوخ من خطوة 2
-    ssl: { rejectUnauthorized: false } // ضروري لتأمين الاتصال السحابي بقاعدة البيانات
+    connectionString: process.env.DATABASE_URL, // الرابط المحدّث من لوحة تحكم Supabase
+    ssl: { rejectUnauthorized: false } // لتأمين الاتصال السحابي بقاعدة البيانات
 });
 
 // --- 2. الإعدادات الأساسية وإدارة الجلسات السحابية ---
@@ -22,11 +23,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use(session({
     store: new PgSession({
         pool: pgPool,             // حفظ الجلسات بداخل قاعدة بيانات Supabase
-        tableName: 'session'      // اسم الجدول الذي قمنا بإنشائه للجلسات
+        tableName: 'session'      // اسم الجدول المخصص للجلسات
     }),
     secret: process.env.SESSION_SECRET || 'cetc-ejust-secure-session',
     resave: false,
-    saveUninitialized: false, // يحافظ على موارد قاعدة البيانات بعدم إنشاء جلسات للزوار غير المسجلين
+    saveUninitialized: false, // لمنع إنشاء جلسات فارغة للزوار وحفظ موارد قاعدة البيانات
     cookie: { maxAge: 24 * 60 * 60 * 1000 } // صلاحية الجلسة: يوم واحد
 }));
 
@@ -65,13 +66,13 @@ const fileIds = {
     "reports": "1366JN3rpYyrdt8Jq27jrlr6eoymtpf3S"
 };
 
-// ميدل وير لحماية المسارات
+// ميدل وير لحماية المسارات لوحة التحكم
 function checkAuth(req, res, next) {
     if (req.session.loggedIn) return next();
     res.redirect('/login');
 }
 
-// تحميل بفر الإكسيل من درايف
+// تحميل بفر الإكسيل من درايف وتحويله
 async function getExcelBuffer(fileId) {
     try {
         const fileMeta = await drive.files.get({ fileId: fileId, fields: 'mimeType' });
@@ -97,22 +98,30 @@ app.get('/login', (req, res) => {
     res.sendFile(path.join(process.cwd(), 'login.html'));
 });
 
-// مسار تسجيل الدخول المطور باستخدام الاستعلام المباشر من Supabase
+// مسار التحقق من الهوية الآمن والمشفر باستخدام bcrypt و Supabase
 app.post('/login', async (req, res) => {
     const { username, password } = req.body;
     
     try {
-        // فحص وجود الحساب في قاعدة البيانات ومطابقة البيانات المدخلة
-        const queryText = 'SELECT * FROM admins WHERE username = $1 AND password = $2';
-        const result = await pgPool.query(queryText, [username, password]);
+        // 1. استعلام للبحث عن المستخدم في قاعدة البيانات بالاسم فقط لتعزيز الأمن
+        const queryText = 'SELECT * FROM admins WHERE username = $1';
+        const result = await pgPool.query(queryText, [username]);
 
         if (result.rows.length > 0) {
-            req.session.loggedIn = true;
-            req.session.adminUser = username;
-            res.json({ success: true, redirect: '/Dashboard' });
-        } else {
-            res.json({ success: false, error: 'اسم المستخدم أو كلمة المرور غير صحيحة.' });
+            const admin = result.rows[0];
+            
+            // 2. مقارنة كلمة المرور المدخلة بالهاش المخزن والمشفر بأمان في قاعدة البيانات
+            const isMatch = await bcrypt.compare(password, admin.password);
+
+            if (isMatch) {
+                req.session.loggedIn = true;
+                req.session.adminUser = username;
+                return res.json({ success: true, redirect: '/Dashboard' });
+            }
         }
+        
+        // 3. رسالة خطأ موحدة مبهمة لمنع المهاجمين من استنتاج الحسابات الصالحة
+        res.json({ success: false, error: 'اسم المستخدم أو كلمة المرور غير صحيحة.' });
     } catch (error) {
         console.error('Database query error:', error);
         res.status(500).json({ success: false, error: 'حدث خطأ فني أثناء الاتصال بالخادم السحابي.' });
@@ -126,7 +135,7 @@ app.get('/logout', (req, res) => {
     res.redirect('/'); 
 });
 
-// روابط الصفحات الفرعية قيد التشغيل والتطوير
+// روابط الصفحات الفرعية والتعريفية
 app.get('/introducing', (req, res) => res.sendFile(path.join(process.cwd(), 'introducing.html')));
 app.get('/portfolio', (req, res) => res.sendFile(path.join(process.cwd(), 'portfolio.html')));
 app.get('/partners', (req, res) => res.sendFile(path.join(process.cwd(), 'partners.html')));

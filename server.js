@@ -111,6 +111,9 @@ app.get('/logout', (req, res) => {
 app.get('/introducing', (req, res) => res.sendFile(path.join(process.cwd(), 'introducing.html')));
 app.get('/portfolio', (req, res) => res.sendFile(path.join(process.cwd(), 'portfolio.html')));
 app.get('/partners', (req, res) => res.sendFile(path.join(process.cwd(), 'partners.html')));
+app.get('/services-prices', (req, res) => res.sendFile(path.join(process.cwd(), 'services-prices.html')));
+app.get('/gallery', (req, res) => res.sendFile(path.join(process.cwd(), 'gallery.html')));
+app.get('/report-request', (req, res) => res.sendFile(path.join(process.cwd(), 'report-request.html')));
 
 // جلب البيانات ذكياً (فواتير وإيرادات)
 app.get('/get-data/:id', checkAuth, async (req, res) => {

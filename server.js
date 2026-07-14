@@ -1,27 +1,38 @@
 const express = require('express');
 const session = require('express-session');
+const pg = require('pg');
+const PgSession = require('connect-pg-simple')(session);
 const { google } = require('googleapis');
 const XLSX = require('xlsx');
 const path = require('path');
 
 const app = express();
 
-// --- 1. الإعدادات الأساسية ---
+// --- 1. إعداد اتصال قاعدة البيانات (PostgreSQL Pool لـ Supabase) ---
+const pgPool = new pg.Pool({
+    connectionString: process.env.DATABASE_URL, // الرابط المنسوخ من خطوة 2
+    ssl: { rejectUnauthorized: false } // ضروري لتأمين الاتصال السحابي بقاعدة البيانات
+});
+
+// --- 2. الإعدادات الأساسية وإدارة الجلسات السحابية ---
 app.use(express.static(path.join(process.cwd()))); 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(session({
+    store: new PgSession({
+        pool: pgPool,             // حفظ الجلسات بداخل قاعدة بيانات Supabase
+        tableName: 'session'      // اسم الجدول الذي قمنا بإنشائه للجلسات
+    }),
     secret: process.env.SESSION_SECRET || 'cetc-ejust-secure-session',
     resave: false,
-    saveUninitialized: true,
-    cookie: { maxAge: 24 * 60 * 60 * 1000 }
+    saveUninitialized: false, // يحافظ على موارد قاعدة البيانات بعدم إنشاء جلسات للزوار غير المسجلين
+    cookie: { maxAge: 24 * 60 * 60 * 1000 } // صلاحية الجلسة: يوم واحد
 }));
 
-// --- 2. إعدادات الوصول لجوجل درايف (Environment Variables) ---
+// --- 3. إعدادات الوصول لجوجل درايف (Environment Variables) ---
 let privateKey = process.env.GOOGLE_PRIVATE_KEY;
 if (privateKey) {
-    // تنظيف المفتاح تلقائياً من علامات الاقتباس الفردية أو المزدوجة الزائدة التي قد تسبب فشل التوقيع
     privateKey = privateKey.trim();
     if (privateKey.startsWith('"') && privateKey.endsWith('"')) {
         privateKey = privateKey.slice(1, -1);
@@ -29,7 +40,6 @@ if (privateKey) {
     if (privateKey.startsWith("'") && privateKey.endsWith("'")) {
         privateKey = privateKey.slice(1, -1);
     }
-    // استبدال الرموز النصية \n بأسطر جديدة حقيقية
     privateKey = privateKey.replace(/\\n/g, '\n');
 }
 
@@ -61,7 +71,7 @@ function checkAuth(req, res, next) {
     res.redirect('/login');
 }
 
-// دالة ذكية مساعدة لتحميل ملف الإكسيل كبفر تلقائي مع معالجة واضحة للأخطاء
+// تحميل بفر الإكسيل من درايف
 async function getExcelBuffer(fileId) {
     try {
         const fileMeta = await drive.files.get({ fileId: fileId, fields: 'mimeType' });
@@ -78,7 +88,7 @@ async function getExcelBuffer(fileId) {
     }
 }
 
-// --- 3. المسارات (Routes) ---
+// --- 4. المسارات (Routes) ---
 
 app.get('/', (req, res) => res.sendFile(path.join(process.cwd(), 'index.html')));
 
@@ -87,16 +97,25 @@ app.get('/login', (req, res) => {
     res.sendFile(path.join(process.cwd(), 'login.html'));
 });
 
-app.post('/login', (req, res) => {
+// مسار تسجيل الدخول المطور باستخدام الاستعلام المباشر من Supabase
+app.post('/login', async (req, res) => {
     const { username, password } = req.body;
-    const isValidUser = (username === process.env.ADMIN_USER);
-    const isValidPass = (password === process.env.ADMIN_PASS);
+    
+    try {
+        // فحص وجود الحساب في قاعدة البيانات ومطابقة البيانات المدخلة
+        const queryText = 'SELECT * FROM admins WHERE username = $1 AND password = $2';
+        const result = await pgPool.query(queryText, [username, password]);
 
-    if (isValidUser && isValidPass && process.env.ADMIN_USER && process.env.ADMIN_PASS) {
-        req.session.loggedIn = true;
-        res.json({ success: true, redirect: '/Dashboard' });
-    } else {
-        res.json({ success: false, error: 'اسم المستخدم أو كلمة المرور غير صحيحة.' });
+        if (result.rows.length > 0) {
+            req.session.loggedIn = true;
+            req.session.adminUser = username;
+            res.json({ success: true, redirect: '/Dashboard' });
+        } else {
+            res.json({ success: false, error: 'اسم المستخدم أو كلمة المرور غير صحيحة.' });
+        }
+    } catch (error) {
+        console.error('Database query error:', error);
+        res.status(500).json({ success: false, error: 'حدث خطأ فني أثناء الاتصال بالخادم السحابي.' });
     }
 });
 
@@ -107,7 +126,7 @@ app.get('/logout', (req, res) => {
     res.redirect('/'); 
 });
 
-// روابط الصفحات الفرعية
+// روابط الصفحات الفرعية قيد التشغيل والتطوير
 app.get('/introducing', (req, res) => res.sendFile(path.join(process.cwd(), 'introducing.html')));
 app.get('/portfolio', (req, res) => res.sendFile(path.join(process.cwd(), 'portfolio.html')));
 app.get('/partners', (req, res) => res.sendFile(path.join(process.cwd(), 'partners.html')));
@@ -152,7 +171,7 @@ app.get('/get-data/:id', checkAuth, async (req, res) => {
     }
 });
 
-// جلب قائمة أسماء التبويبات (أنواع التقارير) تلقائياً
+// جلب قائمة أسماء التبويبات تلقائياً
 app.get('/get-report-sheets', checkAuth, async (req, res) => {
     try {
         const fileId = fileIds["reports"];

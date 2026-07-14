@@ -90,7 +90,7 @@
 
         /* الحاوية الكبرى الممتدة بالصورة الخلفية */
         .hero-about-container {
-            background: linear-gradient(rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.88)), url('https://ejust.edu.eg/storage/EventsPhoto/top-min%20(1).jpg') no-repeat center/cover;
+            background: linear-gradient(rgba(0, 0, 0, 0.52), rgba(0, 0, 0, 0.68)), url('https://ejust.edu.eg/storage/EventsPhoto/top-min%20(1).jpg') no-repeat center/cover;
             background-attachment: scroll;
         }
 
@@ -104,7 +104,7 @@
         .hero h1 { font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 900; margin-bottom: 20px; }
         .hero p { font-size: clamp(1rem, 2vw, 1.2rem); max-width: 800px; margin: 0 auto; color: #f1f5f9; }
 
-        /* شبكة التنقل */
+        /* شبكة التنقل بتأثير زجاجي متكامل */
         .nav-grid { 
             display: grid; 
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
@@ -115,19 +115,70 @@
             position: relative; 
             z-index: 10; 
         }
-        .nav-card { background: #ffffff; padding: 35px 25px; text-align: center; border-radius: 16px; transition: all 0.3s ease; cursor: pointer; text-decoration: none; color: #1a1a1a; border: 1px solid #e2e8f0; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); display: flex; flex-direction: column; align-items: center; gap: 15px; }
-        .nav-card i { font-size: 2.8rem; color: var(--red); background: #fef2f2; padding: 20px; border-radius: 50%; }
+        .nav-card { 
+            background: rgba(255, 255, 255, 0.75); /* تأثير زجاجي مطابق للهيدر */
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 35px 25px; 
+            text-align: center; 
+            border-radius: 16px; 
+            transition: all 0.3s ease; 
+            cursor: pointer; 
+            text-decoration: none; 
+            color: #1a1a1a; 
+            border: 1px solid rgba(255, 255, 255, 0.2); 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            gap: 15px; 
+        }
+        .nav-card i { 
+            font-size: 2.8rem; 
+            color: var(--red); 
+            background: rgba(196, 12, 48, 0.08); /* خلفية حمراء زجاجية ناعمة للايقونة */
+            padding: 20px; 
+            border-radius: 50%; 
+            transition: 0.3s ease;
+        }
         .nav-card h3 { margin: 0; font-weight: 800; font-size: 1.3rem; }
         .nav-card p { margin: 0; font-size: 0.95rem; color: var(--text-gray); }
-        .nav-card:hover { transform: translateY(-8px); border-color: var(--red); box-shadow: 0 20px 25px -5px rgba(196,18,48,0.15); }
+        
+        .nav-card:hover { 
+            background: rgba(255, 255, 255, 0.9); /* يزداد وضوح الخلفية عند الهوفر */
+            transform: translateY(-8px); 
+            border-color: var(--red); 
+            box-shadow: 0 20px 25px -5px rgba(196,18,48,0.2); 
+        }
+        
+        /* تفاعلية تحول لون خلفية الأيقونة عند الهوفر */
+        .nav-card:hover i {
+            background: var(--red);
+            color: var(--white);
+        }
 
-        /* نبذة عن المركز - شفاف ومعاد تنسيق تباين نصوصه */
+        /* نبذة عن المركز - شفاف */
         .about { 
             padding: 40px 5% 100px; 
             background: transparent; 
             text-align: center; 
         }
-        .section-title { 
+
+        /* صندوق نبذة عن المركز الزجاجي المطور */
+        .about-card {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.75); 
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 45px 35px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            box-sizing: border-box;
+        }
+
+        .about-card .section-title { 
             font-size: 2.2rem; 
             color: var(--red); 
             position: relative; 
@@ -135,24 +186,25 @@
             margin-bottom: 35px; 
             font-weight: 900; 
         }
-        /* تعديل لون خط التأكيد للأبيض للتناسب مع الخلفية المظلمة */
-        .section-title::after { 
+        
+        .about-card .section-title::after { 
             content: ""; 
             width: 50px; 
             height: 4px; 
-            background: #ffffff; 
+            background: #1a1a1a; 
             position: absolute; 
             bottom: -10px; 
             left: 50%; 
             transform: translateX(-50%); 
             border-radius: 2px; 
         }
-        .about p { 
+
+        .about-card p { 
             max-width: 850px; 
             margin: 0 auto; 
-            color: #cbd5e1; /* درجة رمادي فاتحة لتوفير قراءة مريحة */
+            color: #475569; 
             font-size: 1.15rem; 
-            font-weight: 600; 
+            font-weight: 700; 
         }
 
         /* تذييل الصفحة */
@@ -160,7 +212,7 @@
             background: var(--black);
             color: var(--white);
             padding: 60px 5% 20px;
-            margin-top: 0; /* التداخل المباشر مع الخلفية الممتدة */
+            margin-top: 0; 
         }
 
         .contact-grid {
@@ -226,6 +278,7 @@
             .brand-container { text-align: center; }
             .hero { padding: 80px 5% 20px; }
             .nav-grid { padding-top: 10px; }
+            .about-card { padding: 30px 20px; }
             .contact-grid { gap: 30px; text-align: center; }
             .section-title { font-size: 1.8rem; }
         }
@@ -248,7 +301,7 @@
     </div>
 </header>
 
-<!-- الحاوية الممتدة التي تحتوي على الخلفية المشتركة -->
+<!-- الحاوية الممتدة بالخلفية المشتركة -->
 <div class="hero-about-container">
     <section class="hero">
         <h1>CIVIL ENGINEERING TESTING & CONSULTING UNIT (CETC)</h1>
@@ -273,11 +326,14 @@
         </a>
     </div>
 
+    <!-- قسم نبذة عن المركز بصندوقه الزجاجي المطور -->
     <section class="about">
-        <h2 class="section-title">نبذة عن المركز</h2>
-        <p>
-            يهدف المركز الى تقديم اختبارات واستشارات فنية متميزة للمشروعات المدنية القومية والخاصة، ملبيا بذلك احتياجات الافراد والجهات الحكومية والمؤسسات والشركات المنفذة والمكاتب الاستشارية.
-        </p>
+        <div class="about-card">
+            <h2 class="section-title">نبذة عن المركز</h2>
+            <p>
+                يهدف المركز الى تقديم اختبارات واستشارات فنية متميزة للمشروعات المدنية القومية والخاصة، ملبيا بذلك احتياجات الافراد والجهات الحكومية والمؤسسات والشركات المنفذة والمكاتب الاستشارية.
+            </p>
+        </div>
     </section>
 </div>
 

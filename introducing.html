@@ -10,9 +10,11 @@
         :root { --red: #C41230; --black: #000000; --white: #ffffff; --bg: #f8fafc; --gray: #475569; }
         body { font-family: 'Cairo', sans-serif; margin: 0; background: var(--bg); color: #1a1a1a; line-height: 1.6; transition: 0.3s; }
         
-        /* Header */
+        /* Header Glassmorphism */
         header { 
-            background: var(--white); 
+            background: rgba(255, 255, 255, 0.75); 
+            backdrop-filter: blur(12px); 
+            -webkit-backdrop-filter: blur(12px); 
             padding: 15px 5%; 
             display: flex; 
             justify-content: space-between; 
@@ -21,7 +23,7 @@
             position: sticky; 
             top: 0; 
             z-index: 1000; 
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); 
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05); 
         }
         .header-right { display: flex; align-items: center; gap: 20px; }
         .logo img { height: 65px; }
@@ -29,16 +31,40 @@
         .main-uni-title { font-weight: 900; font-size: clamp(0.8rem, 1.8vw, 1.1rem); color: #1a1a1a; margin: 0; line-height: 1.2; }
         .sub-unit-title { font-weight: 700; font-size: clamp(0.7rem, 1.5vw, 0.9rem); color: var(--red); margin: 0; line-height: 1.2; }
         
-        /* Language & Back Buttons */
+        /* Language & Back Buttons Glassmorphism */
         .nav-controls { display: flex; gap: 10px; align-items: center; }
         .btn-action { 
-            background: #f1f5f9; color: var(--black); text-decoration: none; padding: 8px 18px; 
-            border-radius: 8px; font-weight: 700; font-size: 0.9rem; transition: 0.3s; 
-            display: flex; align-items: center; gap: 8px; border: 1px solid #e2e8f0; cursor: pointer;
+            background: rgba(241, 245, 249, 0.8); 
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            color: var(--black); 
+            text-decoration: none; 
+            padding: 8px 18px; 
+            border-radius: 8px; 
+            font-weight: 700; 
+            font-size: 0.9rem; 
+            transition: 0.3s; 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+            border: 1px solid rgba(255, 255, 255, 0.2); 
+            cursor: pointer;
             font-family: 'Cairo', sans-serif;
         }
-        .btn-action:hover { background: var(--red); color: white; border-color: var(--red); }
-        .lang-btn { background: var(--black); color: white; }
+        .btn-action:hover { 
+            background: var(--red); 
+            color: white; 
+            border-color: var(--red); 
+            box-shadow: 0 4px 15px rgba(196, 12, 48, 0.2); 
+        }
+        .lang-btn { 
+            background: rgba(15, 23, 42, 0.85) !important; 
+            color: white !important; 
+            border-color: rgba(255, 255, 255, 0.1) !important;
+        }
+        .lang-btn:hover {
+            background: var(--red) !important;
+        }
 
         /* Hero */
         .hero { 
@@ -58,7 +84,6 @@
         /* Services Grid */
         .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 30px; }
         .service-card { 
-            /* تخفيف تعتيم الأبيض بنسبة 20% لتظهر الصور بشكل أوضح */
             background: linear-gradient(rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.72)), var(--bg-img) center/cover no-repeat; 
             padding: 35px 25px; 
             border-radius: 12px; 
@@ -68,7 +93,6 @@
             border-top: 4px solid var(--red); 
         }
         .service-card:hover { 
-            /* زيادة وضوح الصور عند الوقوف على البطاقة بنسبة 45% */
             background: linear-gradient(rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.55)), var(--bg-img) center/cover no-repeat;
             transform: translateY(-5px); 
             box-shadow: 0 15px 25px rgba(0,0,0,0.1); 
@@ -209,7 +233,7 @@
                 { bg: 'https://t4.ftcdn.net/jpg/03/45/28/55/240_F_345285565_gp7hsG6er0QKqrv9LDQuz1T9vmeWOXvv.jpg', icon: 'fa-layer-group', h: 'الهندسة الجيوتقنية', p: 'دراسات التربة، توصيات الأساسات، واختبارات ضبط جودة الأعمال الترابية.' },
                 { bg: 'https://t4.ftcdn.net/jpg/02/93/94/19/240_F_293941936_oozjPSmIJXgjBYVNH0f1vJGfRl1n4ihi.jpg', icon: 'fa-vials', h: 'هندسة المواد', p: 'تطوير تصميمات الخلطات الخرسانية واختبارات صلاحية المواد الخام.' },
                 { bg: 'https://t4.ftcdn.net/jpg/02/49/01/57/240_F_249015797_ZIyiI5MSBAv1FSqjf7wJmCYXYayUIkFi.jpg', icon: 'fa-road', h: 'هندسة الطرق', p: 'اختبار طبقات الرصف الإسفلتية والمواد البيتومينية بأحدث المعدات.' },
-                { bg: 'https://as2.ftcdn.net/v2/jpg/01/51/55/45/1000_F_151554516_Ja2DYVm2pluI1oJgj9T3pvgr2iA2j2Gt.jpg', icon: 'fa-tools', h: 'المعايرة والجودة', p: 'معايرة محطات خلط الخرسانة والمعدات واختبار جودة وحدات البناء.' }
+                { bg: 'https://t4.ftcdn.net/jpg/02/88/18/59/240_F_288185929_gVZHRUWo9RFQkjulqs5R53n9PB2O5l4b.jpg', icon: 'fa-tools', h: 'المعايرة والجودة', p: 'معايرة محطات خلط الخرسانة والمعدات واختبار جودة وحدات البناء.' }
             ],
             why: [
                 { n: '١', h: 'معايير يابانية', p: 'نطبق فلسفة التميز اليابانية لضمان دقة النتائج ومطابقتها للمعايير العالمية.' },
@@ -217,9 +241,9 @@
                 { n: '٣', h: 'قدرة تشغيلية', p: 'إدارة أكثر من ٣٠,٠٠٠ اختبار متخصص مع الالتزام التام بالجداول الزمنية.' }
             ],
             portfolio: [
-                { icon: 'fa-train', h: 'القطار الكهربائي السريع', p: 'تنفيذ أكثر من <span class="highlight">٦,٠٠٠ اختبار</span> للمسارات والكباري.' },
-                { icon: 'fa-seedling', h: 'مشروع الدلتا الجديدة', p: 'دعم البنية التحتية بأكثر من <span class="highlight">٤,٠٠٠ اختبار</span>.' },
-                { icon: 'fa-city', h: 'الإسكان الاجتماعي', p: 'أكثر من <span class="highlight">٧,٠٠٠ اختبار</span> لمبادرة سكن لكل المصريين.' },
+                { icon: 'fa-train', h: 'القطار الكهربائي السريع', p: 'تنفيذ أكثر من <span class="highlight">٦,٠0٠ اختبار</span> للمسارات والكباري.' },
+                { icon: 'fa-seedling', h: 'مشروع الدلتا الجديدة', p: 'دعم البنية التحتية بأكثر من <span class="highlight">٤,٠0٠ اختبار</span>.' },
+                { icon: 'fa-city', h: 'الإسكان الاجتماعي', p: 'أكثر من <span class="highlight">٧,٠0٠ اختبار</span> لمبادرة سكن لكل المصريين.' },
                 { icon: 'fa-industry', h: 'دعم الصناعة', p: 'شراكات مع قادة الصناعة مثل ALSTOM، فودافون، ومجموعة العربي.' }
             ]
         },

@@ -10,17 +10,48 @@
         :root { --red: #C41230; --black: #000000; --white: #ffffff; --bg: #f8fafc; --gray: #475569; }
         body { font-family: 'Cairo', sans-serif; margin: 0; background: var(--bg); color: #1a1a1a; line-height: 1.6; }
         
-        /* Header */
+        /* Header Glassmorphism */
         header { 
-            background: var(--white); padding: 15px 5%; display: flex; justify-content: space-between; 
-            align-items: center; border-bottom: 4px solid var(--red); position: sticky; top: 0; 
-            z-index: 1000; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); 
+            background: rgba(255, 255, 255, 0.75); 
+            backdrop-filter: blur(12px); 
+            -webkit-backdrop-filter: blur(12px); 
+            padding: 15px 5%; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            border-bottom: 4px solid var(--red); 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000; 
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05); 
         }
         .logo img { height: 60px; }
         .brand-container { display: flex; flex-direction: column; gap: 2px; }
         .main-uni-title { font-weight: 900; font-size: clamp(0.8rem, 1.8vw, 1.1rem); color: #1a1a1a; }
         .sub-unit-title { font-weight: 700; font-size: clamp(0.7rem, 1.5vw, 0.9rem); color: var(--red); }
-        .btn-home { background: #f1f5f9; color: var(--black); text-decoration: none; padding: 8px 20px; border-radius: 8px; font-weight: 700; border: 1px solid #e2e8f0; }
+        
+        /* Home Button Glassmorphism */
+        .btn-home { 
+            background: rgba(241, 245, 249, 0.8); 
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2); 
+            color: var(--black); 
+            text-decoration: none; 
+            padding: 8px 20px; 
+            border-radius: 8px; 
+            font-weight: 700; 
+            transition: 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-home:hover {
+            background: var(--red);
+            color: white;
+            border-color: var(--red);
+            box-shadow: 0 4px 15px rgba(196, 12, 48, 0.2);
+        }
 
         /* Hero */
         .hero { 
@@ -30,25 +61,46 @@
         .hero h1 { font-size: 2.5rem; font-weight: 900; margin-bottom: 10px; }
         .hero p { font-size: 1.1rem; max-width: 800px; margin: 0 auto; color: #cbd5e1; }
 
-        /* Stats Bar */
+        /* Stats Bar Glassmorphism */
         .stats-bar { 
             display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
             gap: 20px; max-width: 1200px; margin: -40px auto 40px; padding: 0 20px;
         }
         .stat-item { 
-            background: white; padding: 25px; border-radius: 12px; text-align: center; 
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); border-bottom: 4px solid var(--red);
+            background: rgba(255, 255, 255, 0.8); 
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 25px; 
+            border-radius: 12px; 
+            text-align: center; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+            border-bottom: 4px solid var(--red);
         }
         .stat-num { display: block; font-size: 1.8rem; font-weight: 900; color: var(--red); }
         .stat-label { font-size: 0.9rem; font-weight: 700; color: var(--gray); }
 
-        /* Tabs System */
+        /* Tabs System Glassmorphism */
         .tabs-nav { display: flex; justify-content: center; gap: 10px; margin-bottom: 40px; flex-wrap: wrap; padding: 0 20px; }
         .tab-link { 
-            padding: 12px 25px; background: white; border: 2px solid #e2e8f0; border-radius: 30px; 
-            cursor: pointer; font-weight: 800; transition: 0.3s; color: var(--gray); font-size: 0.95rem;
+            padding: 12px 25px; 
+            background: rgba(255, 255, 255, 0.8); 
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 2px solid rgba(255, 255, 255, 0.2); 
+            border-radius: 30px; 
+            cursor: pointer; 
+            font-weight: 800; 
+            transition: 0.3s; 
+            color: var(--gray); 
+            font-size: 0.95rem;
         }
-        .tab-link.active { background: var(--red); color: white; border-color: var(--red); }
+        .tab-link.active { 
+            background: var(--red); 
+            color: white; 
+            border-color: var(--red); 
+            box-shadow: 0 4px 15px rgba(196, 12, 48, 0.2);
+        }
 
         /* Projects Grid */
         .projects-grid { 
@@ -90,17 +142,17 @@
             border-radius: 12px; 
             border: 1px solid #eee; 
             display: flex;
-            flex-direction: column; /* ترتيب رأسي للشعار والنص */
+            flex-direction: column; 
             align-items: center;
             justify-content: center;
-            min-height: 125px; /* طول متناسق ليستوعب الصورة والاسم */
+            min-height: 125px; 
             box-sizing: border-box;
             transition: all 0.3s ease;
             box-shadow: 0 4px 6px rgba(0,0,0,0.02);
-            gap: 10px; /* المسافة بين الصورة والنص */
+            gap: 10px; 
         }
         .partner-item img {
-            max-height: 48px; /* حجم مخصص للشعار ليترك مساحة كافية للاسم */
+            max-height: 48px; 
             max-width: 100%; 
             object-fit: contain;
         }
@@ -117,13 +169,12 @@
             border-color: var(--red);
             box-shadow: 0 10px 15px -3px rgba(196,18,48,0.1);
         }
-        /* تنسيق مخصص للشعار الأبيض الخاص بـ ECG */
         .partner-item.dark-bg {
             background: #0f172a; 
             border-color: #1e293b;
         }
         .partner-item.dark-bg .partner-name {
-            color: #f1f5f9; /* تغيير لون النص للأبيض ليتناسب مع الخلفية الداكنة */
+            color: #f1f5f9; 
         }
         .partner-item.dark-bg:hover {
             border-color: var(--red);
@@ -303,7 +354,7 @@
         </div>
         <!-- وزارة الري -->
         <div class="partner-item">
-            <img src="https://www.mwri.gov.eg/wp-content/uploads/2023/05/mwri-logo.png">
+            <img src="https://upload.wikimedia.org/wikipedia/ar/b/b3/%D9%88%D8%B2%D8%A7%D8%B1%D8%A9_%D8%A7%D9%84%D9%85%D9%88%D8%A7%D8%B1%D8%AF_%D8%A7%D9%84%D9%85%D8%A7%D8%A6%D9%82%D8%A9_%D9%88%D8%A7%D9%84%D8%B1%D9%82.png" alt="وزارة الموارد المائية والري">
             <p class="partner-name">وزارة الموارد المائية والري</p>
         </div>
         <!-- سيسترا -->

@@ -201,21 +201,23 @@
         .lab-section.alternate .lab-info { direction: rtl; }
         .lab-section.alternate .diagonal-gallery { direction: rtl; }
 
-        /* استعادة التأثير الزجاجي الفاخر لصناديق المعامل (Lab Info Glassmorphism) */
+        /* صناديق المعامل الزجاجية المعدلة (5% أبيض فقط لتطابق الأزرار) */
         .lab-info {
-            background: rgba(255, 255, 255, 0.75); /* خلفية زجاجية فاتحة */
+            background: rgba(255, 255, 255, 0.05); /* 5% tint أبيض فقط كما طلبت */
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2); /* حافة زجاجية خفيفة */
             border-radius: 20px;
             padding: 40px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.15);
             text-align: right;
             box-sizing: border-box;
         }
-        .lab-info h2 { font-size: 1.8rem; color: var(--black); margin: 0 0 10px; font-weight: 900; }
+        
+        /* تعديل ألوان النصوص لتصبح بيضاء لتكون مقروءة على الخلفية الشفافة الداكنة */
+        .lab-info h2 { font-size: 1.8rem; color: #ffffff; margin: 0 0 10px; font-weight: 900; }
         .lab-info h3 { font-size: 1rem; color: var(--red); margin: 0 0 20px; font-weight: 800; text-transform: uppercase; }
-        .lab-info p { font-size: 1.05rem; color: var(--gray); font-weight: 700; line-height: 1.7; margin: 0; text-align: justify; }
+        .lab-info p { font-size: 1.05rem; color: #cbd5e1; font-weight: 600; line-height: 1.7; margin: 0; text-align: justify; }
 
         .diagonal-gallery { position: relative; width: 100%; height: 380px; box-sizing: border-box; }
         .diagonal-img {
@@ -356,16 +358,17 @@
         }
         @media (max-width: 768px) {
             header { flex-direction: column; gap: 15px; text-align: center; }
-            .slider-container { height: 350px; }
-            .slider-caption { bottom: 40px; right: 5%; left: 5%; text-align: center; }
+            .section-intro h1 { font-size: 1.8rem; }
             .filters-nav { gap: 8px; }
             .filter-btn { font-size: 0.85rem; padding: 8px 16px; }
+            .slider-container { height: 350px; }
+            .slider-caption { bottom: 40px; right: 5%; left: 5%; text-align: center; }
         }
     </style>
 </head>
 <body>
 
-<!-- وسم الفيديو الخلفي السحابي الصامت والتلقائي المتجاوب بوضوح مطور وممتاز -->
+<!-- وسم الفيديو الخلفي السحابي الصامت والتلقائي المتجاوب -->
 <div class="video-bg-container">
     <video autoplay muted loop playsinline class="video-bg">
         <source src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/assets/promo.mp4" type="video/mp4">
@@ -529,7 +532,7 @@
                 </div>
                 <div class="item-info">
                     <h3>اختبار المكعبات الخرسانية</h3>
-                    <p>إجراء اختبارات مقاومة الضغط على عينات المكعبات الخرسانية للالتحقق من جودة الخرسانة.</p>
+                    <p>إجراء اختبارات مقاومة الضغط على عينات المكعبات الخرسانية للتحقق من جودة الخرسانة.</p>
                 </div>
             </div>
 

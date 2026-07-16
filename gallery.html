@@ -12,8 +12,42 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { --red: #C41230; --black: #000000; --white: #ffffff; --bg: #f8fafc; --gray: #475569; }
-        body { font-family: 'Cairo', sans-serif; margin: 0; background: var(--bg); color: #1a1a1a; display: flex; flex-direction: column; min-height: 100vh; }
         
+        body { 
+            font-family: 'Cairo', sans-serif; 
+            margin: 0; 
+            background: transparent; /* جعل خلفية الجسم شفافة لتظهر خلفية الفيديو من تحتها */
+            color: #1a1a1a; 
+            display: flex; 
+            flex-direction: column; 
+            min-height: 100vh; 
+        }
+        
+        /* ================= إعدادات فيديو الخلفية السحابية المطور ================= */
+        .video-bg-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* خلف جميع العناصر والبطاقات */
+            overflow: hidden;
+        }
+        .video-bg {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* تجاوب كامل مع أبعاد الشاشة */
+        }
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* تطبيق نفس التدرج الداكن لتسهيل قراءة نصوص البطاقات البلورية */
+            background: linear-gradient(rgba(15, 23, 42, 0.88), rgba(15, 23, 42, 0.94));
+        }
+
         /* Header Glassmorphism */
         header { 
             background: rgba(255, 255, 255, 0.75); 
@@ -57,12 +91,11 @@
             box-shadow: 0 4px 15px rgba(196, 12, 48, 0.2);
         }
 
-        /* Container */
+        /* Container - شفاف */
         .content-container {
             flex: 1;
             padding: 60px 5% 80px;
-            background: linear-gradient(rgba(15, 23, 42, 0.88), rgba(15, 23, 42, 0.94)), url('https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/assets/background.jpg') no-repeat center/cover;
-            background-attachment: scroll;
+            background: transparent;
         }
 
         /* Section Intro */
@@ -143,7 +176,6 @@
             box-shadow: 0 15px 35px rgba(196, 12, 48, 0.2);
         }
         
-        /* معالجة البطاقات الفارغة التي ليس لها صور */
         .gallery-item.no-img {
             cursor: default;
         }
@@ -345,6 +377,15 @@
 </head>
 <body>
 
+<!-- وسم الفيديو الخلفي السحابي الصامت والتلقائي المتجاوب -->
+<div class="video-bg-container">
+    <video autoplay muted loop playsinline class="video-bg">
+        <source src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/assets/promo.mp4" type="video/mp4">
+        متصفحك لا يدعم تشغيل الفيديو الخلفي.
+    </video>
+    <div class="video-overlay"></div>
+</div>
+
 <header>
     <div class="logo"><img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/assets/logo.png" alt="E-JUST"></div>
     <div class="brand-container">
@@ -405,7 +446,7 @@
             </div>
             <div class="item-info">
                 <h3>اختبار المكعبات الخرسانية</h3>
-                <p>إجراء اختبارات مقاومة الضغط على عينات المكعبات الخرسانية للتحقق من جودة الخرسانة.</p>
+                <p>إجراء اختبارات مقاومة الضطاء على عينات المكعبات الخرسانية للتحقق من جودة الخرسانة.</p>
             </div>
         </div>
 
@@ -740,10 +781,8 @@
     let currentImgIndex = 0;
     let filteredImages = [];
 
-    // جلب جميع بطاقات المعرض
     const galleryItems = Array.from(document.querySelectorAll('.gallery-item'));
     
-    // دالة الفلترة الذكية للتبويبات
     function filterGallery(cat, btn) {
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
@@ -758,15 +797,12 @@
         });
     }
 
-    // فلترة وتحديث مصفوفة الصور التي تمتلك وسماً حقيقياً للصور فقط لاستبعاد الفارغة من العارض
     function updateFilteredList() {
         filteredImages = galleryItems.filter(item => {
-            // إظهار في عارض الصور فقط البطاقات المرئية حالياً والتي تمتلك صورة حقيقية (غير فارغة)
             return item.style.display !== 'none' && !item.classList.contains('no-img');
         });
     }
 
-    // فتح عارض الصور التفاعلي ديناميكياً
     function openLightbox(element) {
         updateFilteredList();
         currentImgIndex = filteredImages.indexOf(element);
@@ -777,7 +813,6 @@
         document.getElementById('lightbox').classList.add('active');
     }
 
-    // تحديث محتويات عارض الصور
     function updateLightboxContent() {
         const activeItem = filteredImages[currentImgIndex];
         const imgSrc = activeItem.querySelector('img').src;

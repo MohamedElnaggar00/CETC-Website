@@ -16,7 +16,7 @@
         body { 
             font-family: 'Cairo', sans-serif; 
             margin: 0; 
-            background: transparent; /* خلفية شفافة لتظهر خلفية الفيديو من تحتها */
+            background: transparent; 
             color: #ffffff; 
             display: flex; 
             flex-direction: column; 
@@ -201,20 +201,21 @@
         .lab-section.alternate .lab-info { direction: rtl; }
         .lab-section.alternate .diagonal-gallery { direction: rtl; }
 
+        /* استعادة التأثير الزجاجي الفاخر لصناديق المعامل (Lab Info Glassmorphism) */
         .lab-info {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.75); /* خلفية زجاجية فاتحة */
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 20px;
             padding: 40px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
             text-align: right;
             box-sizing: border-box;
         }
-        .lab-info h2 { font-size: 1.8rem; color: var(--white); margin: 0 0 10px; font-weight: 900; }
+        .lab-info h2 { font-size: 1.8rem; color: var(--black); margin: 0 0 10px; font-weight: 900; }
         .lab-info h3 { font-size: 1rem; color: var(--red); margin: 0 0 20px; font-weight: 800; text-transform: uppercase; }
-        .lab-info p { font-size: 1.05rem; color: #cbd5e1; font-weight: 600; line-height: 1.7; margin: 0; text-align: justify; }
+        .lab-info p { font-size: 1.05rem; color: var(--gray); font-weight: 700; line-height: 1.7; margin: 0; text-align: justify; }
 
         .diagonal-gallery { position: relative; width: 100%; height: 380px; box-sizing: border-box; }
         .diagonal-img {
@@ -385,9 +386,9 @@
 <!-- ================= ترويسة البانر الدوار الممتد (Overview Slider) ================= -->
 <div class="slider-container">
     <div class="slides">
-        <div class="slide active" style="background-image: url('OVER_VIEW_01');"></div>
-        <div class="slide" style="background-image: url('OVER_VIEW_02');"></div>
-        <div class="slide" style="background-image: url('OVER_VIEW_03');"></div>
+        <div class="slide active" style="background-image: url('https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/OVER_VIEW/OVER_VIEW%20(5).jpg');"></div>
+        <div class="slide" style="background-image: url('https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/OVER_VIEW/OVER_VIEW%20(3).jpg');"></div>
+        <div class="slide" style="background-image: url('https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/OVER_VIEW/OVER_VIEW%20(2).jpg');"></div>
     </div>
     <div class="slider-overlay"></div>
     <div class="slider-caption">
@@ -528,7 +529,7 @@
                 </div>
                 <div class="item-info">
                     <h3>اختبار المكعبات الخرسانية</h3>
-                    <p>إجراء اختبارات مقاومة الضغط على عينات المكعبات الخرسانية للتحقق من جودة الخرسانة.</p>
+                    <p>إجراء اختبارات مقاومة الضغط على عينات المكعبات الخرسانية للالتحقق من جودة الخرسانة.</p>
                 </div>
             </div>
 
@@ -917,11 +918,9 @@
         const gridContainer = document.getElementById('galleryGridContainer');
 
         if (cat === 'all') {
-            // التبويب "الكل": إظهار معامل ومختبرات الوحدة وإخفاء شبكة الـ 23 كارت الفردية
             labsOverview.style.display = 'block';
             gridContainer.style.display = 'none';
         } else {
-            // التبويبات الأخرى: إخفاء واجهة المعامل الكبرى وإظهار شبكة الكروت وتصفيتها
             labsOverview.style.display = 'none';
             gridContainer.style.display = 'block';
 
@@ -940,17 +939,14 @@
     let currentImgIndex = 0;
     let filteredImages = [];
 
-    // جلب جميع الصور القطرية
     const diagonalItems = Array.from(document.querySelectorAll('.diagonal-img'));
 
     function updateFilteredList() {
         const labsOverview = document.getElementById('labsOverview');
         
         if (labsOverview.style.display !== 'none') {
-            // إذا كنا في التبويب "الكل": عارض الصور يتعامل فقط مع صور المعامل القطرية الأربعة
             filteredImages = diagonalItems;
         } else {
-            // إذا كنا في التبويبات الأخرى: عارض الصور يتعامل فقط مع الكروت الفردية النشطة حالياً (والتي تمتلك صور حقيقية)
             filteredImages = galleryItems.filter(item => {
                 return item.style.display !== 'none' && !item.classList.contains('no-img');
             });
@@ -971,7 +967,7 @@
         const activeItem = filteredImages[currentImgIndex];
         const imgSrc = activeItem.querySelector('img').src;
         const imgAlt = activeItem.querySelector('img').alt;
-        const captionText = activeItem.querySelector('img').alt; // استخدام الـ Alt لعنوان الصورة
+        const captionText = activeItem.querySelector('img').alt; 
 
         document.getElementById('lightboxImg').src = imgSrc;
         document.getElementById('lightboxImg').alt = imgAlt;

@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>معرض الصور - CETC E-JUST</title>
-    <link rel="icon" type="image/png" href="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/assets/icon.png">
+    
+    <!-- أيقونة تابة المتصفح الموحدة للموقع -->
+    <link rel="icon" type="image/png" href="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/assets/logo.png">
+    
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -27,10 +30,11 @@
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05); 
         }
         .logo img { height: 60px; }
-        .brand-container { display: flex; flex-direction: column; gap: 2px; }
+        .brand-container { display: flex; flex-direction: column; gap: 2px; text-align: right; }
         .main-uni-title { font-weight: 900; font-size: clamp(0.8rem, 1.8vw, 1.1rem); color: #1a1a1a; }
         .sub-unit-title { font-weight: 700; font-size: clamp(0.7rem, 1.5vw, 0.9rem); color: var(--red); }
         
+        /* Home Button Glassmorphism */
         .btn-home { 
             background: rgba(241, 245, 249, 0.8); 
             backdrop-filter: blur(8px);
@@ -53,56 +57,289 @@
             box-shadow: 0 4px 15px rgba(196, 12, 48, 0.2);
         }
 
-        /* Container & Card */
+        /* Container */
         .content-container {
             flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 5%;
-            background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.8)), url('https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/assets/background.jpg') no-repeat center/cover;
+            padding: 60px 5% 80px;
+            background: linear-gradient(rgba(15, 23, 42, 0.88), rgba(15, 23, 42, 0.94)), url('https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/assets/background.jpg') no-repeat center/cover;
+            background-attachment: scroll;
         }
-        .glass-card {
+
+        /* Section Intro */
+        .section-intro {
+            text-align: center;
+            color: white;
+            max-width: 800px;
+            margin: 0 auto 40px;
+        }
+        .section-intro h1 {
+            font-size: 2.2rem;
+            font-weight: 900;
+            margin: 0 0 15px;
+        }
+        .section-intro p {
+            font-size: 1.1rem;
+            color: #cbd5e1;
+            font-weight: 600;
+            line-height: 1.6;
+        }
+
+        /* Filters Tabs Glassmorphism */
+        .filters-nav {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            padding: 10px 22px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 800;
+            font-size: 0.95rem;
+            transition: 0.3s ease;
+            font-family: inherit;
+        }
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--red);
+            border-color: var(--red);
+            box-shadow: 0 8px 20px rgba(196, 12, 48, 0.3);
+            color: white;
+        }
+
+        /* Gallery Grid */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Gallery Item Glassmorphism */
+        .gallery-item {
             background: rgba(255, 255, 255, 0.75);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-            padding: 50px 30px;
-            max-width: 600px;
-            width: 100%;
-            text-align: center;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            display: flex;
+            flex-direction: column;
             box-sizing: border-box;
         }
-        .glass-card i {
-            font-size: 4rem;
-            color: var(--red);
-            margin-bottom: 25px;
-            animation: bounce 2s infinite;
+        .gallery-item:not(.no-img):hover {
+            transform: translateY(-8px);
+            border-color: var(--red);
+            box-shadow: 0 15px 35px rgba(196, 12, 48, 0.2);
         }
-        .glass-card h2 {
-            font-size: 1.8rem;
+        
+        /* معالجة البطاقات الفارغة التي ليس لها صور */
+        .gallery-item.no-img {
+            cursor: default;
+        }
+        
+        /* Image Wrapper with hidden overflow */
+        .img-wrapper {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .gallery-item:not(.no-img):hover img {
+            transform: scale(1.08);
+        }
+
+        /* تصميم الصندوق البلوري المفرغ للبطاقات التي ليس لها صور */
+        .placeholder-icon-wrapper {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.18));
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .placeholder-icon-wrapper i {
+            font-size: 3rem;
+            color: rgba(196, 12, 48, 0.25) !important;
+            background: none !important;
+            padding: 0 !important;
+        }
+        .placeholder-badge {
+            font-size: 0.75rem;
+            background: rgba(0, 0, 0, 0.15);
+            color: #475569;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-weight: 800;
+        }
+
+        /* Overlay text on image */
+        .img-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(transparent, rgba(0,0,0,0.6));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            display: flex;
+            align-items: flex-end;
+            padding: 15px;
+            box-sizing: border-box;
+        }
+        .gallery-item:not(.no-img):hover .img-overlay {
+            opacity: 1;
+        }
+        .img-overlay span {
+            color: white;
+            font-weight: 800;
+            font-size: 0.85rem;
+            background: var(--red);
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+
+        /* Details info at bottom of card */
+        .item-info {
+            padding: 20px;
+            text-align: right;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .item-info h3 {
+            margin: 0 0 8px 0;
+            font-size: 1.1rem;
             font-weight: 900;
             color: var(--black);
-            margin: 0 0 15px;
         }
-        .glass-card p {
-            color: #475569;
-            font-size: 1.1rem;
+        .item-info p {
+            margin: 0;
+            font-size: 0.85rem;
+            color: var(--gray);
             font-weight: 700;
-            line-height: 1.6;
-            margin: 0 0 30px;
+            line-height: 1.5;
         }
+
+        /* ================= LIGHTBOX VIEWER GLASSMORPHISM ================= */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .lightbox.active {
+            display: flex;
+            opacity: 1;
+        }
+        .lightbox-content-wrapper {
+            position: relative;
+            max-width: 85%;
+            max-height: 85%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+        .lightbox-img {
+            max-width: 100%;
+            max-height: 70vh;
+            border-radius: 12px;
+            box-shadow: 0 15px 45px rgba(0,0,0,0.6);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+            object-fit: contain;
+        }
+        .lightbox.active .lightbox-img {
+            transform: scale(1);
+        }
+        .lightbox-caption {
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 800;
+            text-align: center;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+        }
+        .close-btn {
+            position: absolute;
+            top: -45px;
+            right: 0;
+            font-size: 2.2rem;
+            color: #cbd5e1;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .close-btn:hover {
+            color: var(--red);
+        }
+        
+        /* Navigation Arrows on Lightbox */
+        .nav-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            color: white;
+            padding: 15px 18px;
+            font-size: 1.5rem;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: 0.3s;
+            z-index: 2100;
+        }
+        .nav-arrow:hover {
+            background: var(--red);
+            border-color: var(--red);
+            box-shadow: 0 4px 15px rgba(196, 12, 48, 0.4);
+        }
+        .arrow-prev { right: -75px; }
+        .arrow-next { left: -75px; }
 
         footer { background: #000; color: #94a3b8; text-align: center; padding: 25px 5%; font-size: 0.85rem; border-top: 1px solid #222; }
 
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+        @media (max-width: 992px) {
+            .arrow-prev { right: -10px; background: rgba(0,0,0,0.6); }
+            .arrow-next { left: -10px; background: rgba(0,0,0,0.6); }
         }
         @media (max-width: 768px) {
             header { flex-direction: column; gap: 15px; text-align: center; }
+            .section-intro h1 { font-size: 1.8rem; }
+            .filters-nav { gap: 8px; }
+            .filter-btn { font-size: 0.85rem; padding: 8px 16px; }
         }
     </style>
 </head>
@@ -118,17 +355,478 @@
 </header>
 
 <div class="content-container">
-    <div class="glass-card">
-        <i class="fas fa-images"></i>
-        <h2>سيتوفر هذا القسم قريباً</h2>
-        <p>نقوم حالياً بجمع وتنظيم وتجهيز مجموعة متميزة من الصور الفوتوغرافية عالية الجودة لمعاملنا ومواقع مشاريعنا لإتاحتها قريباً.</p>
-        <a href="/" class="btn-home" style="display: inline-flex; margin: 0 auto;"><i class="fas fa-arrow-right"></i> العودة للرئيسية</a>
+    <div class="section-intro">
+        <h1>معرض الصور والوسائط الفنية</h1>
+        <p>جولة بصرية توضح معاملنا الإنشائية والجيوتقنية المتقدمة، وتجهيزاتنا الميدانية المعتمدة لضبط الجودة في كبرى المشروعات القومية.</p>
+    </div>
+
+    <!-- أزرار التصفية البلورية المحدثة لجميع التخصصات -->
+    <div class="filters-nav">
+        <button class="filter-btn active" onclick="filterGallery('all', this)">الكل</button>
+        <button class="filter-btn" onclick="filterGallery('concrete', this)">خرسانة ومواد وعمارة</button>
+        <button class="filter-btn" onclick="filterGallery('geotechnical', this)">تربة ومساحة وجيوتقنية</button>
+        <button class="filter-btn" onclick="filterGallery('roads', this)">طرق وأسفلت وركام</button>
+        <button class="filter-btn" onclick="filterGallery('site', this)">استشارات ومعايرة</button>
+        <button class="filter-btn" onclick="filterGallery('videos', this)">فيديوهات</button>
+    </div>
+
+    <!-- شبكة الصور التفاعلية الـ 23 بالترتيب والروابط السحابية لـ Supabase -->
+    <div class="gallery-grid" id="galleryGrid">
+        
+        <!-- 1. شمدت همر -->
+        <div class="gallery-item" data-cat="concrete" onclick="openLightbox(this)">
+            <div class="img-wrapper">
+                <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/hammer.jpg" alt="شمدت همر">
+                <div class="img-overlay"><span>خرسانة ومواد وعمارة</span></div>
+            </div>
+            <div class="item-info">
+                <h3>شمدت همر</h3>
+                <p>اختبار ارتدادي غير متلف لتقييم واختبار جودة وتماسك السطح الخرساني بالموقع.</p>
+            </div>
+        </div>
+
+        <!-- 2. وزن نوعى وكثافة رمل -->
+        <div class="gallery-item" data-cat="geotechnical" onclick="openLightbox(this)">
+            <div class="img-wrapper">
+                <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/GS.jpg" alt="وزن نوعى وكثافة رمل">
+                <div class="img-overlay"><span>تربة ومساحة وجيوتقنية</span></div>
+            </div>
+            <div class="item-info">
+                <h3>وزن نوعى وكثافة رمل</h3>
+                <p>تحديد الوزن النوعي والكثافة لعينات الرمل والتربة الموقعية بالأساليب القياسية.</p>
+            </div>
+        </div>
+
+        <!-- 3. اختبار المكعبات الخرسانية -->
+        <div class="gallery-item" data-cat="concrete" onclick="openLightbox(this)">
+            <div class="img-wrapper">
+                <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/cubes.jpg" alt="اختبار المكعبات الخرسانية">
+                <div class="img-overlay"><span>خرسانة ومواد وعمارة</span></div>
+            </div>
+            <div class="item-info">
+                <h3>اختبار المكعبات الخرسانية</h3>
+                <p>إجراء اختبارات مقاومة الضغط على عينات المكعبات الخرسانية للتحقق من جودة الخرسانة.</p>
+            </div>
+        </div>
+
+        <!-- 4. اختبار التحميل على الخوازيق -->
+        <div class="gallery-item" data-cat="site" onclick="openLightbox(this)">
+            <div class="img-wrapper">
+                <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/pile_load.jpg" alt="اختبار التحميل على الخوازيق">
+                <div class="img-overlay"><span>استشارات ومعايرة</span></div>
+            </div>
+            <div class="item-info">
+                <h3>اختبار التحميل على الخوازيق</h3>
+                <p>مراقبة وتقييم الهبوط وقدرة تحمل الخوازيق الإنشائية للأحمال الثقيلة بالمشروعات.</p>
+            </div>
+        </div>
+
+        <!-- 5. اختبار حدود السيولة واللدونة -->
+        <div class="gallery-item" data-cat="geotechnical" onclick="openLightbox(this)">
+            <div class="img-wrapper">
+                <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/LA.jpg" alt="اختبار حدود السيولة واللدونة">
+                <div class="img-overlay"><span>تربة ومساحة وجيوتقنية</span></div>
+            </div>
+            <div class="item-info">
+                <h3>اختبار حدود السيولة واللدونة</h3>
+                <p>فحص حدود أتبربرج (Atterberg) لتقييم الخواص اللدنة وصلاحية التربة للتأسيس.</p>
+            </div>
+        </div>
+
+        <!-- 6. اختبار نزع - اختبار شد أسياخ (فارغ) -->
+        <div class="gallery-item no-img" data-cat="concrete">
+            <div class="img-wrapper">
+                <div class="placeholder-icon-wrapper">
+                    <i class="fas fa-camera"></i>
+                    <span class="placeholder-badge">قريباً</span>
+                </div>
+            </div>
+            <div class="item-info">
+                <h3>اختبار نزع - اختبار شد أسياخ</h3>
+                <p>تقييم قوة تماسك أسياخ الصلب والتأكد من مطابقتها لكود البناء المصري (سيتم توفير الصور قريباً).</p>
+            </div>
+        </div>
+
+        <!-- 7. اختبارات الخلطات الأسفلتية والطرق (صورة 1) -->
+        <div class="gallery-item" data-cat="roads" onclick="openLightbox(this)">
+            <div class="img-wrapper">
+                <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/Asphalt1.png" alt="اختبارات الخلطات الأسفلتية والطرق (1)">
+                <div class="img-overlay"><span>طرق وأسفلت وركام</span></div>
+            </div>
+            <div class="item-info">
+                <h3>اختبارات الخلطات الأسفلتية والطرق (1)</h3>
+                <p>أعمال فحص وتحليل طبقات الرصف وجودة دك الأسفلت بالموقع حرقياً.</p>
+            </div>
+        </div>
+
+        <!-- 7. اختبارات الخلطات الأسفلتية والطرق (صورة 2) -->
+        <div class="gallery-item" data-cat="roads" onclick="openLightbox(this)">
+            <div class="img-wrapper">
+                <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/Asphalt2.png" alt="اختبارات الخلطات الأسفلتية والطرق (2)">
+                <div class="img-overlay"><span>طرق وأسفلت وركام</span></div>
+            </div>
+            <div class="item-info">
+                <h3>اختبارات الخلطات الأسفلتية والطرق (2)</h3>
+                <p>فحص استخلاص البيتومين لضبط معايير مطابقة الخلطة الإسفلتية للمواصفات القياسية.</p>
+            </div>
+        </div>
+
+        <!-- 7. اختبارات الخلطات الأسفلتية والطرق (صورة 3) -->
+        <div class="gallery-item" data-cat="roads" onclick="openLightbox(this)">
+            <div class="img-wrapper">
+                <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/Asphalt3.png" alt="اختبارات الخلطات الأسفلتية والطرق (3)">
+                <div class="img-overlay"><span>طرق وأسفلت وركام</span></div>
+            </div>
+            <div class="item-info">
+                <h3>اختبارات الخلطات الأسفلتية والطرق (3)</h3>
+                <p>أعمال دمك وتحضير قوالب مارشال الأسفلتية القياسية داخل معمل الطرق بالوحدة.</p>
+            </div>
+        </div>
+
+        <!-- 8. اختبارات الأسمنت (صورة 1) -->
+        <div class="gallery-item" data-cat="concrete" onclick="openLightbox(this)">
+            <div class="img-wrapper">
+                <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/Cem1.png" alt="اختبارات الأسمنت (1)">
+                <div class="img-overlay"><span>خرسانة ومواد وعمارة</span></div>
+            </div>
+            <div class="item-info">
+                <h3>اختبارات الأسمنت (1)</h3>
+                <p>تعيين زمن الشك الابتدائي والنهائي لعينات الأسمنت باستخدام جهاز فيكات المعياري.</p>
+            </div>
+        </div>
+
+        <!-- 8. اختبارات الأسمنت (صورة 2) -->
+        <div class="gallery-item" data-cat="concrete" onclick="openLightbox(this)">
+            <div class="img-wrapper">
+                <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/Cem2.png" alt="اختبارات الأسمنت (2)">
+                <div class="img-overlay"><span>خرسانة ومواد وعمارة</span></div>
+            </div>
+            <div class="item-info">
+                <h3>اختبارات الأسمنت (2)</h3>
+                <p>تحديد مدى تمدد الأسمنت (اختبار الثبات) باستخدام جهاز لوشاتيليه المعملي بدقة.</p>
+            </div>
+        </div>
+
+        <!-- 9. اختبار تحديد خصائص الدمك (فارغ) -->
+        <div class="gallery-item no-img" data-cat="geotechnical">
+            <div class="img-wrapper">
+                <div class="placeholder-icon-wrapper">
+                    <i class="fas fa-camera"></i>
+                    <span class="placeholder-badge">قريباً</span>
+                </div>
+            </div>
+            <div class="item-info">
+                <h3>اختبار تحديد خصائص الدمك</h3>
+                <p>اختبار بروكتور لتحديد الكثافة الجافة القصوى والمحتوى الأمثل للمياه بالتربة (قريباً).</p>
+            </div>
+        </div>
+
+        <!-- 10. اختبار التحميل على التربة (صورة 1) -->
+        <div class="gallery-item" data-cat="geotechnical" onclick="openLightbox(this)">
+            <div class="img-wrapper">
+                <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/PLT1.png" alt="اختبار التحميل على التربة (1)">
+                <div class="img-overlay"><span>تربة ومساحة وجيوتقنية</span></div>
+            </div>
+            <div class="item-info">
+                <h3>اختبار التحميل على التربة (1)</h3>
+                <p>Plate Load Test الميداني لتحديد قدرة تحمل التربة ومعرفة قيم الهبوط الفوري للأساسات.</p>
+            </div>
+        </div>
+
+        <!-- 10. اختبار التحميل على التربة (صورة 2) -->
+        <div class="gallery-item" data-cat="geotechnical" onclick="openLightbox(this)">
+            <div class="img-wrapper">
+                <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/PLT2.jpg" alt="اختبار التحميل على التربة (2)">
+                <div class="img-overlay"><span>تربة ومساحة وجيوتقنية</span></div>
+            </div>
+            <div class="item-info">
+                <h3>اختبار التحميل على التربة (2)</h3>
+                <p>مراقبة الأحمال الساكنة المطبقة على لوحة التحميل وعدادات قياس الهبوط والتشوه بدقة.</p>
+            </div>
+        </div>
+
+        <!-- 11. اختبارات جسات التربة -->
+        <div class="gallery-item" data-cat="geotechnical" onclick="openLightbox(this)">
+            <div class="img-wrapper">
+                <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/Bore.png" alt="اختبارات جسات التربة">
+                <div class="img-overlay"><span>تربة ومساحة وجيوتقنية</span></div>
+            </div>
+            <div class="item-info">
+                <h3>اختبارات جسات التربة</h3>
+                <p>أعمال الحفر الجيوتقني وأخذ العينات العميقة لاستخراج تقارير التأسيس المعتمدة للمنشآت.</p>
+            </div>
+        </div>
+
+        <!-- 12. اختبار التدرج المنخلي للتربة (فارغ) -->
+        <div class="gallery-item no-img" data-cat="geotechnical">
+            <div class="img-wrapper">
+                <div class="placeholder-icon-wrapper">
+                    <i class="fas fa-camera"></i>
+                    <span class="placeholder-badge">قريباً</span>
+                </div>
+            </div>
+            <div class="item-info">
+                <h3>اختبار التدرج المنخلي للتربة</h3>
+                <p>تحليل عينات التربة معملياً بالمناخل لتصنيفها وتحديد تدرجها الحبيبي (سيتم توفير الصور قريباً).</p>
+            </div>
+        </div>
+
+        <!-- 13. اختبار CBR - نسبة تحمل كالفورنيا -->
+        <div class="gallery-item" data-cat="geotechnical" onclick="openLightbox(this)">
+            <div class="img-wrapper">
+                <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/CBR.jpg" alt="اختبار CBR">
+                <div class="img-overlay"><span>تربة ومساحة وجيوتقنية</span></div>
+            </div>
+            <div class="item-info">
+                <h3>اختبار CBR - نسبة تحمل كالفورنيا</h3>
+                <p>تقييم جودة وقوة طبقات التربة ومطابقتها للمواصفات الهندسية لرصف الطرق السريعة.</p>
+            </div>
+        </div>
+
+        <!-- 14. جهاز محطة الأرصاد المساحية (فارغ) -->
+        <div class="gallery-item no-img" data-cat="geotechnical">
+            <div class="img-wrapper">
+                <div class="placeholder-icon-wrapper">
+                    <i class="fas fa-camera"></i>
+                    <span class="placeholder-badge">قريباً</span>
+                </div>
+            </div>
+            <div class="item-info">
+                <h3>جهاز محطة الأرصاد المساحية</h3>
+                <p>الرفع والقياس المساحي ثلاثي الأبعاد وإحداثيات الموقع فائق الدقة (قريباً).</p>
+            </div>
+        </div>
+
+        <!-- 15. اختبار الكثافة بالموقع -->
+        <div class="gallery-item" data-cat="geotechnical" onclick="openLightbox(this)">
+            <div class="img-wrapper">
+                <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/Sandcone.png" alt="اختبار الكثافة بالموقع">
+                <div class="img-overlay"><span>تربة ومساحة وجيوتقنية</span></div>
+            </div>
+            <div class="item-info">
+                <h3>اختبار الكثافة بالموقع</h3>
+                <p>مخروط الرمل (Sand Cone) للتحقق من جودة دمك طبقة الأساس بالمشروع الإنشائي.</p>
+            </div>
+        </div>
+
+        <!-- 16. اختبارات القلب الخرساني - كور -->
+        <div class="gallery-item" data-cat="concrete" onclick="openLightbox(this)">
+            <div class="img-wrapper">
+                <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/Core.png" alt="اختبارات القلب الخرساني - كور">
+                <div class="img-overlay"><span>خرسانة ومواد وعمارة</span></div>
+            </div>
+            <div class="item-info">
+                <h3>اختبارات القلب الخرساني - كور</h3>
+                <p>استخراج واختبار القلوب الخرسانية لتقييم مقاومة الضغط الفعلي للعناصر الإنشائية المتصلدة.</p>
+            </div>
+        </div>
+
+        <!-- 17. اختبار البري والتآكل - لوس أنجلوس -->
+        <div class="gallery-item" data-cat="roads" onclick="openLightbox(this)">
+            <div class="img-wrapper">
+                <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/LA.jpg" alt="اختبار البري والتآكل - لوس أنجلوس">
+                <div class="img-overlay"><span>طرق وأسفلت وركام</span></div>
+            </div>
+            <div class="item-info">
+                <h3>اختبار البري والتآكل - لوس أنجلوس</h3>
+                <p>تحديد مقاومة تفتت الركام والسن للبري تحت تأثير ضربات واحتكاك الأحمال الحركية.</p>
+            </div>
+        </div>
+
+        <!-- 18. مواقع عامة (فارغ) -->
+        <div class="gallery-item no-img" data-cat="geotechnical">
+            <div class="img-wrapper">
+                <div class="placeholder-icon-wrapper">
+                    <i class="fas fa-camera"></i>
+                    <span class="placeholder-badge">قريباً</span>
+                </div>
+            </div>
+            <div class="item-info">
+                <h3>مواقع عامة</h3>
+                <p>صور ميدانية تذكارية عامة توضح انتشار وإشراف كوادر المركز بالعديد من مواقع المشاريع القومية (قريباً).</p>
+            </div>
+        </div>
+
+        <!-- 19. أنشطة بحثية لقسم العمارة -->
+        <div class="gallery-item" data-cat="concrete" onclick="openLightbox(this)">
+            <div class="img-wrapper">
+                <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/Research.png" alt="أنشطة بحثية لقسم العمارة">
+                <div class="img-overlay"><span>خرسانة ومواد وعمارة</span></div>
+            </div>
+            <div class="item-info">
+                <h3>أنشطة بحثية لقسم العمارة</h3>
+                <p>الابتكار ونمذجة الهياكل والكتل المعمارية المستدامة بالجامعة المصرية اليابانية.</p>
+            </div>
+        </div>
+
+        <!-- 20. إعتماد محطات خلط -->
+        <div class="gallery-item" data-cat="site" onclick="openLightbox(this)">
+            <div class="img-wrapper">
+                <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/patchblant.png" alt="إعتماد محطات خلط">
+                <div class="img-overlay"><span>استشارات ومعايرة</span></div>
+            </div>
+            <div class="item-info">
+                <h3>إعتماد محطات خلط</h3>
+                <p>معاينة وإعتماد محطات إنتاج الخرسانة الجاهزة للتأكد من سلامة المعايير والموازين والخلط الفعلي.</p>
+            </div>
+        </div>
+
+        <!-- 21. اختبارات الانترلوك + طوب البنا (فارغ) -->
+        <div class="gallery-item no-img" data-cat="concrete">
+            <div class="img-wrapper">
+                <div class="placeholder-icon-wrapper">
+                    <i class="fas fa-camera"></i>
+                    <span class="placeholder-badge">قريباً</span>
+                </div>
+            </div>
+            <div class="item-info">
+                <h3>اختبارات الانترلوك + طوب البنا</h3>
+                <p>اختبار الضغط وجودة تماسك الانترلوك وقوالب الطوب الأسمنتي والطفلي المستخدمة في البناء (قريباً).</p>
+            </div>
+        </div>
+
+        <!-- 22. معايرة أجهزة (فارغ) -->
+        <div class="gallery-item no-img" data-cat="site">
+            <div class="img-wrapper">
+                <div class="placeholder-icon-wrapper">
+                    <i class="fas fa-camera"></i>
+                    <span class="placeholder-badge">قريباً</span>
+                </div>
+            </div>
+            <div class="item-info">
+                <h3>معايرة أجهزة</h3>
+                <p>أعمال معايرة وضبط دقة ساعات وموازين الضغط، وحلقات قياس الهبوط المعملية (سيتم توفير الصور قريباً).</p>
+            </div>
+        </div>
+
+        <!-- 23. videos (فارغ) -->
+        <div class="gallery-item no-img" data-cat="videos">
+            <div class="img-wrapper">
+                <div class="placeholder-icon-wrapper">
+                    <i class="fas fa-video" style="font-size: 3rem; color: rgba(196, 12, 48, 0.25) !important;"></i>
+                    <span class="placeholder-badge">قريباً</span>
+                </div>
+            </div>
+            <div class="item-info">
+                <h3>videos</h3>
+                <p>استعراض المقاطع المرئية التوضيحية لجميع أعمال الفحوصات والاختبارات الحقلية (سيتم توفير الفيديوهات قريباً).</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ================= عارض الصور التفاعلي (Lightbox) ================= -->
+<div class="lightbox" id="lightbox">
+    <div class="lightbox-content-wrapper">
+        <span class="close-btn" onclick="closeLightbox()">&times;</span>
+        <button class="nav-arrow arrow-prev" onclick="changeImage(-1)"><i class="fas fa-chevron-right"></i></button>
+        <img class="lightbox-img" id="lightboxImg" src="" alt="صورة مكبرة">
+        <button class="nav-arrow arrow-next" onclick="changeImage(1)"><i class="fas fa-chevron-left"></i></button>
+        <div class="lightbox-caption" id="lightboxCaption"></div>
     </div>
 </div>
 
 <footer>
-    &copy; 2026 وحدة اختبارات واستشارات الهندسة المدنية (CETC) - E-JUST | جميع الحقوق محفوظة
+    <div class="footer-contacts">
+        <span><i class="fas fa-phone-alt"></i> 16448</span>
+        <span><i class="fas fa-envelope"></i> cetc.unit@ejust.edu.eg</span>
+        <span><i class="fas fa-map-marker-alt"></i> New Borg El-Arab, Alexandria, Egypt</span>
+    </div>
+    <p>&copy; 2026 CETC Unit - E-JUST | جميع الحقوق محفوظة</p>
 </footer>
+
+<script>
+    let currentImgIndex = 0;
+    let filteredImages = [];
+
+    // جلب جميع بطاقات المعرض
+    const galleryItems = Array.from(document.querySelectorAll('.gallery-item'));
+    
+    // دالة الفلترة الذكية للتبويبات
+    function filterGallery(cat, btn) {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        galleryItems.forEach(item => {
+            const itemCat = item.getAttribute('data-cat');
+            if (cat === 'all' || itemCat === cat) {
+                item.style.display = 'flex';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    }
+
+    // فلترة وتحديث مصفوفة الصور التي تمتلك وسماً حقيقياً للصور فقط لاستبعاد الفارغة من العارض
+    function updateFilteredList() {
+        filteredImages = galleryItems.filter(item => {
+            // إظهار في عارض الصور فقط البطاقات المرئية حالياً والتي تمتلك صورة حقيقية (غير فارغة)
+            return item.style.display !== 'none' && !item.classList.contains('no-img');
+        });
+    }
+
+    // فتح عارض الصور التفاعلي ديناميكياً
+    function openLightbox(element) {
+        updateFilteredList();
+        currentImgIndex = filteredImages.indexOf(element);
+        
+        if (currentImgIndex === -1) return;
+
+        updateLightboxContent();
+        document.getElementById('lightbox').classList.add('active');
+    }
+
+    // تحديث محتويات عارض الصور
+    function updateLightboxContent() {
+        const activeItem = filteredImages[currentImgIndex];
+        const imgSrc = activeItem.querySelector('img').src;
+        const imgAlt = activeItem.querySelector('img').alt;
+        const captionText = activeItem.querySelector('.item-info h3').textContent;
+
+        document.getElementById('lightboxImg').src = imgSrc;
+        document.getElementById('lightboxImg').alt = imgAlt;
+        document.getElementById('lightboxCaption').textContent = captionText;
+    }
+
+    // إغلاق العارض
+    function closeLightbox() {
+        document.getElementById('lightbox').classList.remove('active');
+    }
+
+    // التنقل بين الصور (التالي والسابق)
+    function changeImage(direction) {
+        if (!filteredImages.length) return;
+        currentImgIndex += direction;
+        
+        if (currentImgIndex >= filteredImages.length) {
+            currentImgIndex = 0;
+        } else if (currentImgIndex < 0) {
+            currentImgIndex = filteredImages.length - 1;
+        }
+
+        updateLightboxContent();
+    }
+
+    document.getElementById('lightbox').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeLightbox();
+        }
+    });
+
+    document.addEventListener('keydown', function(e) {
+        const lightbox = document.getElementById('lightbox');
+        if (lightbox.classList.contains('active')) {
+            if (e.key === 'Escape') {
+                closeLightbox();
+            } else if (e.key === 'ArrowRight') {
+                changeImage(-1);
+            } else if (e.key === 'ArrowLeft') {
+                changeImage(1);
+            }
+        }
+    });
+</script>
 
 </body>
 </html>

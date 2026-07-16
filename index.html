@@ -108,14 +108,13 @@
         /* شبكة التنقل بتأثير زجاجي متكامل */
         .nav-grid { 
             display: grid; 
-            grid-template-columns: repeat(3, minmax(280px, 1fr)); 
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
             gap: 25px; 
             padding: 20px 5% 40px; 
             max-width: 1200px; 
             margin: 0 auto; 
             position: relative; 
             z-index: 10; 
-            justify-items: center;
         }
         .nav-card { 
             background: rgba(255, 255, 255, 0.75); 
@@ -137,8 +136,6 @@
             gap: 15px; 
             min-height: 250px; /* طول متناسق لجميع البطاقات */
             box-sizing: border-box;
-            width: 100%;
-            max-width: 280px;
         }
         .nav-card i { 
             font-size: 2.8rem; 
@@ -288,7 +285,7 @@
             .header-right { flex-direction: column; gap: 10px; text-align: center; }
             .brand-container { text-align: center; }
             .hero { padding: 80px 5% 20px; }
-            .nav-grid { padding-top: 10px; grid-template-columns: 1fr; }
+            .nav-grid { padding-top: 10px; }
             .about-card { padding: 30px 20px; }
             .contact-grid { gap: 30px; text-align: center; }
             .section-title { font-size: 1.8rem; }
@@ -364,7 +361,7 @@
         <div class="about-card">
             <h2 class="section-title">نبذة عن المركز</h2>
             <p>
-                يهدف المركز الى تقديم اختبارات واستشارات فنية متميزة للمشروعات المدنية القومية والخاصة، ملبيا بذلك احتياجات السوق المصري من الخدمات الهندسية المتخصصة والموثوقة [...]
+                يهدف المركز الى تقديم اختبارات واستشارات فنية متميزة للمشروعات المدنية القومية والخاصة، ملبيا بذلك [...]
             </p>
         </div>
     </section>

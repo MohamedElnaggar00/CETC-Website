@@ -16,8 +16,8 @@
         body { 
             font-family: 'Cairo', sans-serif; 
             margin: 0; 
-            background: transparent; /* جعل خلفية الجسم شفافة لتظهر خلفية الفيديو من تحتها */
-            color: #1a1a1a; 
+            background: transparent; /* خلفية شفافة لتظهر خلفية الفيديو من تحتها */
+            color: #ffffff; 
             display: flex; 
             flex-direction: column; 
             min-height: 100vh; 
@@ -30,13 +30,13 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1; /* خلف جميع العناصر والبطاقات */
+            z-index: -1; 
             overflow: hidden;
         }
         .video-bg {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* تجاوب كامل مع أبعاد الشاشة */
+            object-fit: cover; 
         }
         .video-overlay {
             position: absolute;
@@ -44,7 +44,6 @@
             left: 0;
             width: 100%;
             height: 100%;
-            /* تم زيادة وضوح الفيديو ليعطي تأثيراً حركياً احترافياً وواضحاً، مع الحفاظ على تباين وقراءة البطاقات البلورية الفاتحة */
             background: linear-gradient(rgba(15, 23, 42, 0.65), rgba(15, 23, 42, 0.75));
         }
 
@@ -91,11 +90,59 @@
             box-shadow: 0 4px 15px rgba(196, 12, 48, 0.2);
         }
 
-        /* Container - شفاف */
+        /* ================= ترويسة البانر الدوار الممتد (Overview Slider) ================= */
+        .slider-container {
+            position: relative;
+            width: 100%;
+            height: 460px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-bottom: 4px solid var(--red);
+        }
+        .slides { width: 100%; height: 100%; position: relative; }
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 1.2s ease-in-out;
+            z-index: 1;
+        }
+        .slide.active { opacity: 1; z-index: 2; }
+        .slider-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.75));
+            z-index: 3;
+        }
+        .slider-caption {
+            position: absolute;
+            bottom: 60px;
+            right: 5%;
+            z-index: 4;
+            text-align: right;
+            max-width: 700px;
+            animation: fadeInUp 1s ease forwards;
+        }
+        .slider-caption h1 { font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 900; color: #ffffff; margin: 0 0 10px 0; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+        .slider-caption p { font-size: clamp(0.95rem, 1.8vw, 1.25rem); color: #cbd5e1; font-weight: 600; margin: 0; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+        .slider-dots { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 5; display: flex; gap: 10px; }
+        .dot { width: 12px; height: 12px; background: rgba(255, 255, 255, 0.4); border-radius: 50%; cursor: pointer; transition: 0.3s; }
+        .dot.active { background: var(--red); transform: scale(1.25); }
+
+        /* Container */
         .content-container {
-            flex: 1;
             padding: 60px 5% 80px;
-            background: transparent;
+            max-width: 1200px;
+            margin: 0 auto;
+            box-sizing: border-box;
         }
 
         /* Section Intro */
@@ -105,24 +152,15 @@
             max-width: 800px;
             margin: 0 auto 40px;
         }
-        .section-intro h1 {
-            font-size: 2.2rem;
-            font-weight: 900;
-            margin: 0 0 15px;
-        }
-        .section-intro p {
-            font-size: 1.1rem;
-            color: #cbd5e1;
-            font-weight: 600;
-            line-height: 1.6;
-        }
+        .section-intro h1 { font-size: 2.2rem; font-weight: 900; margin: 0 0 15px; }
+        .section-intro p { font-size: 1.1rem; color: #cbd5e1; font-weight: 600; line-height: 1.6; }
 
         /* Filters Tabs Glassmorphism */
         .filters-nav {
             display: flex;
             justify-content: center;
             gap: 12px;
-            margin-bottom: 40px;
+            margin-bottom: 45px;
             flex-wrap: wrap;
         }
         .filter-btn {
@@ -146,16 +184,75 @@
             color: white;
         }
 
-        /* Gallery Grid */
+        /* ================= تصميم المعارض القطرية المائلة (التبويب الرئيسي) ================= */
+        .labs-overview-container {
+            display: block;
+            animation: fadeIn 0.4s ease forwards;
+        }
+        .lab-section {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 60px;
+            align-items: center;
+            margin-bottom: 120px;
+            box-sizing: border-box;
+        }
+        .lab-section.alternate { direction: ltr; }
+        .lab-section.alternate .lab-info { direction: rtl; }
+        .lab-section.alternate .diagonal-gallery { direction: rtl; }
+
+        .lab-info {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: right;
+            box-sizing: border-box;
+        }
+        .lab-info h2 { font-size: 1.8rem; color: var(--white); margin: 0 0 10px; font-weight: 900; }
+        .lab-info h3 { font-size: 1rem; color: var(--red); margin: 0 0 20px; font-weight: 800; text-transform: uppercase; }
+        .lab-info p { font-size: 1.05rem; color: #cbd5e1; font-weight: 600; line-height: 1.7; margin: 0; text-align: justify; }
+
+        .diagonal-gallery { position: relative; width: 100%; height: 380px; box-sizing: border-box; }
+        .diagonal-img {
+            position: absolute;
+            width: 60%;
+            height: 240px;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.35);
+            border: 3px solid rgba(255, 255, 255, 0.25);
+            cursor: pointer;
+            transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+        .diagonal-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+        .diagonal-img:hover img { transform: scale(1.08); }
+
+        .diag-1 { top: 0; right: 0; z-index: 2; transform: translateX(120px) translateY(-30px); opacity: 0; }
+        .diag-2 { bottom: 0; left: 0; z-index: 3; transform: translateX(-120px) translateY(30px); opacity: 0; }
+
+        .diagonal-img:hover {
+            transform: translateY(-8px) scale(1.02);
+            z-index: 10;
+            border-color: var(--red);
+            box-shadow: 0 20px 40px rgba(196, 12, 48, 0.25);
+        }
+        .diagonal-gallery.animate .diag-1 { transform: translateX(0) translateY(0); opacity: 1; }
+        .diagonal-gallery.animate .diag-2 { transform: translateX(0) translateY(0); opacity: 1; }
+
+        /* ================= تصميم شبكة الصور الـ 23 المفلترة ================= */
+        .gallery-grid-container {
+            display: none;
+            animation: fadeIn 0.4s ease forwards;
+        }
         .gallery-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 25px;
-            max-width: 1200px;
-            margin: 0 auto;
         }
-
-        /* Gallery Item Glassmorphism */
         .gallery-item {
             background: rgba(255, 255, 255, 0.75);
             backdrop-filter: blur(12px);
@@ -175,112 +272,40 @@
             border-color: var(--red);
             box-shadow: 0 15px 35px rgba(196, 12, 48, 0.2);
         }
+        .gallery-item.no-img { cursor: default; }
         
-        .gallery-item.no-img {
-            cursor: default;
-        }
-        
-        /* Image Wrapper with hidden overflow */
-        .img-wrapper {
-            position: relative;
-            width: 100%;
-            height: 200px;
-            overflow: hidden;
-        }
-        .gallery-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-        .gallery-item:not(.no-img):hover img {
-            transform: scale(1.08);
-        }
+        .img-wrapper { position: relative; width: 100%; height: 200px; overflow: hidden; }
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+        .gallery-item:not(.no-img):hover img { transform: scale(1.08); }
 
-        /* تصميم الصندوق البلوري المفرغ للبطاقات التي ليس لها صور */
+        /* المربعات الزجاجية للأجهزة الفارغة */
         .placeholder-icon-wrapper {
-            width: 100%;
-            height: 100%;
+            width: 100%; height: 100%;
             background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.18));
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
         }
-        .placeholder-icon-wrapper i {
-            font-size: 3rem;
-            color: rgba(196, 12, 48, 0.25) !important;
-            background: none !important;
-            padding: 0 !important;
-        }
-        .placeholder-badge {
-            font-size: 0.75rem;
-            background: rgba(0, 0, 0, 0.15);
-            color: #475569;
-            padding: 2px 10px;
-            border-radius: 20px;
-            font-weight: 800;
-        }
+        .placeholder-icon-wrapper i { font-size: 3rem; color: rgba(196, 12, 48, 0.25) !important; background: none !important; padding: 0 !important; }
+        .placeholder-badge { font-size: 0.75rem; background: rgba(0, 0, 0, 0.15); color: #475569; padding: 2px 10px; border-radius: 20px; font-weight: 800; }
 
-        /* Overlay text on image */
         .img-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(transparent, rgba(0,0,0,0.6));
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            display: flex;
-            align-items: flex-end;
-            padding: 15px;
-            box-sizing: border-box;
+            opacity: 0; transition: opacity 0.3s ease;
+            display: flex; align-items: flex-end; padding: 15px; box-sizing: border-box;
         }
-        .gallery-item:not(.no-img):hover .img-overlay {
-            opacity: 1;
-        }
-        .img-overlay span {
-            color: white;
-            font-weight: 800;
-            font-size: 0.85rem;
-            background: var(--red);
-            padding: 4px 12px;
-            border-radius: 20px;
-        }
+        .gallery-item:not(.no-img):hover .img-overlay { opacity: 1; }
+        .img-overlay span { color: white; font-weight: 800; font-size: 0.85rem; background: var(--red); padding: 4px 12px; border-radius: 20px; }
 
-        /* Details info at bottom of card */
-        .item-info {
-            padding: 20px;
-            text-align: right;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-        .item-info h3 {
-            margin: 0 0 8px 0;
-            font-size: 1.1rem;
-            font-weight: 900;
-            color: var(--black);
-        }
-        .item-info p {
-            margin: 0;
-            font-size: 0.85rem;
-            color: var(--gray);
-            font-weight: 700;
-            line-height: 1.5;
-        }
+        .item-info { padding: 20px; text-align: right; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
+        .item-info h3 { margin: 0 0 8px 0; font-size: 1.1rem; font-weight: 900; color: var(--black); }
+        .item-info p { margin: 0; font-size: 0.85rem; color: var(--gray); font-weight: 700; line-height: 1.5; }
 
         /* ================= LIGHTBOX VIEWER GLASSMORPHISM ================= */
         .lightbox {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.9);
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
@@ -290,86 +315,48 @@
             opacity: 0;
             transition: opacity 0.3s ease;
         }
-        .lightbox.active {
-            display: flex;
-            opacity: 1;
-        }
-        .lightbox-content-wrapper {
-            position: relative;
-            max-width: 85%;
-            max-height: 85%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 15px;
-        }
+        .lightbox.active { display: flex; opacity: 1; }
+        .lightbox-content-wrapper { position: relative; max-width: 85%; max-height: 85%; display: flex; flex-direction: column; align-items: center; gap: 15px; }
         .lightbox-img {
-            max-width: 100%;
-            max-height: 70vh;
+            max-width: 100%; max-height: 70vh;
             border-radius: 12px;
             box-shadow: 0 15px 45px rgba(0,0,0,0.6);
             border: 2px solid rgba(255, 255, 255, 0.15);
-            transform: scale(0.95);
-            transition: transform 0.3s ease;
+            transform: scale(0.95); transition: transform 0.3s ease;
             object-fit: contain;
         }
-        .lightbox.active .lightbox-img {
-            transform: scale(1);
-        }
-        .lightbox-caption {
-            color: white;
-            font-size: 1.1rem;
-            font-weight: 800;
-            text-align: center;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.5);
-        }
-        .close-btn {
-            position: absolute;
-            top: -45px;
-            right: 0;
-            font-size: 2.2rem;
-            color: #cbd5e1;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .close-btn:hover {
-            color: var(--red);
-        }
+        .lightbox.active .lightbox-img { transform: scale(1); }
+        .lightbox-caption { color: white; font-size: 1.1rem; font-weight: 800; text-align: center; text-shadow: 0 2px 8px rgba(0,0,0,0.5); }
+        .close-btn { position: absolute; top: -45px; right: 0; font-size: 2.2rem; color: #cbd5e1; cursor: pointer; transition: 0.3s; }
+        .close-btn:hover { color: var(--red); }
         
-        /* Navigation Arrows on Lightbox */
         .nav-arrow {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            color: white;
-            padding: 15px 18px;
-            font-size: 1.5rem;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: 0.3s;
-            z-index: 2100;
+            position: absolute; top: 50%; transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            color: white; padding: 15px 18px; font-size: 1.5rem; border-radius: 50%;
+            cursor: pointer; transition: 0.3s; z-index: 2100;
         }
-        .nav-arrow:hover {
-            background: var(--red);
-            border-color: var(--red);
-            box-shadow: 0 4px 15px rgba(196, 12, 48, 0.4);
-        }
+        .nav-arrow:hover { background: var(--red); border-color: var(--red); box-shadow: 0 4px 15px rgba(196, 12, 48, 0.4); }
         .arrow-prev { right: -75px; }
         .arrow-next { left: -75px; }
 
         footer { background: #000; color: #94a3b8; text-align: center; padding: 25px 5%; font-size: 0.85rem; border-top: 1px solid #222; }
 
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
         @media (max-width: 992px) {
+            .lab-section { grid-template-columns: 1fr; gap: 40px; margin-bottom: 80px; }
+            .lab-section.alternate { direction: rtl; }
+            .diagonal-gallery { height: 320px; }
+            .diagonal-img { width: 55%; height: 180px; }
             .arrow-prev { right: -10px; background: rgba(0,0,0,0.6); }
             .arrow-next { left: -10px; background: rgba(0,0,0,0.6); }
         }
         @media (max-width: 768px) {
             header { flex-direction: column; gap: 15px; text-align: center; }
-            .section-intro h1 { font-size: 1.8rem; }
+            .slider-container { height: 350px; }
+            .slider-caption { bottom: 40px; right: 5%; left: 5%; text-align: center; }
             .filters-nav { gap: 8px; }
             .filter-btn { font-size: 0.85rem; padding: 8px 16px; }
         }
@@ -395,15 +382,30 @@
     <a href="/" class="btn-home"><i class="fas fa-home"></i> الرئيسية</a>
 </header>
 
-<div class="content-container">
-    <div class="section-intro">
-        <h1>معرض الصور والوسائط الفنية</h1>
-        <p>جولة بصرية توضح معاملنا الإنشائية والجيوتقنية المتقدمة، وتجهيزاتنا الميدانية المعتمدة لضبط الجودة في كبرى المشروعات القومية.</p>
+<!-- ================= ترويسة البانر الدوار الممتد (Overview Slider) ================= -->
+<div class="slider-container">
+    <div class="slides">
+        <div class="slide active" style="background-image: url('OVER_VIEW_01');"></div>
+        <div class="slide" style="background-image: url('OVER_VIEW_02');"></div>
+        <div class="slide" style="background-image: url('OVER_VIEW_03');"></div>
     </div>
+    <div class="slider-overlay"></div>
+    <div class="slider-caption">
+        <h1>مختبرات وتجهيزات وحدة CETC</h1>
+        <p>جولة بصرية توضح معاملنا المتطورة لضبط الجودة للمشروعات القومية والخاصة</p>
+    </div>
+    <div class="slider-dots">
+        <span class="dot active" onclick="currentSlide(0)"></span>
+        <span class="dot" onclick="currentSlide(1)"></span>
+        <span class="dot" onclick="currentSlide(2)"></span>
+    </div>
+</div>
 
-    <!-- أزرار التصفية البلورية المحدثة لجميع التخصصات -->
+<div class="content-container">
+
+    <!-- أزرار التصفية البلورية لجميع التخصصات -->
     <div class="filters-nav">
-        <button class="filter-btn active" onclick="filterGallery('all', this)">الكل</button>
+        <button class="filter-btn active" onclick="filterGallery('all', this)">الكل (الرئيسية)</button>
         <button class="filter-btn" onclick="filterGallery('concrete', this)">خرسانة ومواد وعمارة</button>
         <button class="filter-btn" onclick="filterGallery('geotechnical', this)">تربة ومساحة وجيوتقنية</button>
         <button class="filter-btn" onclick="filterGallery('roads', this)">طرق وأسفلت وركام</button>
@@ -411,350 +413,431 @@
         <button class="filter-btn" onclick="filterGallery('videos', this)">فيديوهات</button>
     </div>
 
-    <!-- شبكة الصور التفاعلية الـ 23 بالترتيب والروابط السحابية لـ Supabase -->
-    <div class="gallery-grid" id="galleryGrid">
-        
-        <!-- 1. شمدت همر -->
-        <div class="gallery-item" data-cat="concrete" onclick="openLightbox(this)">
-            <div class="img-wrapper">
-                <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/hammer.jpg" alt="شمدت همر">
-                <div class="img-overlay"><span>خرسانة ومواد وعمارة</span></div>
+    <!-- ================= التبويب الأول المدمج (الكل / الرئيسية): يعرض المعامل الأربعة بنظام تعاقب قطري ================= -->
+    <div id="labsOverview" class="labs-overview-container">
+        <!-- 1. معمل التربة والجيوتقنية -->
+        <section class="lab-section">
+            <div class="lab-info">
+                <h2>معمل أبحاث واختبارات التربة</h2>
+                <h3>Geotechnical & Soil Laboratory</h3>
+                <p>
+                    نقدم باقة متكاملة من الاختبارات الجيوتقنية ودراسات التربة والأساسات بأجهزة مخصصة ومعتمدة، تشمل تحديد حدود أتبربرج (Atterberg)، والوزن النوعي، واختبار نسبة تحمل كالفورنيا (CBR) لضمان ثبات وأمان التأسيس الهندسي السليم لكافة المنشآت والكباري.
+                </p>
             </div>
-            <div class="item-info">
-                <h3>شمدت همر</h3>
-                <p>اختبار ارتدادي غير متلف لتقييم واختبار جودة وتماسك السطح الخرساني بالموقع.</p>
-            </div>
-        </div>
-
-        <!-- 2. وزن نوعى وكثافة رمل -->
-        <div class="gallery-item" data-cat="geotechnical" onclick="openLightbox(this)">
-            <div class="img-wrapper">
-                <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/GS.jpg" alt="وزن نوعى وكثافة رمل">
-                <div class="img-overlay"><span>تربة ومساحة وجيوتقنية</span></div>
-            </div>
-            <div class="item-info">
-                <h3>وزن نوعى وكثافة رمل</h3>
-                <p>تحديد الوزن النوعي والكثافة لعينات الرمل والتربة الموقعية بالأساليب القياسية.</p>
-            </div>
-        </div>
-
-        <!-- 3. اختبار المكعبات الخرسانية -->
-        <div class="gallery-item" data-cat="concrete" onclick="openLightbox(this)">
-            <div class="img-wrapper">
-                <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/cubes.jpg" alt="اختبار المكعبات الخرسانية">
-                <div class="img-overlay"><span>خرسانة ومواد وعمارة</span></div>
-            </div>
-            <div class="item-info">
-                <h3>اختبار المكعبات الخرسانية</h3>
-                <p>إجراء اختبارات مقاومة الضغط على عينات المكعبات الخرسانية للتحقق من جودة الخرسانة.</p>
-            </div>
-        </div>
-
-        <!-- 4. اختبار التحميل على الخوازيق -->
-        <div class="gallery-item" data-cat="site" onclick="openLightbox(this)">
-            <div class="img-wrapper">
-                <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/pile_load.jpg" alt="اختبار التحميل على الخوازيق">
-                <div class="img-overlay"><span>استشارات ومعايرة</span></div>
-            </div>
-            <div class="item-info">
-                <h3>اختبار التحميل على الخوازيق</h3>
-                <p>مراقبة وتقييم الهبوط وقدرة تحمل الخوازيق الإنشائية للأحمال الثقيلة بالمشروعات.</p>
-            </div>
-        </div>
-
-        <!-- 5. اختبار حدود السيولة واللدونة -->
-        <div class="gallery-item" data-cat="geotechnical" onclick="openLightbox(this)">
-            <div class="img-wrapper">
-                <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/LA.jpg" alt="اختبار حدود السيولة واللدونة">
-                <div class="img-overlay"><span>تربة ومساحة وجيوتقنية</span></div>
-            </div>
-            <div class="item-info">
-                <h3>اختبار حدود السيولة واللدونة</h3>
-                <p>فحص حدود أتبربرج (Atterberg) لتقييم الخواص اللدنة وصلاحية التربة للتأسيس.</p>
-            </div>
-        </div>
-
-        <!-- 6. اختبار نزع - اختبار شد أسياخ (فارغ) -->
-        <div class="gallery-item no-img" data-cat="concrete">
-            <div class="img-wrapper">
-                <div class="placeholder-icon-wrapper">
-                    <i class="fas fa-camera"></i>
-                    <span class="placeholder-badge">قريباً</span>
+            <div class="diagonal-gallery">
+                <div class="diagonal-img diag-1" onclick="openLightbox(this)">
+                    <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/GS.jpg" alt="وزن نوعي وكثافة رمل">
+                </div>
+                <div class="diagonal-img diag-2" onclick="openLightbox(this)">
+                    <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/CBR.jpg" alt="اختبار CBR - نسبة تحمل كالفورنيا">
                 </div>
             </div>
-            <div class="item-info">
-                <h3>اختبار نزع - اختبار شد أسياخ</h3>
-                <p>تقييم قوة تماسك أسياخ الصلب والتأكد من مطابقتها لكود البناء المصري (سيتم توفير الصور قريباً).</p>
-            </div>
-        </div>
+        </section>
 
-        <!-- 7. اختبارات الخلطات الأسفلتية والطرق (صورة 1) -->
-        <div class="gallery-item" data-cat="roads" onclick="openLightbox(this)">
-            <div class="img-wrapper">
-                <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/Asphalt1.png" alt="اختبارات الخلطات الأسفلتية والطرق (1)">
-                <div class="img-overlay"><span>طرق وأسفلت وركام</span></div>
+        <!-- 2. معمل الخرسانة والمواد -->
+        <section class="lab-section alternate">
+            <div class="lab-info">
+                <h2>معمل الخرسانة ومقاومة المواد</h2>
+                <h3>Concrete & Materials Laboratory</h3>
+                <p>
+                    معمل متكامل مخصص لاختبارات الخرسانة الطازجة والمتصلدة، ومقاومة ضغط المكعبات، واستخراج القلوب الخرسانية القياسية (Core Test)، بالإضافة للفحوصات غير المتلفة للسطح الإنشائي باستخدام مطرقة شميدت للتأكد من استيفاء شروط السلامة الإنشائية.
+                </p>
             </div>
-            <div class="item-info">
-                <h3>اختبارات الخلطات الأسفلتية والطرق (1)</h3>
-                <p>أعمال فحص وتحليل طبقات الرصف وجودة دك الأسفلت بالموقع حرقياً.</p>
-            </div>
-        </div>
-
-        <!-- 7. اختبارات الخلطات الأسفلتية والطرق (صورة 2) -->
-        <div class="gallery-item" data-cat="roads" onclick="openLightbox(this)">
-            <div class="img-wrapper">
-                <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/Asphalt2.png" alt="اختبارات الخلطات الأسفلتية والطرق (2)">
-                <div class="img-overlay"><span>طرق وأسفلت وركام</span></div>
-            </div>
-            <div class="item-info">
-                <h3>اختبارات الخلطات الأسفلتية والطرق (2)</h3>
-                <p>فحص استخلاص البيتومين لضبط معايير مطابقة الخلطة الإسفلتية للمواصفات القياسية.</p>
-            </div>
-        </div>
-
-        <!-- 7. اختبارات الخلطات الأسفلتية والطرق (صورة 3) -->
-        <div class="gallery-item" data-cat="roads" onclick="openLightbox(this)">
-            <div class="img-wrapper">
-                <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/Asphalt3.png" alt="اختبارات الخلطات الأسفلتية والطرق (3)">
-                <div class="img-overlay"><span>طرق وأسفلت وركام</span></div>
-            </div>
-            <div class="item-info">
-                <h3>اختبارات الخلطات الأسفلتية والطرق (3)</h3>
-                <p>أعمال دمك وتحضير قوالب مارشال الأسفلتية القياسية داخل معمل الطرق بالوحدة.</p>
-            </div>
-        </div>
-
-        <!-- 8. اختبارات الأسمنت (صورة 1) -->
-        <div class="gallery-item" data-cat="concrete" onclick="openLightbox(this)">
-            <div class="img-wrapper">
-                <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/Cem1.png" alt="اختبارات الأسمنت (1)">
-                <div class="img-overlay"><span>خرسانة ومواد وعمارة</span></div>
-            </div>
-            <div class="item-info">
-                <h3>اختبارات الأسمنت (1)</h3>
-                <p>تعيين زمن الشك الابتدائي والنهائي لعينات الأسمنت باستخدام جهاز فيكات المعياري.</p>
-            </div>
-        </div>
-
-        <!-- 8. اختبارات الأسمنت (صورة 2) -->
-        <div class="gallery-item" data-cat="concrete" onclick="openLightbox(this)">
-            <div class="img-wrapper">
-                <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/Cem2.png" alt="اختبارات الأسمنت (2)">
-                <div class="img-overlay"><span>خرسانة ومواد وعمارة</span></div>
-            </div>
-            <div class="item-info">
-                <h3>اختبارات الأسمنت (2)</h3>
-                <p>تحديد مدى تمدد الأسمنت (اختبار الثبات) باستخدام جهاز لوشاتيليه المعملي بدقة.</p>
-            </div>
-        </div>
-
-        <!-- 9. اختبار تحديد خصائص الدمك (فارغ) -->
-        <div class="gallery-item no-img" data-cat="geotechnical">
-            <div class="img-wrapper">
-                <div class="placeholder-icon-wrapper">
-                    <i class="fas fa-camera"></i>
-                    <span class="placeholder-badge">قريباً</span>
+            <div class="diagonal-gallery">
+                <div class="diagonal-img diag-1" onclick="openLightbox(this)">
+                    <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/cubes.jpg" alt="اختبار المكعبات الخرسانية">
+                </div>
+                <div class="diagonal-img diag-2" onclick="openLightbox(this)">
+                    <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/Core.png" alt="اختبارات القلب الخرساني - كور">
                 </div>
             </div>
-            <div class="item-info">
-                <h3>اختبار تحديد خصائص الدمك</h3>
-                <p>اختبار بروكتور لتحديد الكثافة الجافة القصوى والمحتوى الأمثل للمياه بالتربة (قريباً).</p>
-            </div>
-        </div>
+        </section>
 
-        <!-- 10. اختبار التحميل على التربة (صورة 1) -->
-        <div class="gallery-item" data-cat="geotechnical" onclick="openLightbox(this)">
-            <div class="img-wrapper">
-                <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/PLT1.png" alt="اختبار التحميل على التربة (1)">
-                <div class="img-overlay"><span>تربة ومساحة وجيوتقنية</span></div>
+        <!-- 3. معمل الأسفلت والطرق -->
+        <section class="lab-section">
+            <div class="lab-info">
+                <h2>معمل اختبارات الأسفلت والطرق</h2>
+                <h3>Asphalt & Highway Laboratory</h3>
+                <p>
+                    فحص ومطابقة تصميم الخلطات الإسفلتية الموقعية لطبقات الرصف بالطرق السريعة والكباري، مع إجراء اختبارات مارشال الرقمية لتحديد قيم الثبات والتدفق، وفحص استخلاص البيتومين لضمان مطابقة المواد المستخدمة لأعلى معايير هيئة الطرق والكباري المصرية.
+                </p>
             </div>
-            <div class="item-info">
-                <h3>اختبار التحميل على التربة (1)</h3>
-                <p>Plate Load Test الميداني لتحديد قدرة تحمل التربة ومعرفة قيم الهبوط الفوري للأساسات.</p>
-            </div>
-        </div>
-
-        <!-- 10. اختبار التحميل على التربة (صورة 2) -->
-        <div class="gallery-item" data-cat="geotechnical" onclick="openLightbox(this)">
-            <div class="img-wrapper">
-                <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/PLT2.jpg" alt="اختبار التحميل على التربة (2)">
-                <div class="img-overlay"><span>تربة ومساحة وجيوتقنية</span></div>
-            </div>
-            <div class="item-info">
-                <h3>اختبار التحميل على التربة (2)</h3>
-                <p>مراقبة الأحمال الساكنة المطبقة على لوحة التحميل وعدادات قياس الهبوط والتشوه بدقة.</p>
-            </div>
-        </div>
-
-        <!-- 11. اختبارات جسات التربة -->
-        <div class="gallery-item" data-cat="geotechnical" onclick="openLightbox(this)">
-            <div class="img-wrapper">
-                <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/Bore.png" alt="اختبارات جسات التربة">
-                <div class="img-overlay"><span>تربة ومساحة وجيوتقنية</span></div>
-            </div>
-            <div class="item-info">
-                <h3>اختبارات جسات التربة</h3>
-                <p>أعمال الحفر الجيوتقني وأخذ العينات العميقة لاستخراج تقارير التأسيس المعتمدة للمنشآت.</p>
-            </div>
-        </div>
-
-        <!-- 12. اختبار التدرج المنخلي للتربة (فارغ) -->
-        <div class="gallery-item no-img" data-cat="geotechnical">
-            <div class="img-wrapper">
-                <div class="placeholder-icon-wrapper">
-                    <i class="fas fa-camera"></i>
-                    <span class="placeholder-badge">قريباً</span>
+            <div class="diagonal-gallery">
+                <div class="diagonal-img diag-1" onclick="openLightbox(this)">
+                    <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/Asphalt1.png" alt="اختبارات الخلطات الأسفلتية والطرق">
+                </div>
+                <div class="diagonal-img diag-2" onclick="openLightbox(this)">
+                    <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/Asphalt2.png" alt="تحليل واستخلاص البيتومين">
                 </div>
             </div>
-            <div class="item-info">
-                <h3>اختبار التدرج المنخلي للتربة</h3>
-                <p>تحليل عينات التربة معملياً بالمناخل لتصنيفها وتحديد تدرجها الحبيبي (سيتم توفير الصور قريباً).</p>
-            </div>
-        </div>
+        </section>
 
-        <!-- 13. اختبار CBR - نسبة تحمل كالفورنيا -->
-        <div class="gallery-item" data-cat="geotechnical" onclick="openLightbox(this)">
-            <div class="img-wrapper">
-                <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/CBR.jpg" alt="اختبار CBR">
-                <div class="img-overlay"><span>تربة ومساحة وجيوتقنية</span></div>
+        <!-- 4. معمل المساحة والاختبارات الحقلية -->
+        <section class="lab-section alternate">
+            <div class="lab-info">
+                <h2>المساحة والاختبارات الحقلية بالموقع</h2>
+                <h3>Surveying & Field Testing Laboratory</h3>
+                <p>
+                    يغطي القسم التجهيزات الحقلية والمساحية بالمواقع الإنشائية لضبط الإحداثيات والمناسيب (Total Station)، وفحص الكثافة الحقلية بمخروط الرمل للتأكد من دمك طبقات التأسيس هندسياً، مع اختبارات التحميل الميدانية على الخوازيق لمراقبة وحصر الهبوط والتحمل.
+                </p>
             </div>
-            <div class="item-info">
-                <h3>اختبار CBR - نسبة تحمل كالفورنيا</h3>
-                <p>تقييم جودة وقوة طبقات التربة ومطابقتها للمواصفات الهندسية لرصف الطرق السريعة.</p>
-            </div>
-        </div>
-
-        <!-- 14. جهاز محطة الأرصاد المساحية (فارغ) -->
-        <div class="gallery-item no-img" data-cat="geotechnical">
-            <div class="img-wrapper">
-                <div class="placeholder-icon-wrapper">
-                    <i class="fas fa-camera"></i>
-                    <span class="placeholder-badge">قريباً</span>
+            <div class="diagonal-gallery">
+                <div class="diagonal-img diag-1" onclick="openLightbox(this)">
+                    <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/pile_load.jpg" alt="اختبار التحميل على الخوازيق">
+                </div>
+                <div class="diagonal-img diag-2" onclick="openLightbox(this)">
+                    <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/Sandcone.png" alt="اختبار الكثافة بالموقع">
                 </div>
             </div>
-            <div class="item-info">
-                <h3>جهاز محطة الأرصاد المساحية</h3>
-                <p>الرفع والقياس المساحي ثلاثي الأبعاد وإحداثيات الموقع فائق الدقة (قريباً).</p>
-            </div>
-        </div>
-
-        <!-- 15. اختبار الكثافة بالموقع -->
-        <div class="gallery-item" data-cat="geotechnical" onclick="openLightbox(this)">
-            <div class="img-wrapper">
-                <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/Sandcone.png" alt="اختبار الكثافة بالموقع">
-                <div class="img-overlay"><span>تربة ومساحة وجيوتقنية</span></div>
-            </div>
-            <div class="item-info">
-                <h3>اختبار الكثافة بالموقع</h3>
-                <p>مخروط الرمل (Sand Cone) للتحقق من جودة دمك طبقة الأساس بالمشروع الإنشائي.</p>
-            </div>
-        </div>
-
-        <!-- 16. اختبارات القلب الخرساني - كور -->
-        <div class="gallery-item" data-cat="concrete" onclick="openLightbox(this)">
-            <div class="img-wrapper">
-                <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/Core.png" alt="اختبارات القلب الخرساني - كور">
-                <div class="img-overlay"><span>خرسانة ومواد وعمارة</span></div>
-            </div>
-            <div class="item-info">
-                <h3>اختبارات القلب الخرساني - كور</h3>
-                <p>استخراج واختبار القلوب الخرسانية لتقييم مقاومة الضغط الفعلي للعناصر الإنشائية المتصلدة.</p>
-            </div>
-        </div>
-
-        <!-- 17. اختبار البري والتآكل - لوس أنجلوس -->
-        <div class="gallery-item" data-cat="roads" onclick="openLightbox(this)">
-            <div class="img-wrapper">
-                <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/LA.jpg" alt="اختبار البري والتآكل - لوس أنجلوس">
-                <div class="img-overlay"><span>طرق وأسفلت وركام</span></div>
-            </div>
-            <div class="item-info">
-                <h3>اختبار البري والتآكل - لوس أنجلوس</h3>
-                <p>تحديد مقاومة تفتت الركام والسن للبري تحت تأثير ضربات واحتكاك الأحمال الحركية.</p>
-            </div>
-        </div>
-
-        <!-- 18. مواقع عامة (فارغ) -->
-        <div class="gallery-item no-img" data-cat="geotechnical">
-            <div class="img-wrapper">
-                <div class="placeholder-icon-wrapper">
-                    <i class="fas fa-camera"></i>
-                    <span class="placeholder-badge">قريباً</span>
-                </div>
-            </div>
-            <div class="item-info">
-                <h3>مواقع عامة</h3>
-                <p>صور ميدانية تذكارية عامة توضح انتشار وإشراف كوادر المركز بالعديد من مواقع المشاريع القومية (قريباً).</p>
-            </div>
-        </div>
-
-        <!-- 19. أنشطة بحثية لقسم العمارة -->
-        <div class="gallery-item" data-cat="concrete" onclick="openLightbox(this)">
-            <div class="img-wrapper">
-                <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/Research.png" alt="أنشطة بحثية لقسم العمارة">
-                <div class="img-overlay"><span>خرسانة ومواد وعمارة</span></div>
-            </div>
-            <div class="item-info">
-                <h3>أنشطة بحثية لقسم العمارة</h3>
-                <p>الابتكار ونمذجة الهياكل والكتل المعمارية المستدامة بالجامعة المصرية اليابانية.</p>
-            </div>
-        </div>
-
-        <!-- 20. إعتماد محطات خلط -->
-        <div class="gallery-item" data-cat="site" onclick="openLightbox(this)">
-            <div class="img-wrapper">
-                <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/patchblant.png" alt="إعتماد محطات خلط">
-                <div class="img-overlay"><span>استشارات ومعايرة</span></div>
-            </div>
-            <div class="item-info">
-                <h3>إعتماد محطات خلط</h3>
-                <p>معاينة وإعتماد محطات إنتاج الخرسانة الجاهزة للتأكد من سلامة المعايير والموازين والخلط الفعلي.</p>
-            </div>
-        </div>
-
-        <!-- 21. اختبارات الانترلوك + طوب البنا (فارغ) -->
-        <div class="gallery-item no-img" data-cat="concrete">
-            <div class="img-wrapper">
-                <div class="placeholder-icon-wrapper">
-                    <i class="fas fa-camera"></i>
-                    <span class="placeholder-badge">قريباً</span>
-                </div>
-            </div>
-            <div class="item-info">
-                <h3>اختبارات الانترلوك + طوب البنا</h3>
-                <p>اختبار الضغط وجودة تماسك الانترلوك وقوالب الطوب الأسمنتي والطفلي المستخدمة في البناء (قريباً).</p>
-            </div>
-        </div>
-
-        <!-- 22. معايرة أجهزة (فارغ) -->
-        <div class="gallery-item no-img" data-cat="site">
-            <div class="img-wrapper">
-                <div class="placeholder-icon-wrapper">
-                    <i class="fas fa-camera"></i>
-                    <span class="placeholder-badge">قريباً</span>
-                </div>
-            </div>
-            <div class="item-info">
-                <h3>معايرة أجهزة</h3>
-                <p>أعمال معايرة وضبط دقة ساعات وموازين الضغط، وحلقات قياس الهبوط المعملية (سيتم توفير الصور قريباً).</p>
-            </div>
-        </div>
-
-        <!-- 23. videos (فارغ) -->
-        <div class="gallery-item no-img" data-cat="videos">
-            <div class="img-wrapper">
-                <div class="placeholder-icon-wrapper">
-                    <i class="fas fa-video" style="font-size: 3rem; color: rgba(196, 12, 48, 0.25) !important;"></i>
-                    <span class="placeholder-badge">قريباً</span>
-                </div>
-            </div>
-            <div class="item-info">
-                <h3>videos</h3>
-                <p>استعراض المقاطع المرئية التوضيحية لجميع أعمال الفحوصات والاختبارات الحقلية (سيتم توفير الفيديوهات قريباً).</p>
-            </div>
-        </div>
-
+        </section>
     </div>
+
+    <!-- ================= التبويبات الأخرى المفلترة: تعرض الـ 23 كرت تفاعلي لجميع الفحوصات الفردية بدقة متناهية ================= -->
+    <div id="galleryGridContainer" class="gallery-grid-container">
+        <div class="gallery-grid" id="galleryGrid">
+            
+            <!-- 1. شمدت همر -->
+            <div class="gallery-item" data-cat="concrete" onclick="openLightbox(this)">
+                <div class="img-wrapper">
+                    <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/hammer.jpg" alt="شمدت همر">
+                    <div class="img-overlay"><span>خرسانة ومواد وعمارة</span></div>
+                </div>
+                <div class="item-info">
+                    <h3>شمدت همر</h3>
+                    <p>اختبار ارتدادي غير متلف لتقييم واختبار جودة وتماسك السطح الخرساني بالموقع.</p>
+                </div>
+            </div>
+
+            <!-- 2. وزن نوعى وكثافة رمل -->
+            <div class="gallery-item" data-cat="geotechnical" onclick="openLightbox(this)">
+                <div class="img-wrapper">
+                    <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/GS.jpg" alt="وزن نوعى وكثافة رمل">
+                    <div class="img-overlay"><span>تربة ومساحة وجيوتقنية</span></div>
+                </div>
+                <div class="item-info">
+                    <h3>وزن نوعى وكثافة رمل</h3>
+                    <p>تحديد الوزن النوعي والكثافة لعينات الرمل والتربة الموقعية بالأساليب القياسية.</p>
+                </div>
+            </div>
+
+            <!-- 3. اختبار المكعبات الخرسانية -->
+            <div class="gallery-item" data-cat="concrete" onclick="openLightbox(this)">
+                <div class="img-wrapper">
+                    <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/cubes.jpg" alt="اختبار المكعبات الخرسانية">
+                    <div class="img-overlay"><span>خرسانة ومواد وعمارة</span></div>
+                </div>
+                <div class="item-info">
+                    <h3>اختبار المكعبات الخرسانية</h3>
+                    <p>إجراء اختبارات مقاومة الضغط على عينات المكعبات الخرسانية للتحقق من جودة الخرسانة.</p>
+                </div>
+            </div>
+
+            <!-- 4. اختبار التحميل على الخوازيق -->
+            <div class="gallery-item" data-cat="site" onclick="openLightbox(this)">
+                <div class="img-wrapper">
+                    <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/pile_load.jpg" alt="اختبار التحميل على الخوازيق">
+                    <div class="img-overlay"><span>استشارات ومعايرة</span></div>
+                </div>
+                <div class="item-info">
+                    <h3>اختبار التحميل على الخوازيق</h3>
+                    <p>مراقبة وتقييم الهبوط وقدرة تحمل الخوازيق الإنشائية للأحمال الثقيلة بالمشروعات.</p>
+                </div>
+            </div>
+
+            <!-- 5. اختبار حدود السيولة واللدونة -->
+            <div class="gallery-item" data-cat="geotechnical" onclick="openLightbox(this)">
+                <div class="img-wrapper">
+                    <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/LA.jpg" alt="اختبار حدود السيولة واللدونة">
+                    <div class="img-overlay"><span>تربة ومساحة وجيوتقنية</span></div>
+                </div>
+                <div class="item-info">
+                    <h3>اختبار حدود السيولة واللدونة</h3>
+                    <p>فحص حدود أتبربرج (Atterberg) لتقييم الخواص اللدنة وصلاحية التربة للتأسيس.</p>
+                </div>
+            </div>
+
+            <!-- 6. اختبار نزع - اختبار شد أسياخ (فارغ) -->
+            <div class="gallery-item no-img" data-cat="concrete">
+                <div class="img-wrapper">
+                    <div class="placeholder-icon-wrapper">
+                        <i class="fas fa-camera"></i>
+                        <span class="placeholder-badge">قريباً</span>
+                    </div>
+                </div>
+                <div class="item-info">
+                    <h3>اختبار نزع - اختبار شد أسياخ</h3>
+                    <p>تقييم قوة تماسك أسياخ الصلب والتأكد من مطابقتها لكود البناء المصري (سيتم توفير الصور قريباً).</p>
+                </div>
+            </div>
+
+            <!-- 7. اختبارات الخلطات الأسفلتية والطرق (صورة 1) -->
+            <div class="gallery-item" data-cat="roads" onclick="openLightbox(this)">
+                <div class="img-wrapper">
+                    <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/Asphalt1.png" alt="اختبارات الخلطات الأسفلتية والطرق (1)">
+                    <div class="img-overlay"><span>طرق وأسفلت وركام</span></div>
+                </div>
+                <div class="item-info">
+                    <h3>اختبارات الخلطات الأسفلتية والطرق (1)</h3>
+                    <p>أعمال فحص وتحليل طبقات الرصف وجودة دك الأسفلت بالموقع حرقياً.</p>
+                </div>
+            </div>
+
+            <!-- 7. اختبارات الخلطات الأسفلتية والطرق (صورة 2) -->
+            <div class="gallery-item" data-cat="roads" onclick="openLightbox(this)">
+                <div class="img-wrapper">
+                    <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/Asphalt2.png" alt="اختبارات الخلطات الأسفلتية والطرق (2)">
+                    <div class="img-overlay"><span>طرق وأسفلت وركام</span></div>
+                </div>
+                <div class="item-info">
+                    <h3>اختبارات الخلطات الأسفلتية والطرق (2)</h3>
+                    <p>فحص استخلاص البيتومين لضبط معايير مطابقة الخلطة الإسفلتية للمواصفات القياسية.</p>
+                </div>
+            </div>
+
+            <!-- 7. اختبارات الخلطات الأسفلتية والطرق (صورة 3) -->
+            <div class="gallery-item" data-cat="roads" onclick="openLightbox(this)">
+                <div class="img-wrapper">
+                    <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/Asphalt3.png" alt="اختبارات الخلطات الأسفلتية والطرق (3)">
+                    <div class="img-overlay"><span>طرق وأسفلت وركام</span></div>
+                </div>
+                <div class="item-info">
+                    <h3>اختبارات الخلطات الأسفلتية والطرق (3)</h3>
+                    <p>أعمال دمك وتحضير قوالب مارشال الأسفلتية القياسية داخل معمل الطرق بالوحدة.</p>
+                </div>
+            </div>
+
+            <!-- 8. اختبارات الأسمنت (صورة 1) -->
+            <div class="gallery-item" data-cat="concrete" onclick="openLightbox(this)">
+                <div class="img-wrapper">
+                    <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/Cem1.png" alt="اختبارات الأسمنت (1)">
+                    <div class="img-overlay"><span>خرسانة ومواد وعمارة</span></div>
+                </div>
+                <div class="item-info">
+                    <h3>اختبارات الأسمنت (1)</h3>
+                    <p>تعيين زمن الشك الابتدائي والنهائي لعينات الأسمنت باستخدام جهاز فيكات المعياري.</p>
+                </div>
+            </div>
+
+            <!-- 8. اختبارات الأسمنت (صورة 2) -->
+            <div class="gallery-item" data-cat="concrete" onclick="openLightbox(this)">
+                <div class="img-wrapper">
+                    <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/Cem2.png" alt="اختبارات الأسمنت (2)">
+                    <div class="img-overlay"><span>خرسانة ومواد وعمارة</span></div>
+                </div>
+                <div class="item-info">
+                    <h3>اختبارات الأسمنت (2)</h3>
+                    <p>تحديد مدى تمدد الأسمنت (اختبار الثبات) باستخدام جهاز لوشاتيليه المعملي بدقة.</p>
+                </div>
+            </div>
+
+            <!-- 9. اختبار تحديد خصائص الدمك (فارغ) -->
+            <div class="gallery-item no-img" data-cat="geotechnical">
+                <div class="img-wrapper">
+                    <div class="placeholder-icon-wrapper">
+                        <i class="fas fa-camera"></i>
+                        <span class="placeholder-badge">قريباً</span>
+                    </div>
+                </div>
+                <div class="item-info">
+                    <h3>اختبار تحديد خصائص الدمك</h3>
+                    <p>اختبار بروكتور لتحديد الكثافة الجافة القصوى والمحتوى الأمثل للمياه بالتربة (قريباً).</p>
+                </div>
+            </div>
+
+            <!-- 10. اختبار التحميل على التربة (صورة 1) -->
+            <div class="gallery-item" data-cat="geotechnical" onclick="openLightbox(this)">
+                <div class="img-wrapper">
+                    <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/PLT1.png" alt="اختبار التحميل على التربة (1)">
+                    <div class="img-overlay"><span>تربة ومساحة وجيوتقنية</span></div>
+                </div>
+                <div class="item-info">
+                    <h3>اختبار التحميل على التربة (1)</h3>
+                    <p>Plate Load Test الميداني لتحديد قدرة تحمل التربة ومعرفة قيم الهبوط الفوري للأساسات.</p>
+                </div>
+            </div>
+
+            <!-- 10. اختبار التحميل على التربة (صورة 2) -->
+            <div class="gallery-item" data-cat="geotechnical" onclick="openLightbox(this)">
+                <div class="img-wrapper">
+                    <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/PLT2.jpg" alt="اختبار التحميل على التربة (2)">
+                    <div class="img-overlay"><span>تربة ومساحة وجيوتقنية</span></div>
+                </div>
+                <div class="item-info">
+                    <h3>اختبار التحميل على التربة (2)</h3>
+                    <p>مراقبة الأحمال الساكنة المطبقة على لوحة التحميل وعدادات قياس الهبوط والتشوه بدقة.</p>
+                </div>
+            </div>
+
+            <!-- 11. اختبارات جسات التربة -->
+            <div class="gallery-item" data-cat="geotechnical" onclick="openLightbox(this)">
+                <div class="img-wrapper">
+                    <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/Bore.png" alt="اختبارات جسات التربة">
+                    <div class="img-overlay"><span>تربة ومساحة وجيوتقنية</span></div>
+                </div>
+                <div class="item-info">
+                    <h3>اختبارات جسات التربة</h3>
+                    <p>أعمال الحفر الجيوتقني وأخذ العينات العميقة لاستخراج تقارير التأسيس المعتمدة للمنشآت.</p>
+                </div>
+            </div>
+
+            <!-- 12. اختبار التدرج المنخلي للتربة (فارغ) -->
+            <div class="gallery-item no-img" data-cat="geotechnical">
+                <div class="img-wrapper">
+                    <div class="placeholder-icon-wrapper">
+                        <i class="fas fa-camera"></i>
+                        <span class="placeholder-badge">قريباً</span>
+                    </div>
+                </div>
+                <div class="item-info">
+                    <h3>اختبار التدرج المنخلي للتربة</h3>
+                    <p>تحليل عينات التربة معملياً بالمناخل لتصنيفها وتحديد تدرجها الحبيبي (سيتم توفير الصور قريباً).</p>
+                </div>
+            </div>
+
+            <!-- 13. اختبار CBR - نسبة تحمل كالفورنيا -->
+            <div class="gallery-item" data-cat="geotechnical" onclick="openLightbox(this)">
+                <div class="img-wrapper">
+                    <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/CBR.jpg" alt="اختبار CBR">
+                    <div class="img-overlay"><span>تربة ومساحة وجيوتقنية</span></div>
+                </div>
+                <div class="item-info">
+                    <h3>اختبار CBR - نسبة تحمل كالفورنيا</h3>
+                    <p>تقييم جودة وقوة طبقات التربة ومطابقتها للمواصفات الهندسية لرصف الطرق السريعة.</p>
+                </div>
+            </div>
+
+            <!-- 14. جهاز محطة الأرصاد المساحية (فارغ) -->
+            <div class="gallery-item no-img" data-cat="geotechnical">
+                <div class="img-wrapper">
+                    <div class="placeholder-icon-wrapper">
+                        <i class="fas fa-camera"></i>
+                        <span class="placeholder-badge">قريباً</span>
+                    </div>
+                </div>
+                <div class="item-info">
+                    <h3>جهاز محطة الأرصاد المساحية</h3>
+                    <p>الرفع والقياس المساحي ثلاثي الأبعاد وإحداثيات الموقع فائق الدقة (قريباً).</p>
+                </div>
+            </div>
+
+            <!-- 15. اختبار الكثافة بالموقع -->
+            <div class="gallery-item" data-cat="geotechnical" onclick="openLightbox(this)">
+                <div class="img-wrapper">
+                    <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/Sandcone.png" alt="اختبار الكثافة بالموقع">
+                    <div class="img-overlay"><span>تربة ومساحة وجيوتقنية</span></div>
+                </div>
+                <div class="item-info">
+                    <h3>اختبار الكثافة بالموقع</h3>
+                    <p>مخروط الرمل (Sand Cone) للتحقق من جودة دمك طبقة الأساس بالمشروع الإنشائي.</p>
+                </div>
+            </div>
+
+            <!-- 16. اختبارات القلب الخرساني - كور -->
+            <div class="gallery-item" data-cat="concrete" onclick="openLightbox(this)">
+                <div class="img-wrapper">
+                    <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/Core.png" alt="اختبارات القلب الخرساني - كور">
+                    <div class="img-overlay"><span>خرسانة ومواد وعمارة</span></div>
+                </div>
+                <div class="item-info">
+                    <h3>اختبارات القلب الخرساني - كور</h3>
+                    <p>استخراج واختبار القلوب الخرسانية لتقييم مقاومة الضغط الفعلي للعناصر الإنشائية المتصلدة.</p>
+                </div>
+            </div>
+
+            <!-- 17. اختبار البري والتآكل - لوس أنجلوس -->
+            <div class="gallery-item" data-cat="roads" onclick="openLightbox(this)">
+                <div class="img-wrapper">
+                    <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/LA.jpg" alt="اختبار البري والتآكل - لوس أنجلوس">
+                    <div class="img-overlay"><span>طرق وأسفلت وركام</span></div>
+                </div>
+                <div class="item-info">
+                    <h3>اختبار البري والتآكل - لوس أنجلوس</h3>
+                    <p>تحديد مقاومة تفتت الركام والسن للبري تحت تأثير ضربات واحتكاك الأحمال الحركية.</p>
+                </div>
+            </div>
+
+            <!-- 18. مواقع عامة (فارغ) -->
+            <div class="gallery-item no-img" data-cat="geotechnical">
+                <div class="img-wrapper">
+                    <div class="placeholder-icon-wrapper">
+                        <i class="fas fa-camera"></i>
+                        <span class="placeholder-badge">قريباً</span>
+                    </div>
+                </div>
+                <div class="item-info">
+                    <h3>مواقع عامة</h3>
+                    <p>صور ميدانية تذكارية عامة توضح انتشار وإشراف كوادر المركز بالعديد من مواقع المشاريع القومية (قريباً).</p>
+                </div>
+            </div>
+
+            <!-- 19. أنشطة بحثية لقسم العمارة -->
+            <div class="gallery-item" data-cat="concrete" onclick="openLightbox(this)">
+                <div class="img-wrapper">
+                    <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/Research.png" alt="أنشطة بحثية لقسم العمارة">
+                    <div class="img-overlay"><span>خرسانة ومواد وعمارة</span></div>
+                </div>
+                <div class="item-info">
+                    <h3>أنشطة بحثية لقسم العمارة</h3>
+                    <p>الابتكار ونمذجة الهياكل والكتل المعمارية المستدامة بالجامعة المصرية اليابانية.</p>
+                </div>
+            </div>
+
+            <!-- 20. إعتماد محطات خلط -->
+            <div class="gallery-item" data-cat="site" onclick="openLightbox(this)">
+                <div class="img-wrapper">
+                    <img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/Gallary/patchblant.png" alt="إعتماد محطات خلط">
+                    <div class="img-overlay"><span>استشارات ومعايرة</span></div>
+                </div>
+                <div class="item-info">
+                    <h3>إعتماد محطات خلط</h3>
+                    <p>معاينة وإعتماد محطات إنتاج الخرسانة الجاهزة للتأكد من سلامة المعايير والموازين والخلط الفعلي.</p>
+                </div>
+            </div>
+
+            <!-- 21. اختبارات الانترلوك + طوب البنا (فارغ) -->
+            <div class="gallery-item no-img" data-cat="concrete">
+                <div class="img-wrapper">
+                    <div class="placeholder-icon-wrapper">
+                        <i class="fas fa-camera"></i>
+                        <span class="placeholder-badge">قريباً</span>
+                    </div>
+                </div>
+                <div class="item-info">
+                    <h3>اختبارات الانترلوك + طوب البنا</h3>
+                    <p>اختبار الضغط وجودة تماسك الانترلوك وقوالب الطوب الأسمنتي والطفلي المستخدمة في البناء (قريباً).</p>
+                </div>
+            </div>
+
+            <!-- 22. معايرة أجهزة (فارغ) -->
+            <div class="gallery-item no-img" data-cat="site">
+                <div class="img-wrapper">
+                    <div class="placeholder-icon-wrapper">
+                        <i class="fas fa-camera"></i>
+                        <span class="placeholder-badge">قريباً</span>
+                    </div>
+                </div>
+                <div class="item-info">
+                    <h3>معايرة أجهزة</h3>
+                    <p>أعمال معايرة وضبط دقة ساعات وموازين الضغط، وحلقات قياس الهبوط المعملية (سيتم توفير الصور قريباً).</p>
+                </div>
+            </div>
+
+            <!-- 23. videos (فارغ) -->
+            <div class="gallery-item no-img" data-cat="videos">
+                <div class="img-wrapper">
+                    <div class="placeholder-icon-wrapper">
+                        <i class="fas fa-video" style="font-size: 3rem; color: rgba(196, 12, 48, 0.25) !important;"></i>
+                        <span class="placeholder-badge">قريباً</span>
+                    </div>
+                </div>
+                <div class="item-info">
+                    <h3>videos</h3>
+                    <p>استعراض المقاطع المرئية التوضيحية لجميع أعمال الفحوصات والاختبارات الحقلية (سيتم توفير الفيديوهات قريباً).</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <!-- ================= عارض الصور التفاعلي (Lightbox) ================= -->
@@ -778,29 +861,100 @@
 </footer>
 
 <script>
-    let currentImgIndex = 0;
-    let filteredImages = [];
+    // ================= إعدادات البانر الدوار الممتد (Slider) =================
+    let slideIndex = 0;
+    const slides = document.querySelectorAll('.slide');
+    const dots = document.querySelectorAll('.dot');
+    let slideInterval = setInterval(nextSlide, 5000); 
 
+    function showSlide(index) {
+        slides.forEach(slide => slide.classList.remove('active'));
+        dots.forEach(dot => dot.classList.remove('active'));
+        
+        slideIndex = index;
+        if (slideIndex >= slides.length) slideIndex = 0;
+        if (slideIndex < 0) slideIndex = slides.length - 1;
+
+        slides[slideIndex].classList.add('active');
+        dots[slideIndex].classList.add('active');
+    }
+
+    function nextSlide() {
+        showSlide(slideIndex + 1);
+    }
+
+    function currentSlide(index) {
+        clearInterval(slideInterval); 
+        showSlide(index);
+        slideInterval = setInterval(nextSlide, 5000); 
+    }
+
+    // ================= تفعيل أنيميشن التمرير القطري (Intersection Observer) =================
+    document.addEventListener("DOMContentLoaded", function() {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate');
+                }
+            });
+        }, {
+            threshold: 0.15 
+        });
+
+        document.querySelectorAll('.diagonal-gallery').forEach(gallery => {
+            observer.observe(gallery);
+        });
+    });
+
+    // ================= منطق التصفية والدمج الهجين المطور =================
     const galleryItems = Array.from(document.querySelectorAll('.gallery-item'));
-    
+
     function filterGallery(cat, btn) {
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
 
-        galleryItems.forEach(item => {
-            const itemCat = item.getAttribute('data-cat');
-            if (cat === 'all' || itemCat === cat) {
-                item.style.display = 'flex';
-            } else {
-                item.style.display = 'none';
-            }
-        });
+        const labsOverview = document.getElementById('labsOverview');
+        const gridContainer = document.getElementById('galleryGridContainer');
+
+        if (cat === 'all') {
+            // التبويب "الكل": إظهار معامل ومختبرات الوحدة وإخفاء شبكة الـ 23 كارت الفردية
+            labsOverview.style.display = 'block';
+            gridContainer.style.display = 'none';
+        } else {
+            // التبويبات الأخرى: إخفاء واجهة المعامل الكبرى وإظهار شبكة الكروت وتصفيتها
+            labsOverview.style.display = 'none';
+            gridContainer.style.display = 'block';
+
+            galleryItems.forEach(item => {
+                const itemCat = item.getAttribute('data-cat');
+                if (itemCat === cat) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
     }
 
+    // ================= عارض الصور التفاعلي الديناميكي المطور =================
+    let currentImgIndex = 0;
+    let filteredImages = [];
+
+    // جلب جميع الصور القطرية
+    const diagonalItems = Array.from(document.querySelectorAll('.diagonal-img'));
+
     function updateFilteredList() {
-        filteredImages = galleryItems.filter(item => {
-            return item.style.display !== 'none' && !item.classList.contains('no-img');
-        });
+        const labsOverview = document.getElementById('labsOverview');
+        
+        if (labsOverview.style.display !== 'none') {
+            // إذا كنا في التبويب "الكل": عارض الصور يتعامل فقط مع صور المعامل القطرية الأربعة
+            filteredImages = diagonalItems;
+        } else {
+            // إذا كنا في التبويبات الأخرى: عارض الصور يتعامل فقط مع الكروت الفردية النشطة حالياً (والتي تمتلك صور حقيقية)
+            filteredImages = galleryItems.filter(item => {
+                return item.style.display !== 'none' && !item.classList.contains('no-img');
+            });
+        }
     }
 
     function openLightbox(element) {
@@ -817,7 +971,7 @@
         const activeItem = filteredImages[currentImgIndex];
         const imgSrc = activeItem.querySelector('img').src;
         const imgAlt = activeItem.querySelector('img').alt;
-        const captionText = activeItem.querySelector('.item-info h3').textContent;
+        const captionText = activeItem.querySelector('img').alt; // استخدام الـ Alt لعنوان الصورة
 
         document.getElementById('lightboxImg').src = imgSrc;
         document.getElementById('lightboxImg').alt = imgAlt;

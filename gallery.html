@@ -44,8 +44,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            /* تطبيق نفس التدرج الداكن لتسهيل قراءة نصوص البطاقات البلورية */
-            background: linear-gradient(rgba(15, 23, 42, 0.88), rgba(15, 23, 42, 0.94));
+            /* تم زيادة وضوح الفيديو ليعطي تأثيراً حركياً احترافياً وواضحاً، مع الحفاظ على تباين وقراءة البطاقات البلورية الفاتحة */
+            background: linear-gradient(rgba(15, 23, 42, 0.65), rgba(15, 23, 42, 0.75));
         }
 
         /* Header Glassmorphism */
@@ -377,7 +377,7 @@
 </head>
 <body>
 
-<!-- وسم الفيديو الخلفي السحابي الصامت والتلقائي المتجاوب -->
+<!-- وسم الفيديو الخلفي السحابي الصامت والتلقائي المتجاوب بوضوح مطور وممتاز -->
 <div class="video-bg-container">
     <video autoplay muted loop playsinline class="video-bg">
         <source src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/assets/promo.mp4" type="video/mp4">
@@ -446,7 +446,7 @@
             </div>
             <div class="item-info">
                 <h3>اختبار المكعبات الخرسانية</h3>
-                <p>إجراء اختبارات مقاومة الضطاء على عينات المكعبات الخرسانية للتحقق من جودة الخرسانة.</p>
+                <p>إجراء اختبارات مقاومة الضغط على عينات المكعبات الخرسانية للتحقق من جودة الخرسانة.</p>
             </div>
         </div>
 
@@ -824,12 +824,10 @@
         document.getElementById('lightboxCaption').textContent = captionText;
     }
 
-    // إغلاق العارض
     function closeLightbox() {
         document.getElementById('lightbox').classList.remove('active');
     }
 
-    // التنقل بين الصور (التالي والسابق)
     function changeImage(direction) {
         if (!filteredImages.length) return;
         currentImgIndex += direction;

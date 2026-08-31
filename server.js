@@ -2,7 +2,7 @@ const express = require('express');
 const session = require('express-session');
 const pg = require('pg');
 const PgSession = require('connect-pg-simple')(session);
-const bcrypt = require('bcryptjs'); // تم التحديث لـ bcryptjs لضمان ثبات التشفير السحابي
+const bcrypt = require('bcryptjs');
 const { google } = require('googleapis');
 const XLSX = require('xlsx');
 const path = require('path');
@@ -54,12 +54,15 @@ const auth = new google.auth.GoogleAuth({
 });
 const drive = google.drive({ version: 'v3', auth });
 
+// إضافة معرفات 2022 و 2023 لقائمة الملفات
 const fileIds = {
     "1": "19sOJ3ihc-edrZ9B0bYsVfv_loQbO0uhW",
     "2": "19z4P-fDzzCIFOIeL9197YhQyr2vXPSgv",
     "3": "1L_XTHyXNy-7YtC6ZQZ3GHYriLGFMvAfx",
     "4": "1knkwfR7QmAFoHzyC3xg--ucJRuj33x8K",
     "5": "19z4P-fDzzCIFOIeL9197YhQyr2vXPSgv",
+    "2022": "1fSReta2PUdK5KbyDLqXFcLE9Giya5Cc8", // ملف 2022
+    "2023": "1xPgJvJYtMcfyBIbi-KWIse0A8Ha23fxU", // ملف 2023
     "2024": "1XBzfNn6LkHiRNF8s7NQeICn4D4mShyDm",
     "2025": "1ypVYF_Y6L-taMfkHSYly8nONIqEbj46V",
     "2026": "1wGGOGxcrakcSiPZMim_uJKI2RUOLxFm_",
@@ -98,38 +101,28 @@ app.get('/login', (req, res) => {
     res.sendFile(path.join(process.cwd(), 'login.html'));
 });
 
-// مسار تسجيل الدخول المحدث مع سجلات تتبع الأخطاء التشخيصية
+// مسار التحقق من الهوية (مشفر)
 app.post('/login', async (req, res) => {
     const { username, password } = req.body;
-    
-    // طباعة سجلات تشخيصية مؤقتة في لوحة Vercel لنتأكد من المشكلة
-    console.log(`[Diagnostic] محاولة دخول باسم المستخدم: ${username}`);
     
     try {
         const queryText = 'SELECT * FROM admins WHERE username = $1';
         const result = await pgPool.query(queryText, [username]);
-        
-        console.log(`[Diagnostic] عدد السجلات المطابقة في قاعدة البيانات: ${result.rows.length}`);
 
         if (result.rows.length > 0) {
             const admin = result.rows[0];
-            console.log(`[Diagnostic] الحساب موجود، شفرة كلمة المرور في قاعدة البيانات تبدأ بـ: ${admin.password.substring(0, 10)}`);
-            
-            // مقارنة كلمة المرور بالهاش المشفر
             const isMatch = await bcrypt.compare(password, admin.password);
-            console.log(`[Diagnostic] نتيجة مطابقة التشفير عبر bcryptjs هي: ${isMatch}`);
 
             if (isMatch) {
                 req.session.loggedIn = true;
                 req.session.adminUser = username;
-                console.log(`[Diagnostic] نجاح مطابقة البيانات بالكامل وتوليد الجلسة بنجاح.`);
                 return res.json({ success: true, redirect: '/Dashboard' });
             }
         }
         
         res.json({ success: false, error: 'اسم المستخدم أو كلمة المرور غير صحيحة.' });
     } catch (error) {
-        console.error('[Diagnostic] حدث خطأ في قاعدة البيانات أثناء تسجيل الدخول:', error);
+        console.error('Database query error:', error);
         res.status(500).json({ success: false, error: 'حدث خطأ فني أثناء الاتصال بالخادم السحابي.' });
     }
 });
@@ -161,7 +154,9 @@ app.get('/get-data/:id', checkAuth, async (req, res) => {
 
         const buffer = await getExcelBuffer(fileId);
         const workbook = XLSX.read(buffer, { type: 'buffer' });
-        const isIncomeFile = ["2024", "2025", "2026"].includes(id);
+        
+        // --- تعديل هام: تضمين 2022 و 2023 في شرط ملفات الإيرادات ---
+        const isIncomeFile = ["2022", "2023", "2024", "2025", "2026"].includes(id);
         
         let sheetName = "فواتير الشركات";
         if (isIncomeFile) {

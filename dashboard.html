@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>لوحة التحكم CETC - E-JUST</title>
-    <link rel="icon" type="image/png" href="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/assets/icon.png">
+    <link rel="icon" type="image/png" href="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/assets/logo.png">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -32,21 +32,21 @@
         /* شريط جانبي زجاجي بلوري شفاف ومطور بفلتر بلوري عميق */
         .sidebar { 
             width: 280px; 
-            background: rgba(15, 23, 42, 0.45); /* كحلي زجاجي خفيف جداً لمطابقة لون الخلفية */
-            backdrop-filter: blur(20px); /* فلتر تغبيش بلوري عميق وممتاز */
+            background: rgba(15, 23, 42, 0.45); 
+            backdrop-filter: blur(20px); 
             -webkit-backdrop-filter: blur(20px);
             display: flex; 
             flex-direction: column; 
             z-index: 100; 
             box-shadow: 4px 0 30px rgba(0,0,0,0.2); 
-            border-left: 1px solid rgba(255, 255, 255, 0.1); /* حافة زجاجية مضيئة خفيفة */
+            border-left: 1px solid rgba(255, 255, 255, 0.1); 
         }
         
         .sidebar-header { 
             padding: 25px; 
             text-align: center; 
             border-bottom: 1px solid rgba(255, 255, 255, 0.08); 
-            background: rgba(255, 255, 255, 0.03); /* تندمج داخل الزجاج */
+            background: rgba(255, 255, 255, 0.03); 
         }
         
         .logo-box { 
@@ -77,12 +77,12 @@
         
         .user-section { 
             padding: 20px; 
-            background: rgba(255, 255, 255, 0.03); /* تندمج داخل الزجاج */
+            background: rgba(255, 255, 255, 0.03); 
             text-align: center; 
             border-top: 1px solid rgba(255, 255, 255, 0.08); 
         }
         
-        .main-content { flex: 1; overflow-y: auto; padding: 30px; background: transparent; }
+        .main-content { flex: 1; overflow-y: auto; padding: 30px; background: transparent; scroll-behavior: smooth; }
         
         .module { display: none; animation: fadeIn 0.4s ease; }
         .module.active { display: block; }
@@ -167,6 +167,15 @@
 
         .val-positive { color: #10b981 !important; }
         .val-negative { color: #ef4444 !important; }
+
+        /* تنسيق مخصص لصف الإجمالي ليظهر بارزاً وأنيقاً في الجدول */
+        tr.total-row td {
+            background: rgba(196, 12, 48, 0.1) !important;
+            color: var(--primary) !important;
+            font-weight: 900 !important;
+            font-size: 1.1rem;
+            border-top: 2px solid var(--primary);
+        }
         
         /* جدول تقارير الإكسيل الزجاجي ناصع التباين */
         .excel-table-wrapper { 
@@ -205,7 +214,7 @@
     <div class="app-layout">
         <aside class="sidebar">
             <div class="sidebar-header">
-                <div class="logo-box"><img src="https://ejust.edu.eg/assets/img/logo.png" alt="Logo"></div>
+                <div class="logo-box"><img src="https://hmfuxiafusrbxvxzfaef.supabase.co/storage/v1/object/public/assets/logo.png" alt="Logo"></div>
                 <div style="font-weight: 900; color: white; margin-top:10px;">CETC DASHBOARD</div>
             </div>
             <nav class="menu-list">
@@ -217,7 +226,7 @@
             <div class="user-section"><div style="color: white; font-weight: 800;">مسؤول النظام</div></div>
         </aside>
 
-        <main class="main-content">
+        <main class="main-content" id="mainScrollContent">
             <section id="billing-module" class="module active">
                 <h2 style="border-bottom: 4px solid var(--primary); padding-bottom:10px; display:inline-block; font-weight: 900;">حصر فواتير الشركات</h2>
                 <div class="tab-group">
@@ -234,9 +243,13 @@
             <section id="monthly-module" class="module">
                 <h2 style="border-bottom: 4px solid var(--primary); padding-bottom:10px; display:inline-block; font-weight: 900;">الايرادات الشهرية</h2>
                 <div class="tab-group">
+                    <button class="tab-btn" onclick="loadIncomeData('2022', this)">إيرادات 2022</button>
+                    <button class="tab-btn" onclick="loadIncomeData('2023', this)">إيرادات 2023</button>
                     <button class="tab-btn" onclick="loadIncomeData('2024', this)">إيرادات 2024</button>
                     <button class="tab-btn" onclick="loadIncomeData('2025', this)">إيرادات 2025</button>
                     <button class="tab-btn" onclick="loadIncomeData('2026', this)">إيرادات 2026</button>
+                    <!-- الزر الجديد لعرض الإجمالي الشامل -->
+                    <button class="tab-btn" style="background: rgba(196, 12, 48, 0.4); border-color: rgba(196, 12, 48, 0.6);" onclick="loadAllYearsIncome(this)">إجمالي إيرادات المركز</button>
                 </div>
                 <div class="table-wrapper" style="margin-bottom: 25px;">
                     <table><thead id="h-monthly"></thead><tbody id="b-monthly"><tr><td colspan="3" style="padding:40px;">اختر السنة...</td></tr></tbody></table>
@@ -263,11 +276,37 @@
         let rawReportData = [];
         let currentReportMaxCols = 0;
 
+        // قاموس ترجمة أسماء التقارير للعربية
+        const reportNamesMap = {
+            "CONS.GEO.FD": "ساندكون",
+            "Geo.Soil": "تربة",
+            "CONS.GEO.PLT": "تحميل تربة",
+            "CONS.CONC": "مكعبات خرسانية",
+            "CONS.Grout": "مكعبات جراوت",
+            "Conc Core": "قلب خرساني",
+            "CONS.Interlock": "انترلوك",
+            "GEO.ROCK": "صخور",
+            "CONS.Curbs": "بردورات",
+            "CONS.BRIKS": "طوب بناء",
+            ".Conc.ST.MAT": "مواد خلطات",
+            "Cons.CEM": "أسمنت",
+            "MIXS": "خلطات خرسانية",
+            "CONS.Mortat": "مكعبات مونة",
+            "CAL": "معايرة",
+            "Asphalt": "خلطات اسفلتية",
+            "Asphalt Core": "كور أسفلت"
+        };
+
         function switchMod(name, btn) {
             document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
             if(btn) btn.classList.add('active');
             document.querySelectorAll('.module').forEach(s => s.classList.remove('active'));
             document.getElementById(name + '-module').classList.add('active');
+            
+            // إعادة التمرير للأعلى عند التبديل بين الأقسام
+            const mainContent = document.getElementById('mainScrollContent');
+            if(mainContent) mainContent.scrollTo({ top: 0, behavior: 'smooth' });
+
             if (name === 'reports') loadReportSheets();
         }
 
@@ -345,15 +384,33 @@
                     const trH = document.createElement('tr');
                     data[0].slice(0,3).forEach(t => { const th = document.createElement('th'); th.textContent = t; trH.appendChild(th); });
                     h.appendChild(trH);
+                    
                     const labels = [], values = [];
+                    
                     data.slice(1).forEach(row => {
-                        if(!row[0] || String(row[0]).toLowerCase().includes('total')) return;
+                        if(!row[0]) return; 
+                        
+                        const isTotalRow = String(row[0]).toLowerCase().includes('total') || String(row[0]).includes('إجمالي') || String(row[1]).includes('Total') || String(row[1]).includes('إجمالي');
+
                         const tr = document.createElement('tr');
-                        row.slice(0,3).forEach((c, i) => { const td = document.createElement('td'); td.textContent = c || '-'; tr.appendChild(td); });
+                        
+                        if(isTotalRow) {
+                            tr.classList.add('total-row');
+                        }
+
+                        row.slice(0,3).forEach((c, i) => { 
+                            const td = document.createElement('td'); 
+                            td.textContent = c || '-'; 
+                            tr.appendChild(td); 
+                        });
                         b.appendChild(tr);
-                        labels.push(row[1]); 
-                        values.push(parseFloat(String(row[2]).replace(/,/g, '')) || 0);
+                        
+                        if(!isTotalRow) {
+                            labels.push(row[1]); 
+                            values.push(parseFloat(String(row[2]).replace(/,/g, '')) || 0);
+                        }
                     });
+                    
                     drawIncomeChart(year, labels, values);
                 } else {
                     b.innerHTML = '<tr><td colspan="3" style="padding:40px; text-align:center;">لا توجد بيانات مسجلة.</td></tr>';
@@ -363,15 +420,79 @@
             }
         }
 
-        function drawIncomeChart(year, labels, data) {
+        // ================= الدالة الجديدة لجلب وعرض الإجمالي لجميع السنوات =================
+        async function loadAllYearsIncome(btn) {
+            document.querySelectorAll('#monthly-module .tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const h = document.getElementById('h-monthly'), b = document.getElementById('b-monthly');
+            b.innerHTML = '<tr><td colspan="3" class="loading"><i class="fas fa-circle-notch fa-spin"></i> جاري مزامنة وحساب إيرادات جميع السنوات...</td></tr>';
+            
+            const years = ['2022', '2023', '2024', '2025', '2026'];
+            let grandTotal = 0;
+            const labels = [];
+            const values = [];
+            
+            try {
+                // استخدام Promise.all لجلب ملفات الإكسيل لجميع السنوات في نفس الوقت لسرعة الأداء
+                const fetchPromises = years.map(year => fetch(`/get-data/${year}`).then(res => res.json()).catch(err => ({ error: err.message, year })));
+                const results = await Promise.all(fetchPromises);
+                
+                h.innerHTML = '<tr><th>السنة (Year)</th><th colspan="2">إجمالي الإيرادات السنوية (ج.م)</th></tr>';
+                b.innerHTML = '';
+
+                results.forEach((data, index) => {
+                    const currentYear = years[index];
+                    let yearTotal = 0;
+                    
+                    if (data && !data.error && data.length > 1) {
+                        // البحث عن صف الإجمالي واستخراج الرقم منه
+                        data.slice(1).forEach(row => {
+                            if (!row[0]) return;
+                            const isTotalRow = String(row[0]).toLowerCase().includes('total') || String(row[0]).includes('إجمالي') || String(row[1]).includes('Total') || String(row[1]).includes('إجمالي');
+                            if (isTotalRow) {
+                                // استخراج الرقم من العمود الثالث (قيمة الإيراد)
+                                yearTotal = parseFloat(String(row[2]).replace(/,/g, '')) || 0;
+                            }
+                        });
+                    }
+                    
+                    // إضافة صف لكل سنة
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td>${currentYear}</td><td colspan="2" style="font-weight: 800; font-size: 1.05rem;">${yearTotal.toLocaleString()}</td>`;
+                    b.appendChild(tr);
+                    
+                    grandTotal += yearTotal;
+                    labels.push(currentYear);
+                    values.push(yearTotal);
+                });
+                
+                // إضافة صف الإجمالي الشامل لجميع السنوات في الأسفل بتنسيق مميز
+                const finalTr = document.createElement('tr');
+                finalTr.classList.add('total-row');
+                finalTr.innerHTML = `<td>إجمالي إيرادات المركز</td><td colspan="2" style="font-size: 1.2rem;">${grandTotal.toLocaleString()} ج.م</td>`;
+                b.appendChild(finalTr);
+                
+                // رسم التشارت ببيانات السنوات المجمعة
+                drawIncomeChart('إجمالي الإيرادات السنوية', labels, values);
+                
+            } catch (error) {
+                b.innerHTML = `<tr><td colspan="3" style="color:red; padding:40px; text-align:center; font-weight:bold;">حدث خطأ أثناء تجميع البيانات: <br>${error.message}</td></tr>`;
+            }
+        }
+
+        function drawIncomeChart(titleOrYear, labels, data) {
             const ctx = document.getElementById('incomeChart').getContext('2d');
             if (incomeChartInstance) incomeChartInstance.destroy();
+            
+            // تحديد عنوان الرسم البياني بشكل ذكي (إما رقم السنة أو عنوان الإجمالي)
+            const chartLabel = isNaN(titleOrYear) ? titleOrYear : `إيرادات ${titleOrYear}`;
+            
             incomeChartInstance = new Chart(ctx, {
                 type: 'bar', 
                 data: {
                     labels: labels,
                     datasets: [{
-                        label: `إيرادات ${year}`,
+                        label: chartLabel,
                         data: data,
                         backgroundColor: 'rgba(196, 18, 48, 0.8)',
                         borderColor: '#C41230',
@@ -399,7 +520,23 @@
                 }
                 
                 select.innerHTML = '<option value="">اختر التقرير...</option>';
-                data.sheets.forEach(s => { const opt = document.createElement('option'); opt.value = s; opt.textContent = s; select.appendChild(opt); });
+                
+                // إضافة أسماء التقارير وتطبيق القاموس المترجم
+                data.sheets.forEach(s => { 
+                    const opt = document.createElement('option'); 
+                    opt.value = s; 
+                    
+                    const cleanSheetName = s.trim();
+                    const arabicName = reportNamesMap[cleanSheetName];
+                    
+                    if (arabicName) {
+                        opt.textContent = `${arabicName} (${cleanSheetName})`;
+                    } else {
+                        opt.textContent = cleanSheetName; 
+                    }
+                    
+                    select.appendChild(opt); 
+                });
             } catch (err) {
                 select.innerHTML = '<option value="">فشل الاتصال بالخادم</option>';
             }
@@ -439,6 +576,14 @@
                 for(let i=0; i<currentReportMaxCols; i++) { const td = document.createElement('td'); td.textContent = row[i] || ''; tr.appendChild(td); }
                 b.appendChild(tr);
             });
+
+            // التمرير التلقائي لأسفل الجدول لرؤية أحدث البيانات (الصف الأخير)
+            setTimeout(() => {
+                const mainContent = document.getElementById('mainScrollContent');
+                if (mainContent) {
+                    mainContent.scrollTo({ top: mainContent.scrollHeight, behavior: 'smooth' });
+                }
+            }, 100);
         }
 
         function filterReportTable() {
@@ -446,6 +591,12 @@
             if(!q) return renderReportTable(rawReportData);
             const filtered = [rawReportData[0], ...rawReportData.slice(1).filter(r => r.some(c => String(c).toLowerCase().includes(q)))];
             renderReportTable(filtered);
+            
+            // التأكد من النزول للأسفل أيضاً بعد التصفية إذا كانت النتائج كثيرة
+            setTimeout(() => {
+                const mainContent = document.getElementById('mainScrollContent');
+                if (mainContent) mainContent.scrollTo({ top: mainContent.scrollHeight, behavior: 'smooth' });
+            }, 50);
         }
     </script>
 </body>

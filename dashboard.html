@@ -202,12 +202,130 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.15);
         }
 
-        @media (max-width: 768px) { 
-            .app-layout { flex-direction: column; overflow-y: auto; } 
-            .sidebar { width: 100%; border-left: none; border-bottom: 1px solid rgba(255,255,255,0.08); } 
-            .user-section { display: none; } 
-            .main-content { padding: 15px; } 
+        @media (max-width: 768px) {
+            html, body { width: 100%; min-width: 0; overflow-x: hidden; }
+            body { height: auto; min-height: 100dvh; overflow-y: auto; background-attachment: scroll; }
+            .app-layout {
+                display: flex;
+                flex-direction: column;
+                height: auto;
+                min-height: 100dvh;
+                overflow: visible;
+            }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                flex: 0 0 auto;
+                position: sticky;
+                top: 0;
+                border: 0;
+                border-bottom: 1px solid rgba(255,255,255,0.12);
+                box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+                z-index: 1000;
+            }
+            .sidebar-header {
+                padding: 9px 12px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 10px;
+            }
+            .logo-box { padding: 6px 9px; border-radius: 8px; }
+            .logo-box img { max-height: 30px; }
+            .sidebar-header > div:last-child { margin-top: 0 !important; font-size: 0.8rem; }
+            .menu-list {
+                display: flex;
+                flex-direction: row;
+                overflow-x: auto;
+                overflow-y: hidden;
+                padding: 7px 6px;
+                gap: 5px;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+            }
+            .menu-list::-webkit-scrollbar { display: none; }
+            .menu-item {
+                flex: 0 0 auto;
+                margin: 0;
+                padding: 9px 12px;
+                border-radius: 9px;
+                gap: 7px;
+                font-size: 0.76rem;
+                white-space: nowrap;
+            }
+            .user-section { display: none; }
+            .main-content {
+                width: 100%;
+                min-width: 0;
+                box-sizing: border-box;
+                height: auto;
+                min-height: calc(100dvh - 95px);
+                overflow: visible;
+                padding: 14px 10px 30px;
+            }
+            .module { width: 100%; min-width: 0; }
+            .module h2 {
+                font-size: 1.15rem !important;
+                line-height: 1.5;
+                max-width: 100%;
+                margin-top: 5px;
+            }
+            .tab-group {
+                gap: 7px;
+                margin-bottom: 15px;
+                overflow-x: auto;
+                flex-wrap: nowrap;
+                padding-bottom: 4px;
+                scrollbar-width: none;
+            }
+            .tab-group::-webkit-scrollbar { display: none; }
+            .tab-btn {
+                flex: 0 0 auto;
+                padding: 8px 11px;
+                font-size: 0.75rem;
+                white-space: nowrap;
+            }
+            .control-item {
+                max-width: 100%;
+                box-sizing: border-box;
+                font-size: 0.82rem;
+                padding: 10px 12px;
+            }
+            .table-wrapper,
+            .excel-table-wrapper {
+                width: 100%;
+                max-width: 100%;
+                min-width: 0;
+                overflow-x: auto !important;
+                overflow-y: hidden;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: thin;
+                border-radius: 10px;
+                box-sizing: border-box;
+            }
+            table { min-width: 760px; }
+            .excel-table { min-width: 760px; }
+            th { padding: 11px 9px; font-size: 0.76rem; white-space: nowrap; }
+            td { padding: 10px 9px; font-size: 0.76rem; white-space: nowrap; }
+            .excel-table th, .excel-table td { padding: 8px 7px; font-size: 0.75rem; }
+            .chart-container {
+                padding: 12px;
+                border-radius: 10px;
+                overflow: hidden;
+            }
         }
+
+        @media (max-width: 480px) {
+            .sidebar-header { padding: 7px 9px; }
+            .sidebar-header > div:last-child { font-size: 0.7rem; }
+            .menu-item { padding: 8px 10px; font-size: 0.7rem; }
+            .main-content { padding: 12px 8px 25px; }
+            table { min-width: 700px; }
+            .excel-table { min-width: 700px; }
+            th, td { font-size: 0.7rem; }
+        }
+
+        /* Modern mobile dashboard layout */
     </style>
 </head>
 <body>
